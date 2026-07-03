@@ -36,6 +36,7 @@ function makeMockContext(overrides: Partial<FiberContextValue> = {}): FiberConte
     mode: 'mock',
     connectionStatus: 'disconnected',
     nodeInfo: null,
+    rpcLogs: [],
     ...overrides,
   };
 }
