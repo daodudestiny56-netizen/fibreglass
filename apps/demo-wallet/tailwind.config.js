@@ -2,7 +2,12 @@
 export default {
   content: ['./index.html', './src/**/*.{ts,tsx}'],
   theme: {
-    extend: {},
+    extend: {
+      fontFamily: {
+        sans: ['Satoshi', 'Plus Jakarta Sans', 'sans-serif'],
+        mono: ['Space Mono', 'monospace'],
+      },
+    },
   },
   plugins: [],
 };

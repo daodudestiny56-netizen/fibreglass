@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Syne:wght@800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&family=Syne:wght@800&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -10,11 +10,11 @@
 
 body {
   @apply bg-[#E5E5EC] text-[#121214] min-h-screen antialiased;
-  font-family: 'Space Grotesk', -apple-system, sans-serif;
+  font-family: 'Satoshi', 'Plus Jakarta Sans', -apple-system, sans-serif;
 }
 
 .font-monument {
-  font-family: 'Monument Extended', 'Syne', 'Space Grotesk', sans-serif;
+  font-family: 'Monument Extended', 'Syne', sans-serif;
   font-weight: 800;
   text-transform: uppercase;
 }

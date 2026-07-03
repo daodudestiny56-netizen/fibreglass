@@ -1,11 +1,14 @@
 /**
  * App.tsx — Demo Wallet
  *
- * Premium editorial-grade UI redesign utilizing:
- *  - Heading Font: Monument Extended / Syne (`font-monument`).
- *  - Colors: Sleek Industrial Platinum background (`#E5E5EC`) with deep matte Charcoal/Obsidian cards (`#121214`).
- *  - Accent Highlight: Precise Electric Cobalt (`#2E5BFF`).
- *  - Full implementation of all 5 React SDK components and developer inspector tools.
+ * Tactical, developer-focused, high-impact aesthetic.
+ * Strictly adheres to these custom typography mappings:
+ *  - Headers & Hero Sections: Monument Extended / Syne (`font-monument`) - heavy, wide, commanding.
+ *  - Main UI & Balances: Satoshi / Plus Jakarta Sans (`font-sans`) - spacious, clean geometric.
+ *  - Public Keys & Hashes & Logs: Space Mono (`font-mono`) - retro-futuristic engineered vibe.
+ *  - Ticking numbers and numeric values: `tabular-nums` - prevents jittering and layout shifting.
+ *
+ * Colors: Slate-Platinum background (`#E5E5EC`) with deep matte Charcoal/Obsidian cards (`#121214`).
  */
 
 import { useState } from 'react';
@@ -35,7 +38,7 @@ import type {
 } from 'fiberglass-react';
 
 // ---------------------------------------------------------------------------
-// Constants & Mock Configurations
+// Constants & Configurations
 // ---------------------------------------------------------------------------
 
 type Tab = 'channels' | 'receive' | 'send' | 'playground';
@@ -59,11 +62,11 @@ function ChannelsTab() {
   if (isLoading) return <LoadingSpinner label="Retrieving channel states" />;
 
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex flex-col gap-4 font-sans text-xs">
       <div className="flex justify-between items-center mb-1">
         <span className="font-monument text-[10px] tracking-widest text-[#52525B]">Lightning Channels</span>
         <button
-          className="bg-[#121214] border border-[#2D2D33] hover:bg-[#1C1C20] text-[10px] font-monument tracking-wider px-3.5 py-2 rounded-md text-white transition-all duration-200 active:scale-[0.98] shadow-sm"
+          className="bg-[#121214] border border-[#2D2D33] hover:bg-[#1C1C20] text-[9px] font-monument tracking-widest px-4 py-2 rounded text-white transition-all duration-200 active:scale-[0.98] shadow-sm"
           onClick={refetch}
         >
           ↻ Refresh
@@ -73,7 +76,7 @@ function ChannelsTab() {
       {error && <ErrorResolutionBanner error={error} />}
       
       {channels.length === 0 && !error && (
-        <div className="text-center py-12 text-xs text-[#A1A1AA] bg-[#121214] border border-[#222226] rounded-lg shadow-md font-medium">
+        <div className="text-center py-12 text-xs text-[#A1A1AA] bg-[#121214] border border-[#222226] rounded-lg shadow-md font-semibold">
           No channels configured on this node.
         </div>
       )}
@@ -105,7 +108,7 @@ function ReceiveTab() {
   });
 
   return (
-    <div className="flex flex-col gap-4 items-center">
+    <div className="flex flex-col gap-4 items-center font-sans">
       <div className="w-full max-w-[420px] flex flex-col gap-3">
         <span className="font-monument text-[10px] tracking-widest text-[#52525B] mb-1">Receive Funds</span>
         <InvoiceSheet
@@ -146,14 +149,14 @@ function SendTab() {
   const canSend = confidence.status === 'ready' && !paymentResult.payment;
 
   return (
-    <div className="flex flex-col gap-6">
+    <div className="flex flex-col gap-6 font-sans">
       <div className="flex flex-col gap-2">
         <span className="font-monument text-[10px] tracking-widest text-[#52525B]">Send Payment</span>
       </div>
 
       <div className="bg-[#121214] border border-[#222226] rounded-lg p-6 shadow-[0_1px_3px_rgba(0,0,0,0.1),0_12px_32px_rgba(0,0,0,0.25)] flex flex-col gap-4 text-[#F4F4F7]">
         <div className="flex flex-col gap-2">
-          <label className="text-[10px] font-monument tracking-wider text-[#A1A1AA]">Invoice Address</label>
+          <label className="text-[10px] font-monument tracking-widest text-[#A1A1AA]">Invoice Address</label>
           <div className="flex gap-2">
             <input
               id="send-invoice-input"
@@ -164,7 +167,7 @@ function SendTab() {
               spellCheck={false}
             />
             <button
-              className="bg-[#2E5BFF] hover:bg-[#1E4BEF] text-white text-[10px] font-monument tracking-wider px-4 py-2.5 rounded-md shadow-sm transition-all duration-200 active:scale-[0.98]"
+              className="bg-[#2E5BFF] hover:bg-[#1E4BEF] text-white text-[9px] font-monument tracking-widest px-4 py-2.5 rounded shadow-sm transition-all duration-200 active:scale-[0.98]"
               onClick={() => setActiveInvoice(invoiceInput || null)}
             >
               Verify Route
@@ -186,7 +189,7 @@ function SendTab() {
 
       {canSend && (
         <button
-          className="w-full py-3.5 bg-[#2E5BFF] hover:bg-[#1E4BEF] text-white text-[10px] font-monument tracking-widest rounded-md shadow-[0_4px_12px_rgba(46,91,255,0.2)] transition-all duration-200 ease-out active:scale-[0.99] uppercase"
+          className="w-full py-3.5 bg-[#2E5BFF] hover:bg-[#1E4BEF] text-white text-[10px] font-monument tracking-widest rounded shadow-[0_4px_12px_rgba(46,91,255,0.2)] transition-all duration-200 ease-out active:scale-[0.99] uppercase"
           onClick={handleSend}
         >
           ⚡ Confirm & Send Payment
@@ -252,7 +255,7 @@ function PlaygroundTab() {
   };
 
   return (
-    <div className="flex flex-col gap-6">
+    <div className="flex flex-col gap-6 font-sans">
       <div className="flex flex-col gap-1.5">
         <span className="font-monument text-[10px] tracking-widest text-[#52525B]">SDK Component Playground</span>
         <span className="text-[11px] text-[#52525B] font-medium">Dynamically adjust parameters to inspect SDK component layouts.</span>
@@ -267,21 +270,21 @@ function PlaygroundTab() {
           <div className="flex justify-between items-center text-xs">
             <span className="text-[#A1A1AA] font-semibold">State:</span>
             <select
-              className="bg-[#1A1A1E] border border-[#2D2D33] text-white rounded-md py-1 px-2.5 text-xs outline-none"
+              className="bg-[#1A1A1E] border border-[#2D2D33] text-white rounded py-1 px-2 text-xs outline-none"
               value={chState}
               onChange={(e) => setChState(e.target.value as ChannelState)}
             >
-              <option value="ChannelReady" className="text-black">ChannelReady</option>
-              <option value="NegotiatingFunding" className="text-black">NegotiatingFunding</option>
-              <option value="AwaitingChannelReady" className="text-black">AwaitingChannelReady</option>
-              <option value="Closed" className="text-black">Closed</option>
+              <option value="ChannelReady" className="text-black font-sans">ChannelReady</option>
+              <option value="NegotiatingFunding" className="text-black font-sans">NegotiatingFunding</option>
+              <option value="AwaitingChannelReady" className="text-black font-sans">AwaitingChannelReady</option>
+              <option value="Closed" className="text-black font-sans">Closed</option>
             </select>
           </div>
 
           <div className="flex justify-between items-center text-xs">
             <span className="text-[#A1A1AA] font-semibold">Local (CKB):</span>
             <input
-              className="w-24 bg-[#1A1A1E] border border-[#2D2D33] rounded-md py-1 px-2 text-xs outline-none text-right text-white"
+              className="w-24 bg-[#1A1A1E] border border-[#2D2D33] rounded py-1 px-2 text-xs outline-none text-right text-white font-mono tabular-nums"
               type="number"
               value={Number(chLocal) / 1e8}
               onChange={(e) => setChLocal(String(Number(e.target.value) * 1e8))}
@@ -291,7 +294,7 @@ function PlaygroundTab() {
           <div className="flex justify-between items-center text-xs">
             <span className="text-[#A1A1AA] font-semibold">Remote (CKB):</span>
             <input
-              className="w-24 bg-[#1A1A1E] border border-[#2D2D33] rounded-md py-1 px-2 text-xs outline-none text-right text-white"
+              className="w-24 bg-[#1A1A1E] border border-[#2D2D33] rounded py-1 px-2 text-xs outline-none text-right text-white font-mono tabular-nums"
               type="number"
               value={Number(chRemote) / 1e8}
               onChange={(e) => setChRemote(String(Number(e.target.value) * 1e8))}
@@ -320,22 +323,22 @@ function PlaygroundTab() {
           <div className="flex justify-between items-center text-xs">
             <span className="text-[#A1A1AA] font-semibold">Route Confidence:</span>
             <select
-              className="bg-[#1A1A1E] border border-[#2D2D33] text-white rounded-md py-1 px-2.5 text-xs outline-none"
+              className="bg-[#1A1A1E] border border-[#2D2D33] text-white rounded py-1 px-2 text-xs outline-none"
               value={confStatus}
               onChange={(e) => setConfStatus(e.target.value as ConfidenceStatus)}
             >
-              <option value="ready" className="text-black">ready</option>
-              <option value="insufficient_liquidity" className="text-black">insufficient_liquidity</option>
-              <option value="no_route" className="text-black">no_route</option>
-              <option value="asset_mismatch" className="text-black">asset_mismatch</option>
-              <option value="loading" className="text-black">loading</option>
+              <option value="ready" className="text-black font-sans">ready</option>
+              <option value="insufficient_liquidity" className="text-black font-sans">insufficient_liquidity</option>
+              <option value="no_route" className="text-black font-sans">no_route</option>
+              <option value="asset_mismatch" className="text-black font-sans">asset_mismatch</option>
+              <option value="loading" className="text-black font-sans">loading</option>
             </select>
           </div>
 
           <div className="flex justify-between items-center text-xs">
             <span className="text-[#A1A1AA] font-semibold">Fee (shannons):</span>
             <input
-              className="w-24 bg-[#1A1A1E] border border-[#2D2D33] rounded-md py-1 px-2 text-xs outline-none text-right text-white"
+              className="w-24 bg-[#1A1A1E] border border-[#2D2D33] rounded py-1 px-2 text-xs outline-none text-right text-white font-mono tabular-nums"
               value={confFee}
               onChange={(e) => setConfFee(e.target.value)}
             />
@@ -360,13 +363,13 @@ function PlaygroundTab() {
           <div className="flex justify-between items-center text-xs">
             <span className="text-[#A1A1AA] font-semibold">Invoice Status:</span>
             <select
-              className="bg-[#1A1A1E] border border-[#2D2D33] text-white rounded-md py-1 px-2.5 text-xs outline-none"
+              className="bg-[#1A1A1E] border border-[#2D2D33] text-white rounded py-1 px-2 text-xs outline-none"
               value={invStatus}
               onChange={(e) => setInvStatus(e.target.value as InvoiceStatus)}
             >
-              <option value="Open" className="text-black">Open</option>
-              <option value="Paid" className="text-black">Paid</option>
-              <option value="Expired" className="text-black">Expired</option>
+              <option value="Open" className="text-black font-sans">Open</option>
+              <option value="Paid" className="text-black font-sans">Paid</option>
+              <option value="Expired" className="text-black font-sans">Expired</option>
             </select>
           </div>
 
@@ -390,14 +393,14 @@ function PlaygroundTab() {
           <div className="flex justify-between items-center text-xs">
             <span className="text-[#A1A1AA] font-semibold">FNN Error Code:</span>
             <select
-              className="bg-[#1A1A1E] border border-[#2D2D33] text-white rounded-md py-1 px-2.5 text-xs outline-none"
+              className="bg-[#1A1A1E] border border-[#2D2D33] text-white rounded py-1 px-2 text-xs outline-none"
               value={errCode}
               onChange={(e) => setErrCode(e.target.value as import('fiberglass-react').FiberErrorCode)}
             >
-              <option value="INSUFFICIENT_LIQUIDITY" className="text-black">INSUFFICIENT_LIQUIDITY</option>
-              <option value="NO_ROUTE" className="text-black">NO_ROUTE</option>
-              <option value="ASSET_MISMATCH" className="text-black">ASSET_MISMATCH</option>
-              <option value="NODE_UNREACHABLE" className="text-black">NODE_UNREACHABLE</option>
+              <option value="INSUFFICIENT_LIQUIDITY" className="text-black font-sans">INSUFFICIENT_LIQUIDITY</option>
+              <option value="NO_ROUTE" className="text-black font-sans">NO_ROUTE</option>
+              <option value="ASSET_MISMATCH" className="text-black font-sans">ASSET_MISMATCH</option>
+              <option value="NODE_UNREACHABLE" className="text-black font-sans">NODE_UNREACHABLE</option>
             </select>
           </div>
 
@@ -413,13 +416,13 @@ function PlaygroundTab() {
           <div className="flex justify-between items-center text-xs mb-1">
             <span className="text-[#A1A1AA] font-semibold">Payment Status:</span>
             <select
-              className="bg-[#1A1A1E] border border-[#2D2D33] text-white rounded-md py-1 px-2.5 text-xs outline-none"
+              className="bg-[#1A1A1E] border border-[#2D2D33] text-white rounded py-1 px-2 text-xs outline-none"
               value={visStatus}
               onChange={(e) => setVisStatus(e.target.value as PaymentStatus)}
             >
-              <option value="Success" className="text-black">Success</option>
-              <option value="Failed" className="text-black">Failed</option>
-              <option value="Inflight" className="text-black">Inflight</option>
+              <option value="Success" className="text-black font-sans">Success</option>
+              <option value="Failed" className="text-black font-sans">Failed</option>
+              <option value="Inflight" className="text-black font-sans">Inflight</option>
             </select>
           </div>
 
@@ -447,7 +450,7 @@ function LoadingSpinner({ label }: { label: string }) {
   return (
     <div className="text-center py-16 text-[#52525B]">
       <div className="text-3xl animate-spin inline-block text-[#2E5BFF]">⟳</div>
-      <div className="mt-3 text-[10px] font-monument tracking-wider uppercase">{label}</div>
+      <div className="mt-3 text-[9px] font-monument tracking-widest uppercase">{label}</div>
     </div>
   );
 }
@@ -465,19 +468,19 @@ function WalletShell() {
   const modeBorder = mode === 'live' ? 'border-[#10B981]/30' : 'border-[#F59E0B]/30';
 
   return (
-    <div className="min-h-screen bg-[#E5E5EC] flex flex-col text-[#121214] selection:bg-[#2E5BFF]/10">
+    <div className="min-h-screen bg-[#E5E5EC] flex flex-col text-[#121214] font-sans selection:bg-[#2E5BFF]/10">
       
       {/* Header */}
       <header className="flex justify-between items-center py-5 px-6 border-b border-[#1E1E22] bg-[#121214] text-white shadow-sm">
         <div>
-          <div className="text-sm font-monument tracking-widest text-white flex items-center gap-2">
+          <div className="text-xs font-monument tracking-widest text-white flex items-center gap-2">
             💎 fiberglass <span className="text-[9px] bg-[#2E5BFF]/20 text-[#2E5BFF] border border-[#2E5BFF]/30 px-1.5 py-0.5 rounded tracking-normal font-mono font-bold lowercase">SDK</span>
           </div>
           <div className="text-[9px] text-[#71717A] tracking-widest uppercase mt-1 font-monument">FNN Client Interface</div>
         </div>
 
         <div className="flex items-center gap-3">
-          <div className={`text-[9px] font-monument tracking-widest px-3.5 py-1.5 border rounded-md ${modeBg} ${modeBorder} text-white`} style={{ color: modeColor }}>
+          <div className={`text-[9px] font-monument tracking-widest px-3.5 py-1.5 border rounded ${modeBg} ${modeBorder} text-white`} style={{ color: modeColor }}>
             {mode === 'live' ? '● LIVE' : '◌ MOCK'} · {connectionStatus.toUpperCase()}
           </div>
           {nodeInfo && (
@@ -496,20 +499,14 @@ function WalletShell() {
             <button
               key={tab}
               id={`tab-${tab}`}
-              className={`border-b-2 py-4 px-4 text-[10px] font-monument tracking-wider transition-all duration-200 ease-out outline-none ${
+              className={`border-b-2 py-4 px-4 text-[9px] font-monument tracking-widest transition-all duration-200 ease-out outline-none ${
                 isActive
                   ? 'border-[#2E5BFF] text-white font-bold'
                   : 'border-transparent text-[#71717A] hover:text-[#F4F4F7]'
               }`}
               onClick={() => setActiveTab(tab)}
             >
-              {tab === 'channels'
-                ? 'channels'
-                : tab === 'receive'
-                ? 'receive'
-                : tab === 'send'
-                ? 'send'
-                : 'playground'}
+              {tab}
             </button>
           );
         })}
