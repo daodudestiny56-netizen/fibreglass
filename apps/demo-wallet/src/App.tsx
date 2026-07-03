@@ -29,6 +29,7 @@ import {
   PaymentRouteVisualizer,
   ErrorResolutionBanner,
   RpcLogViewer,
+  CardPattern,
 } from 'fiberglass-react';
 import type {
   ChannelDetail,
@@ -66,27 +67,36 @@ function DashboardStats({ channelsCount }: { channelsCount: number }) {
   return (
     <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
       {/* Metric 1 */}
-      <div className="bg-[#121214] border border-[#222226] p-4 rounded-lg shadow-sm flex flex-col gap-1 text-white">
-        <span className="font-monument text-[9px] tracking-wider text-[#71717A]">Node Balance</span>
-        <div className="flex items-baseline gap-1 mt-1">
-          <span className="text-xl font-bold font-sans tracking-tight tabular-nums text-white">10.00000000</span>
-          <span className="text-[10px] font-mono text-[#71717A]">CKB</span>
+      <div className="card-pattern-bg border p-4 rounded-lg shadow-sm flex flex-col gap-1 text-white">
+        <CardPattern />
+        <div className="relative z-10 flex flex-col gap-1">
+          <span className="font-monument text-[9px] tracking-wider text-[#A1A1AA]">Node Balance</span>
+          <div className="flex items-baseline gap-1 mt-1">
+            <span className="text-xl font-bold font-sans tracking-tight tabular-nums text-white">10.00000000</span>
+            <span className="text-[10px] font-mono text-[#A1A1AA]">CKB</span>
+          </div>
         </div>
       </div>
       {/* Metric 2 */}
-      <div className="bg-[#121214] border border-[#222226] p-4 rounded-lg shadow-sm flex flex-col gap-1 text-white">
-        <span className="font-monument text-[9px] tracking-wider text-[#71717A]">Total Channels</span>
-        <div className="flex items-baseline gap-1 mt-1">
-          <span className="text-xl font-bold font-sans tracking-tight tabular-nums text-white">{channelsCount}</span>
-          <span className="text-[10px] font-mono text-[#71717A]">Active</span>
+      <div className="card-pattern-bg border p-4 rounded-lg shadow-sm flex flex-col gap-1 text-white">
+        <CardPattern />
+        <div className="relative z-10 flex flex-col gap-1">
+          <span className="font-monument text-[9px] tracking-wider text-[#A1A1AA]">Total Channels</span>
+          <div className="flex items-baseline gap-1 mt-1">
+            <span className="text-xl font-bold font-sans tracking-tight tabular-nums text-white">{channelsCount}</span>
+            <span className="text-[10px] font-mono text-[#A1A1AA]">Active</span>
+          </div>
         </div>
       </div>
       {/* Metric 3 */}
-      <div className="bg-[#121214] border border-[#222226] p-4 rounded-lg shadow-sm flex flex-col gap-1 text-white">
-        <span className="font-monument text-[9px] tracking-wider text-[#71717A]">Network Fee</span>
-        <div className="flex items-baseline gap-1 mt-1">
-          <span className="text-xl font-bold font-sans tracking-tight tabular-nums text-white">4,200</span>
-          <span className="text-[10px] font-mono text-[#71717A]">shannons</span>
+      <div className="card-pattern-bg border p-4 rounded-lg shadow-sm flex flex-col gap-1 text-white">
+        <CardPattern />
+        <div className="relative z-10 flex flex-col gap-1">
+          <span className="font-monument text-[9px] tracking-wider text-[#A1A1AA]">Network Fee</span>
+          <div className="flex items-baseline gap-1 mt-1">
+            <span className="text-xl font-bold font-sans tracking-tight tabular-nums text-white">4,200</span>
+            <span className="text-[10px] font-mono text-[#A1A1AA]">shannons</span>
+          </div>
         </div>
       </div>
     </div>
@@ -161,24 +171,27 @@ function ReceiveTab() {
         <span className="font-monument text-[10px] tracking-widest text-[#52525B] mb-1">Receive Funds</span>
         
         {/* Dynamic Controls */}
-        <div className="bg-[#121214] border border-[#222226] rounded-lg p-5 shadow-[0_1px_3px_rgba(0,0,0,0.1)] flex flex-col gap-4 text-white">
-          <div className="flex flex-col gap-1.5">
-            <label className="text-[9px] font-monument tracking-wider text-[#A1A1AA]">Amount (shannons)</label>
-            <input
-              type="text"
-              className="bg-[#1A1A1E] border border-[#2D2D33] focus:border-[#2E5BFF] focus:ring-1 focus:ring-[#2E5BFF]/30 rounded-md py-2 px-3 text-xs text-white font-mono outline-none transition-all duration-200"
-              value={invoiceAmount}
-              onChange={(e) => setInvoiceAmount(e.target.value)}
-            />
-          </div>
-          <div className="flex flex-col gap-1.5">
-            <label className="text-[9px] font-monument tracking-wider text-[#A1A1AA]">Description / Memo</label>
-            <input
-              type="text"
-              className="bg-[#1A1A1E] border border-[#2D2D33] focus:border-[#2E5BFF] focus:ring-1 focus:ring-[#2E5BFF]/30 rounded-md py-2 px-3 text-xs text-white outline-none transition-all duration-200"
-              value={invoiceMemo}
-              onChange={(e) => setInvoiceMemo(e.target.value)}
-            />
+        <div className="card-pattern-bg border rounded-lg p-5 shadow-[0_1px_3px_rgba(0,0,0,0.1)] flex flex-col gap-4 text-white">
+          <CardPattern />
+          <div className="relative z-10 flex flex-col gap-4">
+            <div className="flex flex-col gap-1.5">
+              <label className="text-[9px] font-monument tracking-wider text-[#A1A1AA]">Amount (shannons)</label>
+              <input
+                type="text"
+                className="bg-[#1A1A1E] border border-[#2D2D33] focus:border-[#2E5BFF] focus:ring-1 focus:ring-[#2E5BFF]/30 rounded-md py-2 px-3 text-xs text-white font-mono outline-none transition-all duration-200"
+                value={invoiceAmount}
+                onChange={(e) => setInvoiceAmount(e.target.value)}
+              />
+            </div>
+            <div className="flex flex-col gap-1.5">
+              <label className="text-[9px] font-monument tracking-wider text-[#A1A1AA]">Description / Memo</label>
+              <input
+                type="text"
+                className="bg-[#1A1A1E] border border-[#2D2D33] focus:border-[#2E5BFF] focus:ring-1 focus:ring-[#2E5BFF]/30 rounded-md py-2 px-3 text-xs text-white outline-none transition-all duration-200"
+                value={invoiceMemo}
+                onChange={(e) => setInvoiceMemo(e.target.value)}
+              />
+            </div>
           </div>
         </div>
 
@@ -220,76 +233,79 @@ function SendTab() {
   const canSend = confidence.status === 'ready' && !paymentResult.payment;
 
   return (
-    <div className="flex flex-col gap-6 font-sans">
+    <div className="flex flex-col gap-6 font-sans w-full max-w-[480px] mx-auto">
       <div className="flex flex-col gap-2">
         <span className="font-monument text-[10px] tracking-widest text-[#52525B]">Send Payment</span>
       </div>
 
-      <div className="bg-[#121214] border border-[#222226] rounded-lg p-6 shadow-[0_1px_3px_rgba(0,0,0,0.1),0_12px_32px_rgba(0,0,0,0.25)] flex flex-col gap-4 text-[#F4F4F7]">
+      <div className="card-pattern-bg border rounded-lg p-6 shadow-[0_1px_3px_rgba(0,0,0,0.1),0_12px_32px_rgba(0,0,0,0.25)] flex flex-col gap-4 text-[#F4F4F7]">
+        <CardPattern />
         
-        {/* Preset Selectors */}
-        <div className="flex flex-col gap-1.5">
-          <label className="text-[9px] font-monument tracking-wider text-[#A1A1AA]">Preset Mock Scenarios</label>
-          <div className="grid grid-cols-3 gap-2">
-            <button
-              onClick={() => {
-                setInvoiceInput(PRESET_INVOICES.standard);
-                setActiveInvoice(PRESET_INVOICES.standard);
-              }}
-              className={`py-1.5 px-3 rounded text-[10px] border font-monument tracking-wider transition-all ${
-                invoiceInput === PRESET_INVOICES.standard
-                  ? 'bg-[#2E5BFF] border-[#2E5BFF] text-white'
-                  : 'bg-[#1A1A1E] border-[#2D2D33] text-[#A1A1AA] hover:text-white'
-              }`}
-            >
-              Standard
-            </button>
-            <button
-              onClick={() => {
-                setInvoiceInput(PRESET_INVOICES.no_route);
-                setActiveInvoice(PRESET_INVOICES.no_route);
-              }}
-              className={`py-1.5 px-3 rounded text-[10px] border font-monument tracking-wider transition-all ${
-                invoiceInput === PRESET_INVOICES.no_route
-                  ? 'bg-[#2E5BFF] border-[#2E5BFF] text-white'
-                  : 'bg-[#1A1A1E] border-[#2D2D33] text-[#A1A1AA] hover:text-white'
-              }`}
-            >
-              No Route
-            </button>
-            <button
-              onClick={() => {
-                setInvoiceInput(PRESET_INVOICES.expired);
-                setActiveInvoice(PRESET_INVOICES.expired);
-              }}
-              className={`py-1.5 px-3 rounded text-[10px] border font-monument tracking-wider transition-all ${
-                invoiceInput === PRESET_INVOICES.expired
-                  ? 'bg-[#2E5BFF] border-[#2E5BFF] text-white'
-                  : 'bg-[#1A1A1E] border-[#2D2D33] text-[#A1A1AA] hover:text-white'
-              }`}
-            >
-              Expired
-            </button>
+        <div className="relative z-10 flex flex-col gap-4">
+          {/* Preset Selectors */}
+          <div className="flex flex-col gap-1.5">
+            <label className="text-[9px] font-monument tracking-wider text-[#A1A1AA]">Preset Mock Scenarios</label>
+            <div className="grid grid-cols-3 gap-2">
+              <button
+                onClick={() => {
+                  setInvoiceInput(PRESET_INVOICES.standard);
+                  setActiveInvoice(PRESET_INVOICES.standard);
+                }}
+                className={`py-1.5 px-3 rounded text-[10px] border font-monument tracking-wider transition-all ${
+                  invoiceInput === PRESET_INVOICES.standard
+                    ? 'bg-[#2E5BFF] border-[#2E5BFF] text-white'
+                    : 'bg-[#1A1A1E] border-[#2D2D33] text-[#A1A1AA] hover:text-white'
+                }`}
+              >
+                Standard
+              </button>
+              <button
+                onClick={() => {
+                  setInvoiceInput(PRESET_INVOICES.no_route);
+                  setActiveInvoice(PRESET_INVOICES.no_route);
+                }}
+                className={`py-1.5 px-3 rounded text-[10px] border font-monument tracking-wider transition-all ${
+                  invoiceInput === PRESET_INVOICES.no_route
+                    ? 'bg-[#2E5BFF] border-[#2E5BFF] text-white'
+                    : 'bg-[#1A1A1E] border-[#2D2D33] text-[#A1A1AA] hover:text-white'
+                }`}
+              >
+                No Route
+              </button>
+              <button
+                onClick={() => {
+                  setInvoiceInput(PRESET_INVOICES.expired);
+                  setActiveInvoice(PRESET_INVOICES.expired);
+                }}
+                className={`py-1.5 px-3 rounded text-[10px] border font-monument tracking-wider transition-all ${
+                  invoiceInput === PRESET_INVOICES.expired
+                    ? 'bg-[#2E5BFF] border-[#2E5BFF] text-white'
+                    : 'bg-[#1A1A1E] border-[#2D2D33] text-[#A1A1AA] hover:text-white'
+                }`}
+              >
+                Expired
+              </button>
+            </div>
           </div>
-        </div>
 
-        <div className="flex flex-col gap-2 mt-2">
-          <label className="text-[10px] font-monument tracking-widest text-[#A1A1AA]">Invoice Address</label>
-          <div className="flex gap-2">
-            <input
-              id="send-invoice-input"
-              className="flex-1 bg-[#1A1A1E] border border-[#2D2D33] focus:border-[#2E5BFF] focus:ring-1 focus:ring-[#2E5BFF]/30 rounded-md py-2.5 px-3.5 text-xs text-white font-mono outline-none transition-all duration-200"
-              value={invoiceInput}
-              onChange={(e) => setInvoiceInput(e.target.value)}
-              placeholder="fibb1q…"
-              spellCheck={false}
-            />
-            <button
-              className="bg-[#2E5BFF] hover:bg-[#1E4BEF] text-white text-[9px] font-monument tracking-widest px-4 py-2.5 rounded shadow-sm transition-all duration-200 active:scale-[0.98]"
-              onClick={() => setActiveInvoice(invoiceInput || null)}
-            >
-              Verify Route
-            </button>
+          <div className="flex flex-col gap-2 mt-2">
+            <label className="text-[10px] font-monument tracking-widest text-[#A1A1AA]">Invoice Address</label>
+            <div className="flex gap-2">
+              <input
+                id="send-invoice-input"
+                className="flex-1 bg-[#1A1A1E] border border-[#2D2D33] focus:border-[#2E5BFF] focus:ring-1 focus:ring-[#2E5BFF]/30 rounded-md py-2.5 px-3.5 text-xs text-white font-mono outline-none transition-all duration-200"
+                value={invoiceInput}
+                onChange={(e) => setInvoiceInput(e.target.value)}
+                placeholder="fibb1q…"
+                spellCheck={false}
+              />
+              <button
+                className="bg-[#2E5BFF] hover:bg-[#1E4BEF] text-white text-[9px] font-monument tracking-widest px-4 py-2.5 rounded shadow-sm transition-all duration-200 active:scale-[0.98]"
+                onClick={() => setActiveInvoice(invoiceInput || null)}
+              >
+                Verify Route
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -382,176 +398,191 @@ function PlaygroundTab() {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         
         {/* Card 1: ChannelLifecycleCard */}
-        <div className="bg-[#121214] border border-[#222226] rounded-lg p-5 shadow-[0_1px_3px_rgba(0,0,0,0.1),0_12px_32px_rgba(0,0,0,0.25)] flex flex-col gap-3.5 text-[#F4F4F7]">
-          <div className="text-[10px] font-monument font-bold text-[#2E5BFF] pb-2 border-b border-[#222226] tracking-wider">&lt;ChannelLifecycleCard&gt;</div>
-          
-          <div className="flex justify-between items-center text-xs">
-            <span className="text-[#A1A1AA] font-semibold">State:</span>
-            <select
-              className="bg-[#1A1A1E] border border-[#2D2D33] text-white rounded py-1 px-2 text-xs outline-none"
-              value={chState}
-              onChange={(e) => setChState(e.target.value as ChannelState)}
-            >
-              <option value="ChannelReady" className="text-black font-sans">ChannelReady</option>
-              <option value="NegotiatingFunding" className="text-black font-sans">NegotiatingFunding</option>
-              <option value="AwaitingChannelReady" className="text-black font-sans">AwaitingChannelReady</option>
-              <option value="Closed" className="text-black font-sans">Closed</option>
-            </select>
-          </div>
+        <div className="card-pattern-bg border rounded-lg p-5 shadow-[0_1px_3px_rgba(0,0,0,0.1),0_12px_32px_rgba(0,0,0,0.25)] flex flex-col gap-3.5 text-[#F4F4F7]">
+          <CardPattern />
+          <div className="relative z-10 flex flex-col gap-3.5">
+            <div className="text-[10px] font-monument font-bold text-[#2E5BFF] pb-2 border-b border-[#222226] tracking-wider">&lt;ChannelLifecycleCard&gt;</div>
+            
+            <div className="flex justify-between items-center text-xs">
+              <span className="text-[#A1A1AA] font-semibold">State:</span>
+              <select
+                className="bg-[#1A1A1E] border border-[#2D2D33] text-white rounded py-1 px-2 text-xs outline-none"
+                value={chState}
+                onChange={(e) => setChState(e.target.value as ChannelState)}
+              >
+                <option value="ChannelReady" className="text-black font-sans">ChannelReady</option>
+                <option value="NegotiatingFunding" className="text-black font-sans">NegotiatingFunding</option>
+                <option value="AwaitingChannelReady" className="text-black font-sans">AwaitingChannelReady</option>
+                <option value="Closed" className="text-black font-sans">Closed</option>
+              </select>
+            </div>
 
-          <div className="flex justify-between items-center text-xs">
-            <span className="text-[#A1A1AA] font-semibold">Local (CKB):</span>
-            <input
-              className="w-24 bg-[#1A1A1E] border border-[#2D2D33] rounded py-1 px-2 text-xs outline-none text-right text-white font-mono tabular-nums"
-              type="number"
-              value={Number(chLocal) / 1e8}
-              onChange={(e) => setChLocal(String(Number(e.target.value) * 1e8))}
-            />
-          </div>
+            <div className="flex justify-between items-center text-xs">
+              <span className="text-[#A1A1AA] font-semibold">Local (CKB):</span>
+              <input
+                className="w-24 bg-[#1A1A1E] border border-[#2D2D33] rounded py-1 px-2 text-xs outline-none text-right text-white font-mono tabular-nums"
+                type="number"
+                value={Number(chLocal) / 1e8}
+                onChange={(e) => setChLocal(String(Number(e.target.value) * 1e8))}
+              />
+            </div>
 
-          <div className="flex justify-between items-center text-xs">
-            <span className="text-[#A1A1AA] font-semibold">Remote (CKB):</span>
-            <input
-              className="w-24 bg-[#1A1A1E] border border-[#2D2D33] rounded py-1 px-2 text-xs outline-none text-right text-white font-mono tabular-nums"
-              type="number"
-              value={Number(chRemote) / 1e8}
-              onChange={(e) => setChRemote(String(Number(e.target.value) * 1e8))}
-            />
-          </div>
+            <div className="flex justify-between items-center text-xs">
+              <span className="text-[#A1A1AA] font-semibold">Remote (CKB):</span>
+              <input
+                className="w-24 bg-[#1A1A1E] border border-[#2D2D33] rounded py-1 px-2 text-xs outline-none text-right text-white font-mono tabular-nums"
+                type="number"
+                value={Number(chRemote) / 1e8}
+                onChange={(e) => setChRemote(String(Number(e.target.value) * 1e8))}
+              />
+            </div>
 
-          <div className="flex justify-between items-center text-xs">
-            <span className="text-[#A1A1AA] font-semibold">Enabled:</span>
-            <input
-              type="checkbox"
-              className="accent-[#2E5BFF] h-4 w-4"
-              checked={chEnabled}
-              onChange={(e) => setChEnabled(e.target.checked)}
-            />
-          </div>
+            <div className="flex justify-between items-center text-xs">
+              <span className="text-[#A1A1AA] font-semibold">Enabled:</span>
+              <input
+                type="checkbox"
+                className="accent-[#2E5BFF] h-4 w-4"
+                checked={chEnabled}
+                onChange={(e) => setChEnabled(e.target.checked)}
+              />
+            </div>
 
-          <div className="mt-3 pt-3 border-t border-[#222226]">
-            <ChannelLifecycleCard channel={simulatedChannel} mode={mode} showModeBadge />
+            <div className="mt-3 pt-3 border-t border-[#222226]">
+              <ChannelLifecycleCard channel={simulatedChannel} mode={mode} showModeBadge />
+            </div>
           </div>
         </div>
 
         {/* Card 2: ConfidenceCheck */}
-        <div className="bg-[#121214] border border-[#222226] rounded-lg p-5 shadow-[0_1px_3px_rgba(0,0,0,0.1),0_12px_32px_rgba(0,0,0,0.25)] flex flex-col gap-3.5 text-[#F4F4F7]">
-          <div className="text-[10px] font-monument font-bold text-[#2E5BFF] pb-2 border-b border-[#222226] tracking-wider">&lt;ConfidenceCheck&gt;</div>
+        <div className="card-pattern-bg border rounded-lg p-5 shadow-[0_1px_3px_rgba(0,0,0,0.1),0_12px_32px_rgba(0,0,0,0.25)] flex flex-col gap-3.5 text-[#F4F4F7]">
+          <CardPattern />
+          <div className="relative z-10 flex flex-col gap-3.5">
+            <div className="text-[10px] font-monument font-bold text-[#2E5BFF] pb-2 border-b border-[#222226] tracking-wider">&lt;ConfidenceCheck&gt;</div>
 
-          <div className="flex justify-between items-center text-xs">
-            <span className="text-[#A1A1AA] font-semibold">Route Confidence:</span>
-            <select
-              className="bg-[#1A1A1E] border border-[#2D2D33] text-white rounded py-1 px-2 text-xs outline-none"
-              value={confStatus}
-              onChange={(e) => setConfStatus(e.target.value as ConfidenceStatus)}
-            >
-              <option value="ready" className="text-black font-sans">ready</option>
-              <option value="insufficient_liquidity" className="text-black font-sans">insufficient_liquidity</option>
-              <option value="no_route" className="text-black font-sans">no_route</option>
-              <option value="asset_mismatch" className="text-black font-sans">asset_mismatch</option>
-              <option value="loading" className="text-black font-sans">loading</option>
-            </select>
-          </div>
+            <div className="flex justify-between items-center text-xs">
+              <span className="text-[#A1A1AA] font-semibold">Route Confidence:</span>
+              <select
+                className="bg-[#1A1A1E] border border-[#2D2D33] text-white rounded py-1 px-2 text-xs outline-none"
+                value={confStatus}
+                onChange={(e) => setConfStatus(e.target.value as ConfidenceStatus)}
+              >
+                <option value="ready" className="text-black font-sans">ready</option>
+                <option value="insufficient_liquidity" className="text-black font-sans">insufficient_liquidity</option>
+                <option value="no_route" className="text-black font-sans">no_route</option>
+                <option value="asset_mismatch" className="text-black font-sans">asset_mismatch</option>
+                <option value="loading" className="text-black font-sans">loading</option>
+              </select>
+            </div>
 
-          <div className="flex justify-between items-center text-xs">
-            <span className="text-[#A1A1AA] font-semibold">Fee (shannons):</span>
-            <input
-              className="w-24 bg-[#1A1A1E] border border-[#2D2D33] rounded py-1 px-2 text-xs outline-none text-right text-white font-mono tabular-nums"
-              value={confFee}
-              onChange={(e) => setConfFee(e.target.value)}
-            />
-          </div>
+            <div className="flex justify-between items-center text-xs">
+              <span className="text-[#A1A1AA] font-semibold">Fee (shannons):</span>
+              <input
+                className="w-24 bg-[#1A1A1E] border border-[#2D2D33] rounded py-1 px-2 text-xs outline-none text-right text-white font-mono tabular-nums"
+                value={confFee}
+                onChange={(e) => setConfFee(e.target.value)}
+              />
+            </div>
 
-          <div className="mt-3 pt-3 border-t border-[#222226]">
-            <ConfidenceCheck
-              status={confStatus}
-              fee={confFee}
-              route={MOCK_HOPS}
-              isLoading={confStatus === 'loading'}
-              error={null}
-              mode={mode}
-            />
+            <div className="mt-3 pt-3 border-t border-[#222226]">
+              <ConfidenceCheck
+                status={confStatus}
+                fee={confFee}
+                route={MOCK_HOPS}
+                isLoading={confStatus === 'loading'}
+                error={null}
+                mode={mode}
+              />
+            </div>
           </div>
         </div>
 
         {/* Card 3: InvoiceSheet */}
-        <div className="bg-[#121214] border border-[#222226] rounded-lg p-5 shadow-[0_1px_3px_rgba(0,0,0,0.1),0_12px_32px_rgba(0,0,0,0.25)] flex flex-col gap-3.5 text-[#F4F4F7]">
-          <div className="text-[10px] font-monument font-bold text-[#2E5BFF] pb-2 border-b border-[#222226] tracking-wider">&lt;InvoiceSheet&gt;</div>
+        <div className="card-pattern-bg border rounded-lg p-5 shadow-[0_1px_3px_rgba(0,0,0,0.1),0_12px_32px_rgba(0,0,0,0.25)] flex flex-col gap-3.5 text-[#F4F4F7]">
+          <CardPattern />
+          <div className="relative z-10 flex flex-col gap-3.5">
+            <div className="text-[10px] font-monument font-bold text-[#2E5BFF] pb-2 border-b border-[#222226] tracking-wider">&lt;InvoiceSheet&gt;</div>
 
-          <div className="flex justify-between items-center text-xs">
-            <span className="text-[#A1A1AA] font-semibold">Invoice Status:</span>
-            <select
-              className="bg-[#1A1A1E] border border-[#2D2D33] text-white rounded py-1 px-2 text-xs outline-none"
-              value={invStatus}
-              onChange={(e) => setInvStatus(e.target.value as InvoiceStatus)}
-            >
-              <option value="Open" className="text-black font-sans">Open</option>
-              <option value="Paid" className="text-black font-sans">Paid</option>
-              <option value="Expired" className="text-black font-sans">Expired</option>
-            </select>
-          </div>
+            <div className="flex justify-between items-center text-xs">
+              <span className="text-[#A1A1AA] font-semibold">Invoice Status:</span>
+              <select
+                className="bg-[#1A1A1E] border border-[#2D2D33] text-white rounded py-1 px-2 text-xs outline-none"
+                value={invStatus}
+                onChange={(e) => setInvStatus(e.target.value as InvoiceStatus)}
+              >
+                <option value="Open" className="text-black font-sans">Open</option>
+                <option value="Paid" className="text-black font-sans">Paid</option>
+                <option value="Expired" className="text-black font-sans">Expired</option>
+              </select>
+            </div>
 
-          <div className="mt-3 pt-3 border-t border-[#222226] flex justify-center">
-            <InvoiceSheet
-              invoiceAddress="fibb1qpp5kh8d0kfwna2t7afjhqjyrq8fq4dg37x4k0hz4w5s9yq9jyeysqqzvq79pq6xm8gqs3y"
-              paymentHash={'0x123' as Hash256}
-              invoiceStatus={invStatus}
-              expiresAt={new Date(Date.now() + 600000)}
-              isLoading={false}
-              error={null}
-              mode={mode}
-            />
+            <div className="mt-3 pt-3 border-t border-[#222226] flex justify-center">
+              <InvoiceSheet
+                invoiceAddress="fibb1qpp5kh8d0kfwna2t7afjhqjyrq8fq4dg37x4k0hz4w5s9yq9jyeysqqzvq79pq6xm8gqs3y"
+                paymentHash={'0x123' as Hash256}
+                invoiceStatus={invStatus}
+                expiresAt={new Date(Date.now() + 600000)}
+                isLoading={false}
+                error={null}
+                mode={mode}
+              />
+            </div>
           </div>
         </div>
 
         {/* Card 4: ErrorResolutionBanner */}
-        <div className="bg-[#121214] border border-[#222226] rounded-lg p-5 shadow-[0_1px_3px_rgba(0,0,0,0.1),0_12px_32px_rgba(0,0,0,0.25)] flex flex-col gap-3.5 text-[#F4F4F7]">
-          <div className="text-[10px] font-monument font-bold text-[#2E5BFF] pb-2 border-b border-[#222226] tracking-wider">&lt;ErrorResolutionBanner&gt;</div>
+        <div className="card-pattern-bg border rounded-lg p-5 shadow-[0_1px_3px_rgba(0,0,0,0.1),0_12px_32px_rgba(0,0,0,0.25)] flex flex-col gap-3.5 text-[#F4F4F7]">
+          <CardPattern />
+          <div className="relative z-10 flex flex-col gap-3.5">
+            <div className="text-[10px] font-monument font-bold text-[#2E5BFF] pb-2 border-b border-[#222226] tracking-wider">&lt;ErrorResolutionBanner&gt;</div>
 
-          <div className="flex justify-between items-center text-xs">
-            <span className="text-[#A1A1AA] font-semibold">FNN Error Code:</span>
-            <select
-              className="bg-[#1A1A1E] border border-[#2D2D33] text-white rounded py-1 px-2 text-xs outline-none"
-              value={errCode}
-              onChange={(e) => setErrCode(e.target.value as import('fiberglass-react').FiberErrorCode)}
-            >
-              <option value="INSUFFICIENT_LIQUIDITY" className="text-black font-sans">INSUFFICIENT_LIQUIDITY</option>
-              <option value="NO_ROUTE" className="text-black font-sans">NO_ROUTE</option>
-              <option value="ASSET_MISMATCH" className="text-black font-sans">ASSET_MISMATCH</option>
-              <option value="NODE_UNREACHABLE" className="text-black font-sans">NODE_UNREACHABLE</option>
-            </select>
-          </div>
+            <div className="flex justify-between items-center text-xs">
+              <span className="text-[#A1A1AA] font-semibold">FNN Error Code:</span>
+              <select
+                className="bg-[#1A1A1E] border border-[#2D2D33] text-white rounded py-1 px-2 text-xs outline-none"
+                value={errCode}
+                onChange={(e) => setErrCode(e.target.value as import('fiberglass-react').FiberErrorCode)}
+              >
+                <option value="INSUFFICIENT_LIQUIDITY" className="text-black font-sans">INSUFFICIENT_LIQUIDITY</option>
+                <option value="NO_ROUTE" className="text-black font-sans">NO_ROUTE</option>
+                <option value="ASSET_MISMATCH" className="text-black font-sans">ASSET_MISMATCH</option>
+                <option value="NODE_UNREACHABLE" className="text-black font-sans">NODE_UNREACHABLE</option>
+              </select>
+            </div>
 
-          <div className="mt-3 pt-3 border-t border-[#222226]">
-            <ErrorResolutionBanner error={simulatedError} retry={() => alert('Callback re-triggered!')} />
+            <div className="mt-3 pt-3 border-t border-[#222226]">
+              <ErrorResolutionBanner error={simulatedError} retry={() => alert('Callback re-triggered!')} />
+            </div>
           </div>
         </div>
 
         {/* Card 5: PaymentRouteVisualizer (Full Span) */}
-        <div className="bg-[#121214] border border-[#222226] rounded-lg p-5 shadow-[0_1px_3px_rgba(0,0,0,0.1),0_12px_32px_rgba(0,0,0,0.25)] flex flex-col gap-3.5 text-[#F4F4F7] md:col-span-2">
-          <div className="text-[10px] font-monument font-bold text-[#2E5BFF] pb-2 border-b border-[#222226] tracking-wider">&lt;PaymentRouteVisualizer&gt;</div>
+        <div className="card-pattern-bg border rounded-lg p-5 shadow-[0_1px_3px_rgba(0,0,0,0.1),0_12px_32px_rgba(0,0,0,0.25)] flex flex-col gap-3.5 text-[#F4F4F7] md:col-span-2">
+          <CardPattern />
+          <div className="relative z-10 flex flex-col gap-3.5">
+            <div className="text-[10px] font-monument font-bold text-[#2E5BFF] pb-2 border-b border-[#222226] tracking-wider">&lt;PaymentRouteVisualizer&gt;</div>
 
-          <div className="flex justify-between items-center text-xs mb-1">
-            <span className="text-[#A1A1AA] font-semibold">Payment Status:</span>
-            <select
-              className="bg-[#1A1A1E] border border-[#2D2D33] text-white rounded py-1 px-2 text-xs outline-none"
-              value={visStatus}
-              onChange={(e) => setVisStatus(e.target.value as PaymentStatus)}
-            >
-              <option value="Success" className="text-black font-sans">Success</option>
-              <option value="Failed" className="text-black font-sans">Failed</option>
-              <option value="Inflight" className="text-black font-sans">Inflight</option>
-            </select>
-          </div>
+            <div className="flex justify-between items-center text-xs mb-1">
+              <span className="text-[#A1A1AA] font-semibold">Payment Status:</span>
+              <select
+                className="bg-[#1A1A1E] border border-[#2D2D33] text-white rounded py-1 px-2 text-xs outline-none"
+                value={visStatus}
+                onChange={(e) => setVisStatus(e.target.value as PaymentStatus)}
+              >
+                <option value="Success" className="text-black font-sans">Success</option>
+                <option value="Failed" className="text-black font-sans">Failed</option>
+                <option value="Inflight" className="text-black font-sans">Inflight</option>
+              </select>
+            </div>
 
-          <div className="mt-2">
-            <PaymentRouteVisualizer
-              hops={MOCK_HOPS}
-              paymentStatus={visStatus}
-              totalFee="2500"
-              mode={mode}
-              isAnimating={visStatus === 'Inflight'}
-            />
+            <div className="mt-2">
+              <PaymentRouteVisualizer
+                hops={MOCK_HOPS}
+                paymentStatus={visStatus}
+                totalFee="2500"
+                mode={mode}
+                isAnimating={visStatus === 'Inflight'}
+              />
+            </div>
           </div>
         </div>
 
@@ -633,7 +664,7 @@ function WalletShell() {
       </nav>
 
       {/* Main Content Area */}
-      <main className="relative z-10 flex-1 max-w-[850px] w-full mx-auto p-6 md:py-8 flex flex-col gap-6">
+      <main className="relative z-10 flex-1 max-w-[720px] w-full mx-auto p-6 md:py-8 flex flex-col gap-6">
         <div className="flex-1">
           {activeTab === 'channels' && <ChannelsTab />}
           {activeTab === 'receive' && <ReceiveTab />}

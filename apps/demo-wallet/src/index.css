@@ -43,3 +43,29 @@ body {
   pointer-events: none;
   opacity: 0.85;
 }
+
+.card-pattern-bg {
+  position: relative;
+  overflow: hidden;
+  background: repeating-linear-gradient(
+    135deg,
+    #232526 0px,
+    #232526 60px,
+    #23252699 70px,
+    #414345 130px
+  ) !important;
+  border-color: #2D2D33 !important;
+}
+
+@keyframes cubeMove {
+  from {
+    transform: translateY(0) scale(1);
+  }
+  to {
+    transform: translateY(-20%) scale(1.02) rotate(1deg);
+  }
+}
+
+.cube-svg {
+  animation: cubeMove 18s linear infinite alternate;
+}

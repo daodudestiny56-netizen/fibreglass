@@ -10,6 +10,7 @@
  */
 
 import React, { useState } from 'react';
+import { CardPattern } from './CardPattern';
 import type { ChannelDetail, ChannelState } from '../lib/rpcClient';
 import { useChannel } from '../hooks/useChannel';
 
@@ -79,11 +80,11 @@ export function ChannelLifecycleCard({
 
   const styles: Record<string, React.CSSProperties> = {
     card: {
-      background: 'linear-gradient(135deg, #1e1e2e 0%, #16213e 100%)',
-      border: '1px solid #2a2a4a',
+      background: 'repeating-linear-gradient(135deg, #232526 0px, #232526 60px, #23252699 70px, #414345 130px)',
+      border: '1px solid #2D2D33',
       borderRadius: '12px',
       padding: '16px 20px',
-      fontFamily: "'Inter', 'ui-sans-serif', system-ui, sans-serif",
+      fontFamily: "'Geist', sans-serif",
       color: '#e2e8f0',
       position: 'relative',
       overflow: 'hidden',
@@ -199,7 +200,8 @@ export function ChannelLifecycleCard({
   if (!channel) {
     return (
       <div style={styles.card}>
-        <div style={{ color: '#64748b', fontSize: '12px', textAlign: 'center', padding: '10px 0' }}>
+        <CardPattern />
+        <div style={{ position: 'relative', zIndex: 10, color: '#94a3b8', fontSize: '12px', textAlign: 'center', padding: '10px 0' }}>
           {channelId ? `Channel ${shortId(channelId)} not found` : 'No channel details provided'}
         </div>
       </div>
@@ -215,72 +217,75 @@ export function ChannelLifecycleCard({
 
   return (
     <div style={styles.card}>
-      {showModeBadge && (
-        <span style={styles.modeBadge}>{mode === 'live' ? '● LIVE' : '◌ MOCK'}</span>
-      )}
+      <CardPattern />
+      <div style={{ position: 'relative', zIndex: 10 }}>
+        {showModeBadge && (
+          <span style={styles.modeBadge}>{mode === 'live' ? '● LIVE' : '◌ MOCK'}</span>
+        )}
 
-      <div style={styles.header}>
-        <div>
-          <div style={styles.channelId}>
-            Channel {shortId(channel.channel_id)}
+        <div style={styles.header}>
+          <div>
+            <div style={styles.channelId}>
+              Channel {shortId(channel.channel_id)}
+            </div>
+            <div style={styles.peerId}>
+              Peer: {shortId(channel.peer_id)}
+            </div>
           </div>
-          <div style={styles.peerId}>
-            Peer: {shortId(channel.peer_id)}
+          <div style={{ display: 'flex', alignItems: 'center' }}>
+            <span style={{ ...styles.stateBadge, color, border: `1px solid ${color}55`, background: `${color}22` }}>
+              <span style={{ ...styles.dot, background: dot }} />
+              <span style={{ marginLeft: '6px' }}>{label}</span>
+            </span>
+            {!channel.enabled && (
+              <span style={styles.disabledTag}>disabled</span>
+            )}
           </div>
         </div>
-        <div style={{ display: 'flex', alignItems: 'center' }}>
-          <span style={{ ...styles.stateBadge, color, border: `1px solid ${color}55`, background: `${color}22` }}>
-            <span style={{ ...styles.dot, background: dot }} />
-            <span style={{ marginLeft: '6px' }}>{label}</span>
-          </span>
-          {!channel.enabled && (
-            <span style={styles.disabledTag}>disabled</span>
-          )}
-        </div>
+
+        {total > 0n && (
+          <div style={styles.balanceRow}>
+            <div style={styles.balanceLabels}>
+              <span>Local Balance</span>
+              <span>Remote Balance</span>
+            </div>
+            <div style={styles.balanceBar}>
+              <div style={{
+                height: '100%',
+                width: `${localPct}%`,
+                background: channel.enabled
+                  ? 'linear-gradient(90deg, #6366f1, #8b5cf6)'
+                  : 'linear-gradient(90deg, #475569, #64748b)',
+                borderRadius: '3px',
+                transition: 'width 0.5s ease',
+              }} />
+            </div>
+            <div style={styles.balanceAmounts}>
+              <span style={styles.localAmount}>{shannonsToCkb(channel.local_balance)} CKB</span>
+              <span style={styles.remoteAmount}>{shannonsToCkb(channel.remote_balance)} CKB</span>
+            </div>
+          </div>
+        )}
+
+        {total === 0n && (
+          <div style={{ marginTop: '10px', fontSize: '11px', color: '#475569', fontStyle: 'italic' }}>
+            No balance — channel is closing or closed.
+          </div>
+        )}
+
+        <button
+          style={styles.disclosureBtn}
+          onClick={() => setRawExpanded((v) => !v)}
+        >
+          <span>{rawExpanded ? '▼' : '▶'}</span> View Raw RPC
+        </button>
+
+        {rawExpanded && (
+          <pre style={styles.jsonBlock}>
+            {JSON.stringify(channel, null, 2)}
+          </pre>
+        )}
       </div>
-
-      {total > 0n && (
-        <div style={styles.balanceRow}>
-          <div style={styles.balanceLabels}>
-            <span>Local Balance</span>
-            <span>Remote Balance</span>
-          </div>
-          <div style={styles.balanceBar}>
-            <div style={{
-              height: '100%',
-              width: `${localPct}%`,
-              background: channel.enabled
-                ? 'linear-gradient(90deg, #6366f1, #8b5cf6)'
-                : 'linear-gradient(90deg, #475569, #64748b)',
-              borderRadius: '3px',
-              transition: 'width 0.5s ease',
-            }} />
-          </div>
-          <div style={styles.balanceAmounts}>
-            <span style={styles.localAmount}>{shannonsToCkb(channel.local_balance)} CKB</span>
-            <span style={styles.remoteAmount}>{shannonsToCkb(channel.remote_balance)} CKB</span>
-          </div>
-        </div>
-      )}
-
-      {total === 0n && (
-        <div style={{ marginTop: '10px', fontSize: '11px', color: '#475569', fontStyle: 'italic' }}>
-          No balance — channel is closing or closed.
-        </div>
-      )}
-
-      <button
-        style={styles.disclosureBtn}
-        onClick={() => setRawExpanded((v) => !v)}
-      >
-        <span>{rawExpanded ? '▼' : '▶'}</span> View Raw RPC
-      </button>
-
-      {rawExpanded && (
-        <pre style={styles.jsonBlock}>
-          {JSON.stringify(channel, null, 2)}
-        </pre>
-      )}
     </div>
   );
 }
