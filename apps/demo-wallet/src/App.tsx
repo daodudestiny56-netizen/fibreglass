@@ -233,7 +233,7 @@ function SendTab() {
   const canSend = confidence.status === 'ready' && !paymentResult.payment;
 
   return (
-    <div className="flex flex-col gap-6 font-sans w-full max-w-[480px] mx-auto">
+    <div className="flex flex-col gap-6 font-sans">
       <div className="flex flex-col gap-2">
         <span className="font-monument text-[10px] tracking-widest text-[#52525B]">Send Payment</span>
       </div>
@@ -664,7 +664,7 @@ function WalletShell() {
       </nav>
 
       {/* Main Content Area */}
-      <main className="relative z-10 flex-1 max-w-[720px] w-full mx-auto p-6 md:py-8 flex flex-col gap-6">
+      <main className="relative z-10 flex-1 max-w-[850px] w-full mx-auto p-6 md:py-8 flex flex-col gap-6">
         <div className="flex-1">
           {activeTab === 'channels' && <ChannelsTab />}
           {activeTab === 'receive' && <ReceiveTab />}
