@@ -1,14 +1,18 @@
 /**
  * App.tsx — Demo Wallet
  *
- * Tactical, developer-focused, high-impact aesthetic.
- * Strictly adheres to these custom typography mappings:
- *  - Headers & Hero Sections: Monument Extended / Syne (`font-monument`) - heavy, wide, commanding.
- *  - Main UI & Balances: Satoshi / Plus Jakarta Sans (`font-sans`) - spacious, clean geometric.
- *  - Public Keys & Hashes & Logs: Space Mono (`font-mono`) - retro-futuristic engineered vibe.
- *  - Ticking numbers and numeric values: `tabular-nums` - prevents jittering and layout shifting.
+ * Premium editorial-grade UI redesign with tactical developer-focused aesthetic:
+ *  - Font: Monument Extended / Syne (`font-monument`) for commanding headers.
+ *  - Font: Satoshi / Plus Jakarta Sans (`font-sans`) for geometric UI.
+ *  - Font: Space Mono (`font-mono`) for keys, hashes, and inspector.
+ *  - Tabular Numbers (`tabular-nums`) on all numeric balance readouts.
+ *  - Background: Radial-masked grid pattern on industrial platinum (`#E5E5EC`).
+ *  - Elevates: Dark Obsidian cards (`#121214`) with pure-white text and Electric Cobalt accents (`#2E5BFF`).
  *
- * Colors: Slate-Platinum background (`#E5E5EC`) with deep matte Charcoal/Obsidian cards (`#121214`).
+ * New Sleek Dashboard Additions:
+ *  - Network Metrics & Liquidity Stats Grid.
+ *  - Fast-Track Preset select boxes on Send & Playground tabs.
+ *  - Filterable RPC Log Inspector.
  */
 
 import { useState } from 'react';
@@ -38,18 +42,56 @@ import type {
 } from 'fiberglass-react';
 
 // ---------------------------------------------------------------------------
-// Constants & Configurations
+// Constants & Presets
 // ---------------------------------------------------------------------------
 
 type Tab = 'channels' | 'receive' | 'send' | 'playground';
 
-const DEMO_INVOICE =
-  'fibb1qpp5kh8d0kfwna2t7afjhqjyrq8fq4dg37x4k0hz4w5s9yq9jyeysqqzvq79pq6xm8gqs3y6e28ekqkq9wj4lxx8t4fdjjvs8vfxzf0lfmscmygq5yu';
+const PRESET_INVOICES = {
+  standard: 'fibb1qpp5kh8d0kfwna2t7afjhqjyrq8fq4dg37x4k0hz4w5s9yq9jyeysqqzvq79pq6xm8gqs3y6e28ekqkq9wj4lxx8t4fdjjvs8vfxzf0lfmscmygq5yu',
+  expired: 'fibb1qpp5kh8d0kfwna2t7afjhqjyrq8fq4dg37x4k0hz4w5s9yq9jyeysqqzvq79pq6xm8gqs3y6e28ekqkq9wj4lxx8t4fdjjvs8vfxzf0lfmscmygq5yu_expired',
+  no_route: 'fibb1qpp5kh8d0kfwna2t7afjhqjyrq8fq4dg37x4k0hz4w5s9yq9jyeysqqzvq79pq6xm8gqs3y6e28ekqkq9wj4lxx8t4fdjjvs8vfxzf0lfmscmygq5no_route',
+};
 
 const MOCK_HOPS: RouterHop[] = [
   { channel_outpoint: '0x0001', next_hop: '0x0002' as import('fiberglass-react').Pubkey, fee: '1000' },
   { channel_outpoint: '0x0002', next_hop: '0x0003' as import('fiberglass-react').Pubkey, fee: '1500' },
 ];
+
+// ---------------------------------------------------------------------------
+// Component: Dashboard Stats Grid
+// ---------------------------------------------------------------------------
+
+function DashboardStats({ channelsCount }: { channelsCount: number }) {
+  return (
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+      {/* Metric 1 */}
+      <div className="bg-[#121214] border border-[#222226] p-4 rounded-lg shadow-sm flex flex-col gap-1 text-white">
+        <span className="font-monument text-[9px] tracking-wider text-[#71717A]">Node Balance</span>
+        <div className="flex items-baseline gap-1 mt-1">
+          <span className="text-xl font-bold font-sans tracking-tight tabular-nums text-white">10.00000000</span>
+          <span className="text-[10px] font-mono text-[#71717A]">CKB</span>
+        </div>
+      </div>
+      {/* Metric 2 */}
+      <div className="bg-[#121214] border border-[#222226] p-4 rounded-lg shadow-sm flex flex-col gap-1 text-white">
+        <span className="font-monument text-[9px] tracking-wider text-[#71717A]">Total Channels</span>
+        <div className="flex items-baseline gap-1 mt-1">
+          <span className="text-xl font-bold font-sans tracking-tight tabular-nums text-white">{channelsCount}</span>
+          <span className="text-[10px] font-mono text-[#71717A]">Active</span>
+        </div>
+      </div>
+      {/* Metric 3 */}
+      <div className="bg-[#121214] border border-[#222226] p-4 rounded-lg shadow-sm flex flex-col gap-1 text-white">
+        <span className="font-monument text-[9px] tracking-wider text-[#71717A]">Network Fee</span>
+        <div className="flex items-baseline gap-1 mt-1">
+          <span className="text-xl font-bold font-sans tracking-tight tabular-nums text-white">4,200</span>
+          <span className="text-[10px] font-mono text-[#71717A]">shannons</span>
+        </div>
+      </div>
+    </div>
+  );
+}
 
 // ---------------------------------------------------------------------------
 // Component: Channels Tab
@@ -63,8 +105,10 @@ function ChannelsTab() {
 
   return (
     <div className="flex flex-col gap-4 font-sans text-xs">
+      <DashboardStats channelsCount={channels.length} />
+
       <div className="flex justify-between items-center mb-1">
-        <span className="font-monument text-[10px] tracking-widest text-[#52525B]">Lightning Channels</span>
+        <span className="font-monument text-[10px] tracking-widest text-[#52525B]">Channel Overview</span>
         <button
           className="bg-[#121214] border border-[#2D2D33] hover:bg-[#1C1C20] text-[9px] font-monument tracking-widest px-4 py-2 rounded text-white transition-all duration-200 active:scale-[0.98] shadow-sm"
           onClick={refetch}
@@ -101,16 +145,43 @@ function ChannelsTab() {
 
 function ReceiveTab() {
   const { mode } = useFiberNode();
+  const [invoiceAmount, setInvoiceAmount] = useState('100000000'); // 1 CKB default
+  const [invoiceMemo, setInvoiceMemo] = useState('Fiberglass SDK Dev Demo');
+
+  // Trigger invoice creation
   const invoice = useInvoice({
-    amount: '100000000', // 1 CKB
+    amount: invoiceAmount,
     currency: 'CKB',
-    memo: 'Fiberglass SDK Dev Demo',
+    memo: invoiceMemo,
   });
 
   return (
     <div className="flex flex-col gap-4 items-center font-sans">
-      <div className="w-full max-w-[420px] flex flex-col gap-3">
+      <div className="w-full max-w-[420px] flex flex-col gap-4">
         <span className="font-monument text-[10px] tracking-widest text-[#52525B] mb-1">Receive Funds</span>
+        
+        {/* Dynamic Controls */}
+        <div className="bg-[#121214] border border-[#222226] rounded-lg p-5 shadow-[0_1px_3px_rgba(0,0,0,0.1)] flex flex-col gap-4 text-white">
+          <div className="flex flex-col gap-1.5">
+            <label className="text-[9px] font-monument tracking-wider text-[#A1A1AA]">Amount (shannons)</label>
+            <input
+              type="text"
+              className="bg-[#1A1A1E] border border-[#2D2D33] focus:border-[#2E5BFF] focus:ring-1 focus:ring-[#2E5BFF]/30 rounded-md py-2 px-3 text-xs text-white font-mono outline-none transition-all duration-200"
+              value={invoiceAmount}
+              onChange={(e) => setInvoiceAmount(e.target.value)}
+            />
+          </div>
+          <div className="flex flex-col gap-1.5">
+            <label className="text-[9px] font-monument tracking-wider text-[#A1A1AA]">Description / Memo</label>
+            <input
+              type="text"
+              className="bg-[#1A1A1E] border border-[#2D2D33] focus:border-[#2E5BFF] focus:ring-1 focus:ring-[#2E5BFF]/30 rounded-md py-2 px-3 text-xs text-white outline-none transition-all duration-200"
+              value={invoiceMemo}
+              onChange={(e) => setInvoiceMemo(e.target.value)}
+            />
+          </div>
+        </div>
+
         <InvoiceSheet
           invoiceAddress={invoice.invoiceAddress}
           paymentHash={invoice.paymentHash}
@@ -132,8 +203,8 @@ function ReceiveTab() {
 
 function SendTab() {
   const { mode } = useFiberNode();
-  const [invoiceInput, setInvoiceInput] = useState(DEMO_INVOICE);
-  const [activeInvoice, setActiveInvoice] = useState<string | null>(DEMO_INVOICE);
+  const [invoiceInput, setInvoiceInput] = useState(PRESET_INVOICES.standard);
+  const [activeInvoice, setActiveInvoice] = useState<string | null>(PRESET_INVOICES.standard);
 
   const confidence = useConfidence({ invoiceAddress: activeInvoice });
 
@@ -155,7 +226,54 @@ function SendTab() {
       </div>
 
       <div className="bg-[#121214] border border-[#222226] rounded-lg p-6 shadow-[0_1px_3px_rgba(0,0,0,0.1),0_12px_32px_rgba(0,0,0,0.25)] flex flex-col gap-4 text-[#F4F4F7]">
-        <div className="flex flex-col gap-2">
+        
+        {/* Preset Selectors */}
+        <div className="flex flex-col gap-1.5">
+          <label className="text-[9px] font-monument tracking-wider text-[#A1A1AA]">Preset Mock Scenarios</label>
+          <div className="grid grid-cols-3 gap-2">
+            <button
+              onClick={() => {
+                setInvoiceInput(PRESET_INVOICES.standard);
+                setActiveInvoice(PRESET_INVOICES.standard);
+              }}
+              className={`py-1.5 px-3 rounded text-[10px] border font-monument tracking-wider transition-all ${
+                invoiceInput === PRESET_INVOICES.standard
+                  ? 'bg-[#2E5BFF] border-[#2E5BFF] text-white'
+                  : 'bg-[#1A1A1E] border-[#2D2D33] text-[#A1A1AA] hover:text-white'
+              }`}
+            >
+              Standard
+            </button>
+            <button
+              onClick={() => {
+                setInvoiceInput(PRESET_INVOICES.no_route);
+                setActiveInvoice(PRESET_INVOICES.no_route);
+              }}
+              className={`py-1.5 px-3 rounded text-[10px] border font-monument tracking-wider transition-all ${
+                invoiceInput === PRESET_INVOICES.no_route
+                  ? 'bg-[#2E5BFF] border-[#2E5BFF] text-white'
+                  : 'bg-[#1A1A1E] border-[#2D2D33] text-[#A1A1AA] hover:text-white'
+              }`}
+            >
+              No Route
+            </button>
+            <button
+              onClick={() => {
+                setInvoiceInput(PRESET_INVOICES.expired);
+                setActiveInvoice(PRESET_INVOICES.expired);
+              }}
+              className={`py-1.5 px-3 rounded text-[10px] border font-monument tracking-wider transition-all ${
+                invoiceInput === PRESET_INVOICES.expired
+                  ? 'bg-[#2E5BFF] border-[#2E5BFF] text-white'
+                  : 'bg-[#1A1A1E] border-[#2D2D33] text-[#A1A1AA] hover:text-white'
+              }`}
+            >
+              Expired
+            </button>
+          </div>
+        </div>
+
+        <div className="flex flex-col gap-2 mt-2">
           <label className="text-[10px] font-monument tracking-widest text-[#A1A1AA]">Invoice Address</label>
           <div className="flex gap-2">
             <input

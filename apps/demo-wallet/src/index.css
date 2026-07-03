@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&family=Syne:wght@800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Geist+Mono:wght@100..900&family=Geist:wght@100..900&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -10,13 +10,14 @@
 
 body {
   @apply bg-[#E5E5EC] text-[#121214] min-h-screen antialiased;
-  font-family: 'Satoshi', 'Plus Jakarta Sans', -apple-system, sans-serif;
+  font-family: 'Geist', -apple-system, sans-serif;
 }
 
 .font-monument {
-  font-family: 'Monument Extended', 'Syne', sans-serif;
+  font-family: 'Geist', sans-serif;
   font-weight: 800;
   text-transform: uppercase;
+  letter-spacing: 0.05em;
 }
 
 .grid-background {

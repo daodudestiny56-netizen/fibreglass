@@ -4,8 +4,8 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        sans: ['Satoshi', 'Plus Jakarta Sans', 'sans-serif'],
-        mono: ['Space Mono', 'monospace'],
+        sans: ['Geist', 'sans-serif'],
+        mono: ['Geist Mono', 'monospace'],
       },
     },
   },
