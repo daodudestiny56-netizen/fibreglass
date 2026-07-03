@@ -30,6 +30,7 @@ import {
   type FiberMode,
   type ConnectionStatus,
   type NodeInfoResponse,
+  type RpcLog,
 } from '../lib/rpcClient';
 import { MOCK_NODE_INFO } from '../lib/mockFixtures';
 
@@ -66,6 +67,16 @@ export function FiberProvider({ nodeUrl, children }: FiberProviderProps) {
   const [connectionStatus, setConnectionStatus] =
     useState<ConnectionStatus>('connecting');
   const [nodeInfo, setNodeInfo] = useState<NodeInfoResponse | null>(null);
+  const [rpcLogs, setRpcLogs] = useState<RpcLog[]>([]);
+
+  useEffect(() => {
+    clientRef.current.onLog = (log) => {
+      setRpcLogs((prev) => [log, ...prev].slice(0, 50));
+    };
+    return () => {
+      clientRef.current.onLog = undefined;
+    };
+  }, []);
 
   const attemptConnection = useCallback(async () => {
     setConnectionStatus('connecting');
@@ -99,6 +110,7 @@ export function FiberProvider({ nodeUrl, children }: FiberProviderProps) {
     mode,
     connectionStatus,
     nodeInfo,
+    rpcLogs,
   };
 
   return (

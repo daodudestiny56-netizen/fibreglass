@@ -102,6 +102,7 @@ export function useInvoice(options: UseInvoiceOptions): UseInvoiceResult {
       if (mode === 'mock') {
         await delay(200);
         const data = MOCK_NEW_INVOICE;
+        client.logMockCall('new_invoice', { amount, currency, description: memo, ...(expirySeconds ? { expiry: expirySeconds } : {}) }, data);
         setInvoiceAddress(data.invoice_address);
         setPaymentHash(data.invoice.payment_hash);
         setInvoiceStatus(MOCK_GET_INVOICE_OPEN.status);
@@ -109,6 +110,7 @@ export function useInvoice(options: UseInvoiceOptions): UseInvoiceResult {
 
         // Simulate payment arriving after ~6 s in mock mode
         mockPayRef.current = setTimeout(() => {
+          client.logMockCall('get_invoice', { payment_hash: data.invoice.payment_hash }, { invoice_address: data.invoice_address, invoice: data.invoice, status: 'Paid' });
           setInvoiceStatus(MOCK_GET_INVOICE_PAID.status);
           stopPolling();
         }, 6_000);

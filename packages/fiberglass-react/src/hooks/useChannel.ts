@@ -40,6 +40,7 @@ export function useChannel(options: UseChannelOptions = {}): UseChannelResult {
         // Simulate a brief async delay to make mock feel realistic
         await delay(120);
         const data = MOCK_LIST_CHANNELS;
+        client.logMockCall('list_channels', peerId ? { peer_id: peerId } : {}, data);
         const filtered = peerId
           ? data.channels.filter((ch) => ch.peer_id === peerId)
           : data.channels;

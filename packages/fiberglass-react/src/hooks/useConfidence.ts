@@ -58,6 +58,7 @@ export function useConfidence({
       if (mode === 'mock') {
         await delay(180);
         const data = MOCK_SEND_PAYMENT_DRY_RUN;
+        client.logMockCall('send_payment', { invoice: invoiceAddress, dry_run: true, ...(amount ? { amount } : {}) }, data);
         setFee(data.fee);
         setRoute(data.router);
         setStatus('ready');

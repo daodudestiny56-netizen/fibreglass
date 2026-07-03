@@ -58,6 +58,7 @@ export function usePayment({
       if (mode === 'mock') {
         await delay(150);
         const data = MOCK_GET_PAYMENT_SUCCESS;
+        client.logMockCall('get_payment', { payment_hash: paymentHash }, data);
         setPayment(data);
         setStatus(data.status);
         if (TERMINAL_STATUSES.includes(data.status)) stopPolling();

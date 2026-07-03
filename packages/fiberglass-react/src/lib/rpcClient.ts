@@ -40,6 +40,15 @@ export type ConnectionStatus =
   | 'disconnected'
   | 'error';
 
+export interface RpcLog {
+  id: number;
+  method: FnnMethod;
+  params: unknown;
+  timestamp: number;
+  response?: unknown;
+  error?: string;
+}
+
 export interface FiberContextValue {
   /** Low-level RPC call wrapper — prefer the domain hooks. */
   client: FiberClient;
@@ -49,6 +58,8 @@ export interface FiberContextValue {
   connectionStatus: ConnectionStatus;
   /** The node_info response from the live node, or null in mock mode. */
   nodeInfo: NodeInfoResponse | null;
+  /** Recent RPC request and response logs. */
+  rpcLogs: RpcLog[];
 }
 
 /**
@@ -378,9 +389,22 @@ function isJsonRpcError<T>(r: JsonRpcResponse<T>): r is JsonRpcError {
 export class FiberClient {
   private readonly nodeUrl: string;
   private requestId = 0;
+  public onLog?: ((log: RpcLog) => void) | undefined;
 
   constructor(nodeUrl: string) {
     this.nodeUrl = nodeUrl;
+  }
+
+  /** Log a mock call for the developer panel. */
+  logMockCall(method: FnnMethod, params: unknown, response?: unknown, error?: string) {
+    this.onLog?.({
+      id: ++this.requestId,
+      method,
+      params,
+      timestamp: Date.now(),
+      ...(response !== undefined ? { response } : {}),
+      ...(error !== undefined ? { error } : {}),
+    });
   }
 
   /**
@@ -400,6 +424,13 @@ export class FiberClient {
       id,
     };
 
+    const logEntry: RpcLog = {
+      id,
+      method,
+      params,
+      timestamp: Date.now(),
+    };
+
     let response: Response;
     try {
       response = await fetch(this.nodeUrl, {
@@ -411,6 +442,8 @@ export class FiberClient {
         signal: AbortSignal.timeout(5_000),
       });
     } catch (networkErr) {
+      logEntry.error = `Network error: ${String(networkErr)}`;
+      this.onLog?.(logEntry);
       throw buildFiberError(
         'NODE_UNREACHABLE',
         `Network error calling ${method}: ${String(networkErr)}`,
@@ -419,6 +452,8 @@ export class FiberClient {
     }
 
     if (!response.ok) {
+      logEntry.error = `HTTP ${response.status}`;
+      this.onLog?.(logEntry);
       throw buildFiberError(
         'NODE_UNREACHABLE',
         `HTTP ${response.status} from FNN node calling ${method}`,
@@ -430,6 +465,8 @@ export class FiberClient {
     const json: JsonRpcResponse<TResult> = (await response.json()) as any;
 
     if (isJsonRpcError(json)) {
+      logEntry.error = json.error.message;
+      this.onLog?.(logEntry);
       throw buildFiberError(
         'UNKNOWN',
         json.error.message,
@@ -437,6 +474,8 @@ export class FiberClient {
       );
     }
 
+    logEntry.response = json.result;
+    this.onLog?.(logEntry);
     return json.result;
   }
 

@@ -21,6 +21,7 @@ export { ConfidenceCheck } from './components/ConfidenceCheck';
 export { InvoiceSheet } from './components/InvoiceSheet';
 export { ErrorResolutionBanner } from './components/ErrorResolutionBanner';
 export { PaymentRouteVisualizer } from './components/PaymentRouteVisualizer';
+export { RpcLogViewer } from './components/RpcLogViewer';
 
 // Types
 export type {
@@ -49,6 +50,7 @@ export type {
   ConnectionStatus,
   FiberContextValue,
   FiberError,
+  FiberErrorCode,
   InvoiceStatus,
   PaymentStatus,
   ConfidenceStatus,

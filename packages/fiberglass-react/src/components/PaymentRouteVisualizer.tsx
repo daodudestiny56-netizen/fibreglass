@@ -334,6 +334,35 @@ export function PaymentRouteVisualizer({
 
   const destId = hops[hops.length - 1]?.next_hop ?? 'Destination';
 
+  const replayBtnStyle: React.CSSProperties = {
+    background: 'rgba(255, 255, 255, 0.08)',
+    border: '1px solid rgba(255, 255, 255, 0.15)',
+    borderRadius: '6px',
+    color: '#94a3b8',
+    padding: '3px 8px',
+    fontSize: '11px',
+    cursor: 'pointer',
+    fontFamily: 'inherit',
+    fontWeight: 600,
+    transition: 'background-color 0.15s',
+  };
+
+  const handleReplay = () => {
+    setVisibleCount(0);
+    setTimeout(() => {
+      let i = 0;
+      const total = hops.length + 2;
+      function reveal() {
+        i++;
+        setVisibleCount(i);
+        if (i < total) {
+          timerRef.current = setTimeout(reveal, 180);
+        }
+      }
+      reveal();
+    }, 50);
+  };
+
   return (
     <div style={containerStyle}>
       <style>{`
@@ -347,6 +376,9 @@ export function PaymentRouteVisualizer({
       <div style={headerStyle}>
         <span style={titleStyle}>⚡ Payment Route</span>
         <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+          <button style={replayBtnStyle} onClick={handleReplay}>
+            🔄 Replay
+          </button>
           {paymentStatus && (
             <span style={{
               display: 'inline-flex',
