@@ -18,3 +18,27 @@ body {
   font-weight: 800;
   text-transform: uppercase;
 }
+
+.grid-background {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 0;
+  background-image: linear-gradient(to right, #cbd5e1 1px, transparent 1px),
+    linear-gradient(to bottom, #cbd5e1 1px, transparent 1px);
+  background-size: 24px 24px;
+  -webkit-mask-image: radial-gradient(
+    ellipse 80% 50% at 50% 0%,
+    #000 40%,
+    transparent 100%
+  );
+  mask-image: radial-gradient(
+    ellipse 80% 50% at 50% 0%,
+    #000 40%,
+    transparent 100%
+  );
+  pointer-events: none;
+  opacity: 0.85;
+}

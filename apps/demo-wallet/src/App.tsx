@@ -468,10 +468,12 @@ function WalletShell() {
   const modeBorder = mode === 'live' ? 'border-[#10B981]/30' : 'border-[#F59E0B]/30';
 
   return (
-    <div className="min-h-screen bg-[#E5E5EC] flex flex-col text-[#121214] font-sans selection:bg-[#2E5BFF]/10">
+    <div className="min-h-screen bg-[#E5E5EC] flex flex-col text-[#121214] font-sans selection:bg-[#2E5BFF]/10 relative overflow-x-hidden">
+      {/* Radial-masked grid background */}
+      <div className="grid-background" />
       
       {/* Header */}
-      <header className="flex justify-between items-center py-5 px-6 border-b border-[#1E1E22] bg-[#121214] text-white shadow-sm">
+      <header className="relative z-10 flex justify-between items-center py-5 px-6 border-b border-[#1E1E22] bg-[#121214] text-white shadow-sm">
         <div>
           <div className="text-xs font-monument tracking-widest text-white flex items-center gap-2">
             💎 fiberglass <span className="text-[9px] bg-[#2E5BFF]/20 text-[#2E5BFF] border border-[#2E5BFF]/30 px-1.5 py-0.5 rounded tracking-normal font-mono font-bold lowercase">SDK</span>
@@ -492,7 +494,7 @@ function WalletShell() {
       </header>
 
       {/* Tab Navigation */}
-      <nav className="flex gap-1 border-b border-[#1E1E22] bg-[#121214] px-6">
+      <nav className="relative z-10 flex gap-1 border-b border-[#1E1E22] bg-[#121214] px-6">
         {(['channels', 'receive', 'send', 'playground'] as Tab[]).map((tab) => {
           const isActive = activeTab === tab;
           return (
@@ -513,7 +515,7 @@ function WalletShell() {
       </nav>
 
       {/* Main Content Area */}
-      <main className="flex-1 max-w-[850px] w-full mx-auto p-6 md:py-8 flex flex-col gap-6">
+      <main className="relative z-10 flex-1 max-w-[850px] w-full mx-auto p-6 md:py-8 flex flex-col gap-6">
         <div className="flex-1">
           {activeTab === 'channels' && <ChannelsTab />}
           {activeTab === 'receive' && <ReceiveTab />}
