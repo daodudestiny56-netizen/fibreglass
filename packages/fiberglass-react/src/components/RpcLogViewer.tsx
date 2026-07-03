@@ -2,202 +2,90 @@
  * components/RpcLogViewer.tsx
  *
  * Developer panel showing recent JSON-RPC 2.0 request/response logs.
- * Supports light mode aesthetics and expanding log entries to view JSON details.
+ * Styled using Tailwind CSS to match the premium minimalist light-mode system.
  */
 
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useFiberNode } from '../hooks/useFiberNode';
-
-// ---------------------------------------------------------------------------
-// Helpers
-// ---------------------------------------------------------------------------
 
 function formatTime(timestamp: number): string {
   const d = new Date(timestamp);
   return `${d.toLocaleTimeString()} .${d.getMilliseconds().toString().padStart(3, '0')}`;
 }
 
-// ---------------------------------------------------------------------------
-// Component
-// ---------------------------------------------------------------------------
-
 export function RpcLogViewer() {
   const { rpcLogs } = useFiberNode();
   const [expandedId, setExpandedId] = useState<number | null>(null);
 
-  const styles: Record<string, React.CSSProperties> = {
-    container: {
-      background: '#ffffff',
-      border: '1px solid #e2e8f0',
-      borderRadius: '12px',
-      padding: '16px',
-      fontFamily: "'Inter', system-ui, sans-serif",
-      color: '#334155',
-      boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.05), 0 2px 4px -2px rgb(0 0 0 / 0.05)',
-      marginTop: '20px',
-    },
-    header: {
-      display: 'flex',
-      justifyContent: 'space-between',
-      alignItems: 'center',
-      borderBottom: '1px solid #f1f5f9',
-      paddingBottom: '10px',
-      marginBottom: '12px',
-    },
-    title: {
-      fontSize: '13px',
-      fontWeight: 700,
-      color: '#475569',
-      letterSpacing: '0.04em',
-      textTransform: 'uppercase',
-      display: 'flex',
-      alignItems: 'center',
-      gap: '6px',
-    },
-    badge: {
-      fontSize: '11px',
-      background: '#f1f5f9',
-      color: '#475569',
-      padding: '2px 8px',
-      borderRadius: '12px',
-      fontWeight: 600,
-    },
-    logList: {
-      display: 'flex',
-      flexDirection: 'column',
-      gap: '8px',
-      maxHeight: '280px',
-      overflowY: 'auto',
-      paddingRight: '4px',
-    },
-    logItem: {
-      border: '1px solid #f1f5f9',
-      borderRadius: '8px',
-      overflow: 'hidden',
-      transition: 'border-color 0.15s',
-    },
-    logHeader: {
-      display: 'flex',
-      alignItems: 'center',
-      padding: '10px 12px',
-      cursor: 'pointer',
-      background: '#f8fafc',
-      userSelect: 'none',
-      fontSize: '12px',
-    },
-    methodName: {
-      fontFamily: 'monospace',
-      fontWeight: 700,
-      color: '#6366f1',
-      flex: 1,
-    },
-    statusText: {
-      fontSize: '10px',
-      fontWeight: 600,
-      padding: '2px 6px',
-      borderRadius: '4px',
-      marginLeft: '8px',
-    },
-    timeText: {
-      fontSize: '10px',
-      color: '#94a3b8',
-      fontFamily: 'monospace',
-      marginLeft: '8px',
-    },
-    logContent: {
-      padding: '12px',
-      background: '#f8fafc',
-      borderTop: '1px solid #e2e8f0',
-      display: 'flex',
-      flexDirection: 'column',
-      gap: '8px',
-    },
-    jsonBlock: {
-      background: '#0f172a',
-      color: '#cbd5e1',
-      padding: '8px 12px',
-      borderRadius: '6px',
-      fontSize: '10px',
-      fontFamily: 'monospace',
-      margin: 0,
-      overflow: 'auto',
-      maxHeight: '140px',
-    },
-    subTitle: {
-      fontSize: '10px',
-      fontWeight: 700,
-      textTransform: 'uppercase',
-      color: '#64748b',
-      letterSpacing: '0.04em',
-    },
-  };
-
   return (
-    <div style={styles.container}>
-      <div style={styles.header}>
-        <div style={styles.title}>
+    <div className="bg-white border border-[#E4E4E7] rounded-lg p-5 mt-5 shadow-[0_1px_3px_rgba(0,0,0,0.02),0_8px_24px_rgba(0,0,0,0.04)]">
+      <div className="flex justify-between items-center pb-2.5 mb-3 border-b border-[#F0F0F3]">
+        <div className="text-[10px] font-monument tracking-widest text-[#52525B] flex items-center gap-2">
           ⚙️ RPC Log Inspector
-          <span style={styles.badge}>{rpcLogs.length} logs</span>
+          <span className="text-[10px] bg-[#F4F4F5] text-[#52525B] px-2 py-0.5 rounded font-mono font-bold">
+            {rpcLogs.length} logs
+          </span>
         </div>
       </div>
 
       {rpcLogs.length === 0 ? (
-        <div style={{ textAlign: 'center', color: '#94a3b8', padding: '20px 0', fontSize: '12px' }}>
+        <div className="text-center text-[#71717A] py-8 text-xs font-medium">
           No RPC requests recorded yet. Interact with the wallet to generate logs.
         </div>
       ) : (
-        <div style={styles.logList}>
+        <div className="flex flex-col gap-2 max-h-[280px] overflow-y-auto pr-1">
           {rpcLogs.map((log) => {
             const isExpanded = expandedId === log.id;
             const hasError = !!log.error;
 
-            const statusBg = hasError ? '#fef2f2' : '#f0fdf4';
-            const statusColor = hasError ? '#ef4444' : '#22c55e';
+            const statusBg = hasError ? 'bg-[#FEF2F2]' : 'bg-[#ECFDF5]';
+            const statusColor = hasError ? 'text-[#EF4444]' : 'text-[#10B981]';
             const statusLabel = hasError ? 'ERROR' : 'SUCCESS';
 
             return (
               <div
                 key={log.id}
-                style={{
-                  ...styles.logItem,
-                  borderColor: isExpanded ? '#6366f1' : '#f1f5f9',
-                }}
+                className={`border rounded-md overflow-hidden transition-all duration-150 ${
+                  isExpanded ? 'border-[#2E5BFF]' : 'border-[#F0F0F3]'
+                }`}
               >
+                {/* Header row */}
                 <div
-                  style={styles.logHeader}
+                  className="flex items-center p-3 cursor-pointer bg-[#F9F9FB] hover:bg-[#F4F4F5] select-none text-xs transition-colors"
                   onClick={() => setExpandedId(isExpanded ? null : log.id)}
                 >
-                  <span style={{ marginRight: '6px', fontSize: '10px', color: '#94a3b8' }}>
+                  <span className="mr-2 text-[10px] text-[#71717A]">
                     {isExpanded ? '▼' : '▶'}
                   </span>
-                  <span style={styles.methodName}>
+                  <span className="font-mono font-bold text-[#2E5BFF] flex-1">
                     {log.method}
                   </span>
-                  <span style={{ ...styles.statusText, background: statusBg, color: statusColor }}>
+                  <span className={`text-[9px] font-bold px-1.5 py-0.5 rounded ml-2 ${statusBg} ${statusColor}`}>
                     {statusLabel}
                   </span>
-                  <span style={styles.timeText}>
+                  <span className="text-[10px] text-[#71717A] font-mono ml-2">
                     {formatTime(log.timestamp)}
                   </span>
                 </div>
 
+                {/* Expanded details */}
                 {isExpanded && (
-                  <div style={styles.logContent}>
+                  <div className="p-3 bg-[#F9F9FB] border-t border-[#F0F0F3] flex flex-col gap-3">
                     <div>
-                      <div style={styles.subTitle}>Request Parameters (JSON-RPC ID: {log.id})</div>
-                      <pre style={styles.jsonBlock}>
+                      <div className="text-[9px] font-monument tracking-wider text-[#71717A] mb-1">
+                        Request Parameters (JSON-RPC ID: {log.id})
+                      </div>
+                      <pre className="bg-[#121214] text-[#E4E4E7] p-3 rounded font-mono text-[10px] overflow-auto max-h-[140px] whitespace-pre-wrap break-all">
                         {JSON.stringify(log.params, null, 2)}
                       </pre>
                     </div>
                     <div>
-                      <div style={styles.subTitle}>
+                      <div className="text-[9px] font-monument tracking-wider text-[#71717A] mb-1">
                         {hasError ? 'Error Message' : 'Response Result'}
                       </div>
-                      <pre style={{
-                        ...styles.jsonBlock,
-                        background: hasError ? '#450a0a' : '#0f172a',
-                        color: hasError ? '#fca5a5' : '#cbd5e1',
-                      }}>
+                      <pre className={`p-3 rounded font-mono text-[10px] overflow-auto max-h-[140px] whitespace-pre-wrap break-all ${
+                        hasError ? 'bg-[#450A0A] text-[#FCA5A5]' : 'bg-[#121214] text-[#E4E4E7]'
+                      }`}>
                         {JSON.stringify(hasError ? log.error : log.response, null, 2)}
                       </pre>
                     </div>
