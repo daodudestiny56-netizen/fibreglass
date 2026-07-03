@@ -1,0 +1,11 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "noEmit": true,
+    "types": ["vite/client", "node"],
+    "paths": {
+      "fiberglass-react": ["../../packages/fiberglass-react/src/index.ts"]
+    }
+  },
+  "include": ["src/**/*", "vite.config.ts"]
+}

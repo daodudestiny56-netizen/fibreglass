@@ -1,0 +1,20 @@
+{
+  "name": "fiberglass",
+  "version": "0.0.0",
+  "private": true,
+  "description": "The Developer Experience Layer for Fiber Network",
+  "workspaces": [
+    "packages/*",
+    "apps/*"
+  ],
+  "scripts": {
+    "dev": "npm run dev --workspace=apps/demo-wallet",
+    "build": "npm run build --workspace=packages/fiberglass-react && npm run build --workspace=apps/demo-wallet",
+    "test": "npm run test --workspace=packages/fiberglass-react",
+    "test:watch": "npm run test:watch --workspace=packages/fiberglass-react",
+    "lint": "npm run lint --workspace=packages/fiberglass-react && npm run lint --workspace=apps/demo-wallet"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
