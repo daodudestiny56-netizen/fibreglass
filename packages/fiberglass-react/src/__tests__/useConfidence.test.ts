@@ -13,9 +13,6 @@ import { MOCK_SEND_PAYMENT_DRY_RUN } from '../lib/mockFixtures';
 import type { FiberContextValue } from '../lib/rpcClient';
 import { FiberClient } from '../lib/rpcClient';
 
-// ---------------------------------------------------------------------------
-// Helpers
-// ---------------------------------------------------------------------------
 
 function makeWrapper(contextValue: FiberContextValue) {
   return function Wrapper({ children }: { children: React.ReactNode }) {
@@ -38,9 +35,6 @@ function makeMockContext(overrides: Partial<FiberContextValue> = {}): FiberConte
   };
 }
 
-// ---------------------------------------------------------------------------
-// Tests
-// ---------------------------------------------------------------------------
 
 describe('useConfidence', () => {
   beforeEach(() => {

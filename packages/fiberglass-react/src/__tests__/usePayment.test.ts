@@ -16,9 +16,6 @@ import {
 import type { FiberContextValue, Hash256 } from '../lib/rpcClient';
 import { FiberClient } from '../lib/rpcClient';
 
-// ---------------------------------------------------------------------------
-// Helpers
-// ---------------------------------------------------------------------------
 
 function makeWrapper(contextValue: FiberContextValue) {
   return function Wrapper({ children }: { children: React.ReactNode }) {
@@ -43,9 +40,6 @@ function makeMockContext(overrides: Partial<FiberContextValue> = {}): FiberConte
 
 const MOCK_HASH = '0xa665a45920422f9d417e4867efdc4fb8a04a1f3fff1fa07e998e86f7f7a27ae3' as Hash256;
 
-// ---------------------------------------------------------------------------
-// Tests
-// ---------------------------------------------------------------------------
 
 describe('usePayment', () => {
   beforeEach(() => {

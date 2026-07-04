@@ -18,9 +18,6 @@
 
 import type { FiberError, FiberErrorCode, FnnMethod } from './rpcClient';
 
-// ---------------------------------------------------------------------------
-// Matcher entry
-// ---------------------------------------------------------------------------
 
 interface ErrorMatcher {
   /**
@@ -101,9 +98,6 @@ const MATCHERS: ErrorMatcher[] = [
   },
 ];
 
-// ---------------------------------------------------------------------------
-// Public functions
-// ---------------------------------------------------------------------------
 
 /**
  * Classify a raw FNN error string into a FiberErrorCode.

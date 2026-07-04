@@ -15,9 +15,6 @@ import { MOCK_LIST_CHANNELS } from '../lib/mockFixtures';
 import type { FiberContextValue } from '../lib/rpcClient';
 import { FiberClient } from '../lib/rpcClient';
 
-// ---------------------------------------------------------------------------
-// Helpers
-// ---------------------------------------------------------------------------
 
 function makeWrapper(contextValue: FiberContextValue) {
   return function Wrapper({ children }: { children: React.ReactNode }) {
@@ -40,9 +37,6 @@ function makeMockContext(overrides: Partial<FiberContextValue> = {}): FiberConte
   };
 }
 
-// ---------------------------------------------------------------------------
-// Tests
-// ---------------------------------------------------------------------------
 
 describe('useChannel', () => {
   beforeEach(() => {

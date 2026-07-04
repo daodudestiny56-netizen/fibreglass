@@ -22,7 +22,6 @@ export { InvoiceSheet } from './components/InvoiceSheet';
 export { ErrorResolutionBanner } from './components/ErrorResolutionBanner';
 export { PaymentRouteVisualizer } from './components/PaymentRouteVisualizer';
 export { RpcLogViewer } from './components/RpcLogViewer';
-export { CardPattern } from './components/CardPattern';
 
 // Types
 export type {

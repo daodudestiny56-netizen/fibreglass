@@ -9,9 +9,6 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { FiberClient, DEFAULT_NODE_URL } from '../lib/rpcClient';
 import { MOCK_NODE_INFO, MOCK_LIST_CHANNELS } from '../lib/mockFixtures';
 
-// ---------------------------------------------------------------------------
-// Helpers
-// ---------------------------------------------------------------------------
 
 function mockFetchSuccess(result: unknown) {
   global.fetch = vi.fn().mockResolvedValue({
@@ -35,9 +32,6 @@ function mockFetchNetworkError() {
   global.fetch = vi.fn().mockRejectedValue(new Error('Failed to fetch'));
 }
 
-// ---------------------------------------------------------------------------
-// Tests
-// ---------------------------------------------------------------------------
 
 describe('FiberClient', () => {
   let client: FiberClient;

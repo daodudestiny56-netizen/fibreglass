@@ -14,9 +14,6 @@ import React, { useState } from 'react';
 import type { FiberError, FiberErrorCode } from '../lib/rpcClient';
 import { getErrorHint } from '../lib/errorMap';
 
-// ---------------------------------------------------------------------------
-// Types
-// ---------------------------------------------------------------------------
 
 export interface ErrorResolutionBannerProps {
   error: FiberError | null;
@@ -27,9 +24,6 @@ export interface ErrorResolutionBannerProps {
   className?: string;
 }
 
-// ---------------------------------------------------------------------------
-// Helpers
-// ---------------------------------------------------------------------------
 
 interface CodeStyle {
   icon: string;
@@ -44,7 +38,7 @@ function codeStyle(code: FiberErrorCode): CodeStyle {
   switch (code) {
     case 'NO_ROUTE':
       return {
-        icon: '🔍',
+        icon: '',
         label: 'No Route Found',
         bg: '#1e1a2e',
         border: '#7c3aed44',
@@ -53,7 +47,7 @@ function codeStyle(code: FiberErrorCode): CodeStyle {
       };
     case 'INSUFFICIENT_LIQUIDITY':
       return {
-        icon: '💧',
+        icon: '',
         label: 'Insufficient Liquidity',
         bg: '#1e1a14',
         border: '#d9770644',
@@ -62,7 +56,7 @@ function codeStyle(code: FiberErrorCode): CodeStyle {
       };
     case 'ASSET_MISMATCH':
       return {
-        icon: '⚠️',
+        icon: '️',
         label: 'Asset Mismatch',
         bg: '#1e1a14',
         border: '#ca8a0444',
@@ -71,7 +65,7 @@ function codeStyle(code: FiberErrorCode): CodeStyle {
       };
     case 'INVOICE_EXPIRED':
       return {
-        icon: '⏰',
+        icon: '',
         label: 'Invoice Expired',
         bg: '#1a1e14',
         border: '#4d7c0f44',
@@ -80,7 +74,7 @@ function codeStyle(code: FiberErrorCode): CodeStyle {
       };
     case 'INVOICE_CANCELLED':
       return {
-        icon: '🚫',
+        icon: '',
         label: 'Invoice Cancelled',
         bg: '#1e1414',
         border: '#dc262644',
@@ -89,7 +83,7 @@ function codeStyle(code: FiberErrorCode): CodeStyle {
       };
     case 'PAYMENT_ALREADY_EXISTS':
       return {
-        icon: '🔁',
+        icon: '',
         label: 'Payment Already Exists',
         bg: '#141e1e',
         border: '#0891b244',
@@ -98,7 +92,7 @@ function codeStyle(code: FiberErrorCode): CodeStyle {
       };
     case 'NODE_UNREACHABLE':
       return {
-        icon: '📡',
+        icon: '',
         label: 'Node Unreachable',
         bg: '#1e1414',
         border: '#dc262644',
@@ -107,7 +101,7 @@ function codeStyle(code: FiberErrorCode): CodeStyle {
       };
     default:
       return {
-        icon: '❓',
+        icon: '',
         label: 'Unexpected Error',
         bg: '#1a1a1e',
         border: '#52525b44',
@@ -117,9 +111,6 @@ function codeStyle(code: FiberErrorCode): CodeStyle {
   }
 }
 
-// ---------------------------------------------------------------------------
-// Component
-// ---------------------------------------------------------------------------
 
 export function ErrorResolutionBanner({
   error,
@@ -133,39 +124,35 @@ export function ErrorResolutionBanner({
   const style = codeStyle(error.code);
   const hint = getErrorHint(error.code);
 
-  const containerStyle: React.CSSProperties = {
-    background: style.bg,
-    border: `1px solid ${style.border}`,
-    borderRadius: '10px',
-    padding: '14px 16px',
-    fontFamily: "'Inter', 'ui-sans-serif', system-ui, sans-serif",
-    position: 'relative',
+  const bannerStyle: React.CSSProperties = {
+    background: 'var(--glass-base, #05080f)',
+    border: '1px solid var(--fail-signal, #f43f5e)',
+    borderRadius: '2px',
+    padding: '16px 20px',
+    fontFamily: "'Satoshi', sans-serif",
+    color: 'var(--ink-primary, #e2e8f0)',
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '12px',
   };
 
   const headerStyle: React.CSSProperties = {
     display: 'flex',
     alignItems: 'center',
     gap: '10px',
-    marginBottom: hint ? '10px' : '0',
   };
 
   const iconStyle: React.CSSProperties = {
-    width: '32px',
-    height: '32px',
-    borderRadius: '8px',
-    background: style.iconBg,
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    fontSize: '16px',
-    flexShrink: 0,
+    fontSize: '18px',
+    color: 'var(--fail-signal, #f43f5e)',
   };
 
   const titleStyle: React.CSSProperties = {
-    fontSize: '13px',
+    fontSize: '14px',
     fontWeight: 600,
-    color: style.titleColor,
-    flex: 1,
+    color: 'var(--fail-signal, #f43f5e)',
+    textTransform: 'uppercase',
+    letterSpacing: '0.05em',
   };
 
   const codeTagStyle: React.CSSProperties = {
@@ -209,27 +196,28 @@ export function ErrorResolutionBanner({
   };
 
   const retryBtnStyle: React.CSSProperties = {
-    background: 'rgba(255, 255, 255, 0.08)',
-    border: '1px solid rgba(255, 255, 255, 0.15)',
-    borderRadius: '6px',
-    color: '#e2e8f0',
-    padding: '4px 12px',
-    fontSize: '11px',
+    background: 'var(--signal-dim, rgba(79, 240, 216, 0.1))',
+    border: '1px solid var(--signal-active, #4FF0D8)',
+    color: 'var(--signal-active, #4FF0D8)',
+    padding: '8px 16px',
+    borderRadius: '2px',
+    fontSize: '12px',
     fontWeight: 600,
     cursor: 'pointer',
-    fontFamily: 'inherit',
-    transition: 'background-color 0.2s',
+    fontFamily: "'Satoshi', sans-serif",
+    textTransform: 'uppercase',
+    letterSpacing: '0.05em',
   };
 
   const rawBlockStyle: React.CSSProperties = {
     marginTop: '8px',
-    padding: '8px 10px',
-    background: '#0f172a',
-    border: '1px solid #1e293b',
-    borderRadius: '6px',
+    background: 'var(--glass-surface, #0a0e17)',
+    border: '1px solid var(--glass-edge, #151c2d)',
+    borderRadius: '2px',
+    padding: '10px 12px',
+    fontFamily: "'Space Mono', monospace",
     fontSize: '11px',
-    color: '#64748b',
-    fontFamily: 'monospace',
+    color: 'var(--ink-secondary, #64748b)',
     wordBreak: 'break-all',
     lineHeight: 1.5,
   };
@@ -249,7 +237,7 @@ export function ErrorResolutionBanner({
   };
 
   return (
-    <div style={containerStyle} role="alert" aria-live="assertive">
+    <div style={bannerStyle} role="alert" aria-live="assertive">
       {onDismiss && (
         <button style={dismissStyle} onClick={onDismiss} aria-label="Dismiss error">
           ✕
@@ -272,7 +260,7 @@ export function ErrorResolutionBanner({
           onClick={() => setRawExpanded((v) => !v)}
           aria-expanded={rawExpanded}
         >
-          <span style={{ transform: rawExpanded ? 'rotate(90deg)' : 'rotate(0)', display: 'inline-block', transition: 'transform 0.15s' }}>▶</span>
+          <span style={{ transform: rawExpanded ? 'rotate(90deg)' : 'rotate(0)', display: 'inline-block', transition: 'transform 0.15s' }}></span>
           {rawExpanded ? 'Hide' : 'Show'} raw error
           <span style={{ fontFamily: 'monospace', color: '#334155', marginLeft: '4px' }}>
             ({error.rpcMethod})

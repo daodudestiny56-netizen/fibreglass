@@ -25,16 +25,10 @@ import type {
   Pubkey,
 } from './rpcClient';
 
-// ---------------------------------------------------------------------------
-// Helpers to cast branded strings without runtime overhead
-// ---------------------------------------------------------------------------
 
 const h = (s: string): Hash256 => s as Hash256;
 const p = (s: string): Pubkey => s as Pubkey;
 
-// ---------------------------------------------------------------------------
-// Stable identifiers used across fixtures for consistency
-// ---------------------------------------------------------------------------
 
 const MOCK_NODE_PUBKEY = p(
   '0x02eec7245d6b7d2ccb30380bfbe2a3648cd7a942653f5aa340edcea1f283686619',
@@ -66,9 +60,6 @@ const MOCK_INVOICE_ADDRESS =
   'zvq79pq6xm8gqs3y6e28ekqkq9wj4lxx8t4fdjjvs8vfxzf0lfmscmygq5yu' +
   'hqd7gq5r4jvq8qqqdvq79pq6xm8gqs3y6e28ekqkq9wj4lxx8t4fdjjvs8vfx';
 
-// ---------------------------------------------------------------------------
-// 1. node_info
-// ---------------------------------------------------------------------------
 
 export const MOCK_NODE_INFO: NodeInfoResponse = {
   node_name: 'fiberglass-mock-node',
@@ -81,9 +72,6 @@ export const MOCK_NODE_INFO: NodeInfoResponse = {
   open_channel_auto_accept_min_ckb_funding_amount: '100000000000',
 };
 
-// ---------------------------------------------------------------------------
-// 2. list_channels
-// ---------------------------------------------------------------------------
 
 export const MOCK_LIST_CHANNELS: ListChannelsResponse = {
   channels: [
@@ -116,9 +104,6 @@ export const MOCK_LIST_CHANNELS: ListChannelsResponse = {
   ],
 };
 
-// ---------------------------------------------------------------------------
-// 3. new_invoice
-// ---------------------------------------------------------------------------
 
 const MOCK_EXPIRY_SECONDS = 3600;
 const MOCK_CREATED_AT = Math.floor(Date.now() / 1000);
@@ -134,9 +119,6 @@ export const MOCK_NEW_INVOICE: NewInvoiceResponse = {
   },
 };
 
-// ---------------------------------------------------------------------------
-// 4. get_invoice
-// ---------------------------------------------------------------------------
 
 export const MOCK_GET_INVOICE_OPEN: GetInvoiceResponse = {
   invoice_address: MOCK_INVOICE_ADDRESS,
@@ -179,9 +161,6 @@ export const MOCK_SEND_PAYMENT_DRY_RUN: SendPaymentResponse = {
   ],
 };
 
-// ---------------------------------------------------------------------------
-// 6a. get_payment — success path (same multi-hop route)
-// ---------------------------------------------------------------------------
 
 export const MOCK_GET_PAYMENT_SUCCESS: GetPaymentResponse = {
   payment_hash: MOCK_PAYMENT_HASH,
@@ -254,9 +233,6 @@ export const MOCK_GET_PAYMENT_NODE_UNREACHABLE: GetPaymentResponse = {
   routers: MOCK_GET_PAYMENT_SUCCESS.routers.slice(0, 1),
 };
 
-// ---------------------------------------------------------------------------
-// Named export map — convenience for the hooks to select the right fixture
-// ---------------------------------------------------------------------------
 
 export const mockFixtures = {
   nodeInfo: MOCK_NODE_INFO,

@@ -5,7 +5,7 @@
  * animated node-and-edge diagram.
  *
  * Layout: horizontal pipeline
- *   [Source] ──(fee)──▶ [Hop 1] ──(fee)──▶ [Hop 2] ──▶ [Destination]
+ *   [Source] ──(fee)──[Hop 1] ──(fee)──[Hop 2] ──[Destination]
  *
  * Can fetch data internally if `paymentHash` is provided,
  * or render pre-loaded hops.
@@ -17,9 +17,6 @@ import React, { useEffect, useRef, useState } from 'react';
 import type { RouterHop, PaymentStatus, Hash256 } from '../lib/rpcClient';
 import { usePayment } from '../hooks/usePayment';
 
-// ---------------------------------------------------------------------------
-// Types
-// ---------------------------------------------------------------------------
 
 export interface PaymentRouteVisualizerProps {
   /** Hop array representing route path. */
@@ -35,9 +32,6 @@ export interface PaymentRouteVisualizerProps {
   isAnimating?: boolean;
 }
 
-// ---------------------------------------------------------------------------
-// Helpers
-// ---------------------------------------------------------------------------
 
 function shortKey(key: string, chars = 4): string {
   if (key.length <= chars * 2 + 2) return key;
@@ -50,9 +44,6 @@ function shannonsToCkb(shannons: string): string {
   return `${(val / 1e8).toFixed(4)} CKB`;
 }
 
-// ---------------------------------------------------------------------------
-// Sub-components
-// ---------------------------------------------------------------------------
 
 function NodeBubble({
   label,
@@ -97,17 +88,17 @@ function NodeBubble({
         fontSize: special ? '18px' : '14px',
         transition: 'box-shadow 0.5s ease',
       }}>
-        {isSource ? '🔷' : isDest ? '🎯' : '⬡'}
+        {isSource ? '' : isDest ? '' : '⬡'}
       </div>
       <div style={{
         textAlign: 'center',
         maxWidth: '72px',
       }}>
-        <div style={{ fontSize: '10px', color: '#94a3b8', fontFamily: 'monospace', lineHeight: 1.2 }}>
+        <div style={{ fontSize: '10px', color: 'var(--ink-secondary, #64748b)', fontFamily: "'Space Mono', monospace", lineHeight: 1.2 }}>
           {label}
         </div>
         {sublabel && (
-          <div style={{ fontSize: '9px', color: '#475569', marginTop: '2px' }}>
+          <div style={{ fontSize: '9px', color: 'var(--ink-secondary, #64748b)', marginTop: '2px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
             {sublabel}
           </div>
         )}
@@ -175,12 +166,15 @@ function EdgeArrow({
           position: 'absolute',
           top: '-18px',
           fontSize: '9px',
-          color: '#475569',
-          background: '#0f172a',
+          color: 'var(--ink-secondary, #64748b)',
+          background: 'var(--glass-surface, #0a0e17)',
           padding: '1px 4px',
-          borderRadius: '3px',
-          border: '1px solid #1e293b',
+          borderRadius: '2px',
+          border: '1px solid var(--glass-edge, #151c2d)',
           whiteSpace: 'nowrap',
+          fontFamily: "'Satoshi', sans-serif",
+          textTransform: 'uppercase',
+          letterSpacing: '0.05em',
         }}>
           {shannonsToCkb(fee)} fee
         </div>
@@ -189,9 +183,6 @@ function EdgeArrow({
   );
 }
 
-// ---------------------------------------------------------------------------
-// Main component
-// ---------------------------------------------------------------------------
 
 export function PaymentRouteVisualizer({
   hops: propHops,
@@ -236,12 +227,12 @@ export function PaymentRouteVisualizer({
   }, [hops]);
 
   const containerStyle: React.CSSProperties = {
-    background: 'linear-gradient(160deg, #0f0f1e 0%, #161628 50%, #0c1a2e 100%)',
-    border: '1px solid #1e2040',
-    borderRadius: '14px',
+    background: 'var(--glass-surface, #0a0e17)',
+    border: '1px solid var(--glass-edge, #151c2d)',
+    borderRadius: '2px',
     padding: '20px',
-    fontFamily: "'Inter', 'ui-sans-serif', system-ui, sans-serif",
-    color: '#e2e8f0',
+    fontFamily: "'Satoshi', sans-serif",
+    color: 'var(--ink-primary, #e2e8f0)',
     overflow: 'auto',
   };
 
@@ -253,10 +244,10 @@ export function PaymentRouteVisualizer({
   };
 
   const titleStyle: React.CSSProperties = {
-    fontSize: '13px',
+    fontSize: '14px',
     fontWeight: 600,
-    color: '#94a3b8',
-    letterSpacing: '0.06em',
+    color: 'var(--ink-primary, #e2e8f0)',
+    letterSpacing: '0.05em',
     textTransform: 'uppercase' as const,
   };
 
@@ -272,10 +263,10 @@ export function PaymentRouteVisualizer({
     fontSize: '9px',
     fontWeight: 700,
     letterSpacing: '0.08em',
-    color: mode === 'live' ? '#34d399' : '#fbbf24',
-    background: mode === 'live' ? '#06402720' : '#78350f20',
-    border: `1px solid ${mode === 'live' ? '#34d39940' : '#fbbf2440'}`,
-    borderRadius: '4px',
+    color: mode === 'live' ? 'var(--signal-active, #4FF0D8)' : 'var(--ink-secondary, #64748b)',
+    background: mode === 'live' ? 'var(--signal-dim, #4FF0D822)' : 'transparent',
+    border: `1px solid ${mode === 'live' ? 'var(--signal-active, #4FF0D8)' : 'var(--glass-edge, #151c2d)'}`,
+    borderRadius: '2px',
     padding: '2px 6px',
   };
 
@@ -283,7 +274,7 @@ export function PaymentRouteVisualizer({
     display: 'flex',
     gap: '16px',
     marginTop: '16px',
-    borderTop: '1px solid #1e2040',
+    borderTop: '1px solid var(--glass-edge, #151c2d)',
     paddingTop: '14px',
     flexWrap: 'wrap' as const,
   };
@@ -296,22 +287,23 @@ export function PaymentRouteVisualizer({
 
   const statLabel: React.CSSProperties = {
     fontSize: '10px',
-    color: '#475569',
+    color: 'var(--ink-secondary, #64748b)',
     textTransform: 'uppercase' as const,
     letterSpacing: '0.08em',
   };
 
   const statValue: React.CSSProperties = {
     fontSize: '14px',
-    fontWeight: 600,
-    color: '#c7d2fe',
+    fontWeight: 700,
+    color: 'var(--ink-primary, #e2e8f0)',
+    fontFamily: "'Space Mono', monospace",
   };
 
   if (hops.length === 0) {
     return (
       <div style={containerStyle}>
-        <div style={{ textAlign: 'center', padding: '30px 0', color: '#334155', fontSize: '13px' }}>
-          <div style={{ fontSize: '28px', marginBottom: '8px' }}>🔍</div>
+        <div style={{ textAlign: 'center', padding: '30px 0', color: 'var(--ink-secondary, #64748b)', fontSize: '13px' }}>
+          <div style={{ fontSize: '28px', marginBottom: '8px' }}></div>
           No route data available.
         </div>
       </div>
@@ -324,25 +316,27 @@ export function PaymentRouteVisualizer({
   const isInflight = paymentStatus === 'Inflight';
 
   // Base colors
-  const activeNodeColor = isSuccess ? '#4ade80' : isFailed ? '#818cf8' : isInflight ? '#60a5fa' : '#818cf8';
-  const activeEdgeColor = isSuccess ? '#22c55e' : isInflight ? '#3b82f6' : '#6366f1';
-  const activeGlow = isSuccess ? '#22c55e40' : isInflight ? '#3b82f640' : '#6366f140';
+  const activeNodeColor = isSuccess ? 'var(--signal-active, #4FF0D8)' : isFailed ? 'var(--fail-signal, #f43f5e)' : isInflight ? 'var(--signal-active, #4FF0D8)' : 'var(--ink-secondary, #64748b)';
+  const activeEdgeColor = isSuccess ? 'var(--signal-active, #4FF0D8)' : isInflight ? 'var(--signal-active, #4FF0D8)' : 'var(--ink-secondary, #64748b)';
+  const activeGlow = isSuccess ? 'var(--signal-dim, rgba(79, 240, 216, 0.25))' : isInflight ? 'var(--signal-dim, rgba(79, 240, 216, 0.4))' : 'var(--glass-edge, rgba(21, 28, 45, 0.4))';
 
   // Failed node/edge colors
-  const failColor = '#f87171';
-  const failGlow = '#ef444440';
+  const failColor = 'var(--fail-signal, #f43f5e)';
+  const failGlow = 'rgba(244, 63, 94, 0.4)';
 
   const destId = hops[hops.length - 1]?.next_hop ?? 'Destination';
 
   const replayBtnStyle: React.CSSProperties = {
-    background: 'rgba(255, 255, 255, 0.08)',
-    border: '1px solid rgba(255, 255, 255, 0.15)',
-    borderRadius: '6px',
-    color: '#94a3b8',
+    background: 'var(--signal-dim, rgba(79, 240, 216, 0.1))',
+    border: '1px solid var(--signal-active, #4FF0D8)',
+    borderRadius: '2px',
+    color: 'var(--signal-active, #4FF0D8)',
     padding: '3px 8px',
     fontSize: '11px',
     cursor: 'pointer',
-    fontFamily: 'inherit',
+    fontFamily: "'Satoshi', sans-serif",
+    textTransform: 'uppercase',
+    letterSpacing: '0.05em',
     fontWeight: 600,
     transition: 'background-color 0.15s',
   };
@@ -374,10 +368,10 @@ export function PaymentRouteVisualizer({
       `}</style>
 
       <div style={headerStyle}>
-        <span style={titleStyle}>⚡ Payment Route</span>
+        <span style={titleStyle}>Payment Route</span>
         <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
           <button style={replayBtnStyle} onClick={handleReplay}>
-            🔄 Replay
+            Replay
           </button>
           {paymentStatus && (
             <span style={{
@@ -386,17 +380,19 @@ export function PaymentRouteVisualizer({
               gap: '6px',
               fontSize: '11px',
               fontWeight: 600,
-              color: isSuccess ? '#4ade80' : isFailed ? '#f87171' : '#60a5fa',
-              background: isSuccess ? '#052e16' : isFailed ? '#1e0a0a' : '#0c1a2e',
-              border: `1px solid ${isSuccess ? '#16a34a44' : isFailed ? '#dc262644' : '#1d4ed844'}`,
-              borderRadius: '20px',
+              color: isSuccess ? 'var(--signal-active, #4FF0D8)' : isFailed ? 'var(--fail-signal, #f43f5e)' : 'var(--signal-active, #4FF0D8)',
+              background: isSuccess ? 'var(--signal-dim, #4FF0D822)' : isFailed ? 'transparent' : 'var(--signal-dim, #4FF0D822)',
+              border: `1px solid ${isSuccess ? 'var(--signal-active, #4FF0D8)' : isFailed ? 'var(--fail-signal, #f43f5e)' : 'var(--signal-active, #4FF0D8)'}`,
+              borderRadius: '2px',
               padding: '3px 10px',
+              textTransform: 'uppercase',
+              letterSpacing: '0.05em',
             }}>
               {isSuccess ? '●' : isFailed ? '✕' : '⟳'}
               {' '}{paymentStatus}
             </span>
           )}
-          <span style={modeBadge}>{mode === 'live' ? '● LIVE' : '◌ MOCK'}</span>
+          <span style={modeBadge}>{mode === 'live' ? '● LIVE' : '− MOCK'}</span>
         </div>
       </div>
 
@@ -474,13 +470,13 @@ export function PaymentRouteVisualizer({
         {isSuccess && (
           <div style={statItem}>
             <span style={statLabel}>Status</span>
-            <span style={{ ...statValue, color: '#4ade80' }}>✓ Delivered</span>
+            <span style={{ ...statValue, color: 'var(--signal-active, #4FF0D8)' }}>✓ Delivered</span>
           </div>
         )}
         {isFailed && (
           <div style={statItem}>
             <span style={statLabel}>Status</span>
-            <span style={{ ...statValue, color: '#f87171' }}>✕ Failed at link</span>
+            <span style={{ ...statValue, color: 'var(--fail-signal, #f43f5e)' }}>✕ Failed at link</span>
           </div>
         )}
       </div>

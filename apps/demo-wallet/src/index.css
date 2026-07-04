@@ -1,71 +1,14 @@
-@import url('https://fonts.googleapis.com/css2?family=Geist+Mono:wght@100..900&family=Geist:wght@100..900&display=swap');
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 :root {
-  color-scheme: light;
+  color-scheme: dark;
 }
 
 body {
-  @apply bg-[#E5E5EC] text-[#121214] min-h-screen antialiased;
-  font-family: 'Geist', -apple-system, sans-serif;
-}
-
-.font-monument {
-  font-family: 'Geist', sans-serif;
-  font-weight: 800;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-}
-
-.grid-background {
-  position: fixed;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  z-index: 0;
-  background-image: linear-gradient(to right, #cbd5e1 1px, transparent 1px),
-    linear-gradient(to bottom, #cbd5e1 1px, transparent 1px);
-  background-size: 24px 24px;
-  -webkit-mask-image: radial-gradient(
-    ellipse 80% 50% at 50% 0%,
-    #000 40%,
-    transparent 100%
-  );
-  mask-image: radial-gradient(
-    ellipse 80% 50% at 50% 0%,
-    #000 40%,
-    transparent 100%
-  );
-  pointer-events: none;
-  opacity: 0.85;
-}
-
-.card-pattern-bg {
-  position: relative;
-  overflow: hidden;
-  background: repeating-linear-gradient(
-    135deg,
-    #232526 0px,
-    #232526 60px,
-    #23252699 70px,
-    #414345 130px
-  ) !important;
-  border-color: #2D2D33 !important;
-}
-
-@keyframes cubeMove {
-  from {
-    transform: translateY(0) scale(1);
-  }
-  to {
-    transform: translateY(-20%) scale(1.02) rotate(1deg);
-  }
-}
-
-.cube-svg {
-  animation: cubeMove 18s linear infinite alternate;
+  @apply min-h-screen antialiased;
+  background-color: #05080f;
+  color: #e2e8f0;
+  font-family: 'Satoshi', sans-serif;
 }

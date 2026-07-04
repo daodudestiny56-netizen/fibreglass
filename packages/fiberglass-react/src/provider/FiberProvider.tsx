@@ -34,16 +34,10 @@ import {
 } from '../lib/rpcClient';
 import { MOCK_NODE_INFO } from '../lib/mockFixtures';
 
-// ---------------------------------------------------------------------------
-// Context
-// ---------------------------------------------------------------------------
 
 export const FiberContext = createContext<FiberContextValue | null>(null);
 FiberContext.displayName = 'FiberContext';
 
-// ---------------------------------------------------------------------------
-// Provider props
-// ---------------------------------------------------------------------------
 
 export interface FiberProviderProps {
   /**
@@ -55,9 +49,6 @@ export interface FiberProviderProps {
   children: React.ReactNode;
 }
 
-// ---------------------------------------------------------------------------
-// Provider component
-// ---------------------------------------------------------------------------
 
 export function FiberProvider({ nodeUrl, children }: FiberProviderProps) {
   const url = nodeUrl ?? DEFAULT_NODE_URL;

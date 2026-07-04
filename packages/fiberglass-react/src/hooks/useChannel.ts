@@ -75,9 +75,6 @@ export function useChannel(options: UseChannelOptions = {}): UseChannelResult {
   return { channels, isLoading, error, refetch: fetch };
 }
 
-// ---------------------------------------------------------------------------
-// Internal helper
-// ---------------------------------------------------------------------------
 
 function delay(ms: number): Promise<void> {
   return new Promise((resolve) => setTimeout(resolve, ms));

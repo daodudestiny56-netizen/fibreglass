@@ -14,9 +14,6 @@ import type { ConfidenceStatus, AmountString, RouterHop, FiberError } from '../l
 import { useConfidence } from '../hooks/useConfidence';
 import { ErrorResolutionBanner } from './ErrorResolutionBanner';
 
-// ---------------------------------------------------------------------------
-// Types
-// ---------------------------------------------------------------------------
 
 export interface ConfidenceCheckProps {
   status?: ConfidenceStatus;
@@ -37,9 +34,6 @@ export interface ConfidenceCheckProps {
   mode?: 'live' | 'mock';
 }
 
-// ---------------------------------------------------------------------------
-// Helpers
-// ---------------------------------------------------------------------------
 
 function shannonsToCkb(shannons: string): string {
   const val = BigInt(shannons);
@@ -62,29 +56,29 @@ function statusInfo(status: ConfidenceStatus): StatusInfo {
       return {
         icon: '✓',
         label: 'Route found — ready to send',
-        color: '#4ade80',
-        bg: '#052e16',
-        border: '#16a34a44',
+        color: 'var(--signal-active, #4FF0D8)',
+        bg: 'var(--signal-dim, #4FF0D822)',
+        border: 'var(--glass-edge, #151c2d)',
       };
     case 'loading':
       return {
         icon: '⟳',
         label: 'Checking route…',
-        color: '#94a3b8',
-        bg: '#0f172a',
-        border: '#1e293b',
+        color: 'var(--ink-secondary, #64748b)',
+        bg: 'transparent',
+        border: 'var(--glass-edge, #151c2d)',
       };
     case 'no_route':
       return {
         icon: '✕',
         label: 'No route available',
-        color: '#f87171',
-        bg: '#1e0a0a',
-        border: '#dc262644',
+        color: 'var(--fail-signal, #f43f5e)',
+        bg: 'transparent',
+        border: 'var(--glass-edge, #151c2d)',
       };
     case 'insufficient_liquidity':
       return {
-        icon: '💧',
+        icon: '',
         label: 'Insufficient channel liquidity',
         color: '#fb923c',
         bg: '#1e1204',
@@ -92,26 +86,23 @@ function statusInfo(status: ConfidenceStatus): StatusInfo {
       };
     case 'asset_mismatch':
       return {
-        icon: '⚠',
+        icon: '',
         label: 'Asset type mismatch',
         color: '#facc15',
-        bg: '#1c1700',
-        border: '#a16207',
+        bg: 'transparent',
+        border: 'var(--glass-edge, #151c2d)',
       };
     case 'error':
       return {
         icon: '!',
         label: 'Routing check failed',
-        color: '#f87171',
-        bg: '#1e0a0a',
-        border: '#dc262644',
+        color: 'var(--fail-signal, #f43f5e)',
+        bg: 'transparent',
+        border: 'var(--glass-edge, #151c2d)',
       };
   }
 }
 
-// ---------------------------------------------------------------------------
-// Component
-// ---------------------------------------------------------------------------
 
 export function ConfidenceCheck({
   status: propStatus,
@@ -143,12 +134,12 @@ export function ConfidenceCheck({
   const info = statusInfo(status);
 
   const containerStyle: React.CSSProperties = {
-    background: '#1e1e2e',
-    border: '1px solid #2a2a4a',
-    borderRadius: '12px',
+    background: 'var(--glass-surface, #0a0e17)',
+    border: '1px solid var(--glass-edge, #151c2d)',
+    borderRadius: '2px',
     padding: '16px 20px',
-    fontFamily: "'Inter', 'ui-sans-serif', system-ui, sans-serif",
-    color: '#e2e8f0',
+    fontFamily: "'Satoshi', sans-serif",
+    color: 'var(--ink-primary, #e2e8f0)',
   };
 
   const statusBarStyle: React.CSSProperties = {
@@ -158,7 +149,7 @@ export function ConfidenceCheck({
     padding: '10px 14px',
     background: info.bg,
     border: `1px solid ${info.border}`,
-    borderRadius: '8px',
+    borderRadius: '2px',
     marginBottom: '14px',
   };
 
@@ -192,15 +183,15 @@ export function ConfidenceCheck({
 
   const statBoxStyle: React.CSSProperties = {
     flex: '1 1 120px',
-    background: '#131325',
-    border: '1px solid #1e1e3e',
-    borderRadius: '8px',
+    background: 'var(--glass-base, #05080f)',
+    border: '1px solid var(--glass-edge, #151c2d)',
+    borderRadius: '2px',
     padding: '10px 14px',
   };
 
   const statLabelStyle: React.CSSProperties = {
     fontSize: '10px',
-    color: '#475569',
+    color: 'var(--ink-secondary, #64748b)',
     textTransform: 'uppercase' as const,
     letterSpacing: '0.08em',
     marginBottom: '4px',
@@ -208,8 +199,9 @@ export function ConfidenceCheck({
 
   const statValueStyle: React.CSSProperties = {
     fontSize: '15px',
-    fontWeight: 600,
-    color: '#c7d2fe',
+    fontWeight: 700,
+    color: 'var(--ink-primary, #e2e8f0)',
+    fontFamily: "'Space Mono', monospace",
   };
 
   const modeBadgeStyle: React.CSSProperties = {
@@ -217,10 +209,10 @@ export function ConfidenceCheck({
     fontSize: '9px',
     fontWeight: 700,
     letterSpacing: '0.08em',
-    color: mode === 'live' ? '#34d399' : '#fbbf24',
-    background: mode === 'live' ? '#06402720' : '#78350f20',
-    border: `1px solid ${mode === 'live' ? '#34d39940' : '#fbbf2440'}`,
-    borderRadius: '4px',
+    color: mode === 'live' ? 'var(--signal-active, #4FF0D8)' : 'var(--ink-secondary, #64748b)',
+    background: mode === 'live' ? 'var(--signal-dim, #4FF0D822)' : 'transparent',
+    border: `1px solid ${mode === 'live' ? 'var(--signal-active, #4FF0D8)' : 'var(--glass-edge, #151c2d)'}`,
+    borderRadius: '2px',
     padding: '1px 5px',
     marginBottom: '10px',
   };
@@ -229,7 +221,7 @@ export function ConfidenceCheck({
     <div style={containerStyle}>
       <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
 
-      <div style={modeBadgeStyle}>{mode === 'live' ? '● LIVE' : '◌ MOCK'}</div>
+      <div style={modeBadgeStyle}>{mode === 'live' ? '● LIVE' : '− MOCK'}</div>
 
       <div style={statusBarStyle}>
         <div style={iconStyle}>{info.icon}</div>

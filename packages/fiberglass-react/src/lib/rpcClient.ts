@@ -11,9 +11,6 @@
  *  - Types marked PROVISIONAL will be updated once real captured payloads arrive (Day 1 task).
  */
 
-// ---------------------------------------------------------------------------
-// Branded primitive types
-// ---------------------------------------------------------------------------
 
 /** 0x-prefixed 32-byte hex string. e.g. "0xabcd…" */
 export type Hash256 = string & { readonly __brand: 'Hash256' };
@@ -28,9 +25,6 @@ export type Pubkey = string & { readonly __brand: 'Pubkey' };
  */
 export type AmountString = string;
 
-// ---------------------------------------------------------------------------
-// SDK-level derived types
-// ---------------------------------------------------------------------------
 
 export type FiberMode = 'live' | 'mock';
 
@@ -108,9 +102,6 @@ export type ChannelState =
   | 'ShuttingDown'
   | 'Closed';
 
-// ---------------------------------------------------------------------------
-// RPC method name literals
-// ---------------------------------------------------------------------------
 
 export type FnnMethod =
   | 'node_info'
@@ -120,9 +111,6 @@ export type FnnMethod =
   | 'send_payment'
   | 'get_payment';
 
-// ---------------------------------------------------------------------------
-// RPC request / response shapes (PROVISIONAL — update from real payloads)
-// ---------------------------------------------------------------------------
 
 // ---- node_info ------------------------------------------------------------
 
@@ -306,9 +294,6 @@ export interface GetPaymentResponse {
   [key: string]: unknown;
 }
 
-// ---------------------------------------------------------------------------
-// Hook return types
-// ---------------------------------------------------------------------------
 
 export interface UseChannelResult {
   channels: ChannelDetail[];
@@ -344,9 +329,6 @@ export interface UsePaymentResult {
   refetch: () => void;
 }
 
-// ---------------------------------------------------------------------------
-// JSON-RPC 2.0 wire types (internal)
-// ---------------------------------------------------------------------------
 
 interface JsonRpcRequest {
   jsonrpc: '2.0';
@@ -377,9 +359,6 @@ function isJsonRpcError<T>(r: JsonRpcResponse<T>): r is JsonRpcError {
   return 'error' in r;
 }
 
-// ---------------------------------------------------------------------------
-// FiberClient class
-// ---------------------------------------------------------------------------
 
 /**
  * Low-level JSON-RPC 2.0 client for Fiber Network Node.
@@ -522,9 +501,6 @@ export class FiberClient {
   }
 }
 
-// ---------------------------------------------------------------------------
-// Error helper
-// ---------------------------------------------------------------------------
 
 function buildFiberError(
   code: FiberError['code'],
@@ -534,9 +510,6 @@ function buildFiberError(
   return { code, rawMessage, rpcMethod };
 }
 
-// ---------------------------------------------------------------------------
-// Default node URL
-// ---------------------------------------------------------------------------
 
 /** Default FNN node URL — matches FNN's documented default. */
 export const DEFAULT_NODE_URL = 'http://127.0.0.1:8227';

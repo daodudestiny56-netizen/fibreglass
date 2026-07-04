@@ -10,13 +10,9 @@
  */
 
 import React, { useState } from 'react';
-import { CardPattern } from './CardPattern';
 import type { ChannelDetail, ChannelState } from '../lib/rpcClient';
 import { useChannel } from '../hooks/useChannel';
 
-// ---------------------------------------------------------------------------
-// Types
-// ---------------------------------------------------------------------------
 
 export interface ChannelLifecycleCardProps {
   channel?: ChannelDetail;
@@ -27,9 +23,6 @@ export interface ChannelLifecycleCardProps {
   mode?: 'live' | 'mock';
 }
 
-// ---------------------------------------------------------------------------
-// Helpers
-// ---------------------------------------------------------------------------
 
 function stateStyle(state: ChannelState): { label: string; color: string; dot: string } {
   switch (state) {
@@ -63,9 +56,6 @@ function shortId(id: string, chars = 6): string {
   return `${id.slice(0, chars + 2)}…${id.slice(-chars)}`;
 }
 
-// ---------------------------------------------------------------------------
-// Component
-// ---------------------------------------------------------------------------
 
 export function ChannelLifecycleCard({
   channel: propChannel,
@@ -80,12 +70,12 @@ export function ChannelLifecycleCard({
 
   const styles: Record<string, React.CSSProperties> = {
     card: {
-      background: 'repeating-linear-gradient(135deg, #232526 0px, #232526 60px, #23252699 70px, #414345 130px)',
-      border: '1px solid #2D2D33',
-      borderRadius: '12px',
+      background: 'var(--glass-surface, #0a0e17)',
+      border: '1px solid var(--glass-edge, #151c2d)',
+      borderRadius: '2px',
       padding: '16px 20px',
-      fontFamily: "'Geist', sans-serif",
-      color: '#e2e8f0',
+      fontFamily: "'Satoshi', sans-serif",
+      color: 'var(--ink-primary, #e2e8f0)',
       position: 'relative',
       overflow: 'hidden',
     },
@@ -99,9 +89,9 @@ export function ChannelLifecycleCard({
       display: 'inline-flex',
       alignItems: 'center',
       gap: '6px',
-      background: 'rgba(255, 255, 255, 0.05)',
-      border: '1px solid rgba(255, 255, 255, 0.1)',
-      borderRadius: '20px',
+      background: 'var(--signal-dim, rgba(79, 240, 216, 0.1))',
+      border: '1px solid var(--glass-edge, #151c2d)',
+      borderRadius: '2px',
       padding: '3px 10px',
       fontSize: '11px',
       fontWeight: 600,
@@ -115,14 +105,14 @@ export function ChannelLifecycleCard({
     },
     channelId: {
       fontSize: '11px',
-      color: '#64748b',
-      fontFamily: 'monospace',
+      color: 'var(--ink-secondary, #64748b)',
+      fontFamily: "'Space Mono', monospace",
       marginBottom: '4px',
     },
     peerId: {
       fontSize: '12px',
-      color: '#94a3b8',
-      fontFamily: 'monospace',
+      color: 'var(--ink-secondary, #64748b)',
+      fontFamily: "'Space Mono', monospace",
     },
     balanceRow: {
       marginTop: '14px',
@@ -132,12 +122,15 @@ export function ChannelLifecycleCard({
       justifyContent: 'space-between',
       marginBottom: '6px',
       fontSize: '11px',
-      color: '#64748b',
+      color: 'var(--ink-secondary, #64748b)',
+      fontFamily: "'Satoshi', sans-serif",
+      textTransform: 'uppercase',
+      letterSpacing: '0.05em',
     },
     balanceBar: {
       height: '6px',
-      borderRadius: '3px',
-      background: '#1e293b',
+      borderRadius: '2px',
+      background: 'var(--glass-edge, #151c2d)',
       overflow: 'hidden',
     },
     balanceAmounts: {
@@ -145,9 +138,11 @@ export function ChannelLifecycleCard({
       justifyContent: 'space-between',
       marginTop: '6px',
       fontSize: '12px',
+      fontFamily: "'Space Mono', monospace",
+      fontVariantNumeric: 'tabular-nums',
     },
-    localAmount: { color: '#818cf8', fontWeight: 500 },
-    remoteAmount: { color: '#64748b' },
+    localAmount: { color: 'var(--signal-active, #4FF0D8)', fontWeight: 700 },
+    remoteAmount: { color: 'var(--ink-secondary, #64748b)' },
     modeBadge: {
       position: 'absolute',
       top: '10px',
@@ -155,18 +150,18 @@ export function ChannelLifecycleCard({
       fontSize: '9px',
       fontWeight: 700,
       letterSpacing: '0.08em',
-      color: mode === 'live' ? '#34d399' : '#fbbf24',
-      background: mode === 'live' ? '#06402720' : '#78350f20',
-      border: `1px solid ${mode === 'live' ? '#34d39940' : '#fbbf2440'}`,
-      borderRadius: '4px',
+      color: mode === 'live' ? 'var(--signal-active, #4FF0D8)' : 'var(--ink-secondary, #64748b)',
+      background: mode === 'live' ? 'var(--signal-dim, #4FF0D822)' : 'transparent',
+      border: `1px solid ${mode === 'live' ? 'var(--signal-active, #4FF0D8)' : 'var(--glass-edge, #151c2d)'}`,
+      borderRadius: '2px',
       padding: '1px 5px',
     },
     disabledTag: {
       fontSize: '10px',
-      color: '#ef4444',
-      background: '#ef444415',
-      border: '1px solid #ef444430',
-      borderRadius: '4px',
+      color: 'var(--fail-signal, #f43f5e)',
+      background: 'transparent',
+      border: '1px solid var(--fail-signal, #f43f5e)',
+      borderRadius: '2px',
       padding: '1px 6px',
       marginLeft: '6px',
     },
@@ -174,7 +169,7 @@ export function ChannelLifecycleCard({
       marginTop: '12px',
       background: 'none',
       border: 'none',
-      color: '#64748b',
+      color: 'var(--ink-secondary, #64748b)',
       fontSize: '11px',
       cursor: 'pointer',
       padding: 0,
@@ -186,12 +181,12 @@ export function ChannelLifecycleCard({
     jsonBlock: {
       marginTop: '8px',
       padding: '10px',
-      background: '#0f172a',
-      border: '1px solid #1e293b',
-      borderRadius: '6px',
+      background: 'var(--glass-base, #05080f)',
+      border: '1px solid var(--glass-edge, #151c2d)',
+      borderRadius: '2px',
       fontSize: '10px',
-      fontFamily: 'monospace',
-      color: '#94a3b8',
+      fontFamily: "'Space Mono', monospace",
+      color: 'var(--ink-secondary, #64748b)',
       whiteSpace: 'pre-wrap',
       wordBreak: 'break-all',
     },
@@ -200,8 +195,7 @@ export function ChannelLifecycleCard({
   if (!channel) {
     return (
       <div style={styles.card}>
-        <CardPattern />
-        <div style={{ position: 'relative', zIndex: 10, color: '#94a3b8', fontSize: '12px', textAlign: 'center', padding: '10px 0' }}>
+        <div style={{ color: '#64748b', fontSize: '12px', textAlign: 'center', padding: '10px 0' }}>
           {channelId ? `Channel ${shortId(channelId)} not found` : 'No channel details provided'}
         </div>
       </div>
@@ -217,75 +211,73 @@ export function ChannelLifecycleCard({
 
   return (
     <div style={styles.card}>
-      <CardPattern />
-      <div style={{ position: 'relative', zIndex: 10 }}>
-        {showModeBadge && (
-          <span style={styles.modeBadge}>{mode === 'live' ? '● LIVE' : '◌ MOCK'}</span>
-        )}
+      {showModeBadge && (
+        <span style={styles.modeBadge}>{mode === 'live' ? '● LIVE' : '− MOCK'}</span>
+      )}
 
-        <div style={styles.header}>
-          <div>
-            <div style={styles.channelId}>
-              Channel {shortId(channel.channel_id)}
-            </div>
-            <div style={styles.peerId}>
-              Peer: {shortId(channel.peer_id)}
-            </div>
+      <div style={styles.header}>
+        <div>
+          <div style={styles.channelId}>
+            Channel {shortId(channel.channel_id)}
           </div>
-          <div style={{ display: 'flex', alignItems: 'center' }}>
-            <span style={{ ...styles.stateBadge, color, border: `1px solid ${color}55`, background: `${color}22` }}>
-              <span style={{ ...styles.dot, background: dot }} />
-              <span style={{ marginLeft: '6px' }}>{label}</span>
-            </span>
-            {!channel.enabled && (
-              <span style={styles.disabledTag}>disabled</span>
-            )}
+          <div style={styles.peerId}>
+            Peer: {shortId(channel.peer_id)}
           </div>
         </div>
-
-        {total > 0n && (
-          <div style={styles.balanceRow}>
-            <div style={styles.balanceLabels}>
-              <span>Local Balance</span>
-              <span>Remote Balance</span>
-            </div>
-            <div style={styles.balanceBar}>
-              <div style={{
-                height: '100%',
-                width: `${localPct}%`,
-                background: channel.enabled
-                  ? 'linear-gradient(90deg, #6366f1, #8b5cf6)'
-                  : 'linear-gradient(90deg, #475569, #64748b)',
-                borderRadius: '3px',
-                transition: 'width 0.5s ease',
-              }} />
-            </div>
-            <div style={styles.balanceAmounts}>
-              <span style={styles.localAmount}>{shannonsToCkb(channel.local_balance)} CKB</span>
-              <span style={styles.remoteAmount}>{shannonsToCkb(channel.remote_balance)} CKB</span>
-            </div>
-          </div>
-        )}
-
-        {total === 0n && (
-          <div style={{ marginTop: '10px', fontSize: '11px', color: '#475569', fontStyle: 'italic' }}>
-            No balance — channel is closing or closed.
-          </div>
-        )}
-
-        <button
-          style={styles.disclosureBtn}
-          onClick={() => setRawExpanded((v) => !v)}
-        >
-          <span>{rawExpanded ? '▼' : '▶'}</span> View Raw RPC
-        </button>
-
-        {rawExpanded && (
-          <pre style={styles.jsonBlock}>
-            {JSON.stringify(channel, null, 2)}
-          </pre>
-        )}
+        <div style={{ display: 'flex', alignItems: 'center' }}>
+          <span style={{ ...styles.stateBadge, color, border: `1px solid ${color}55`, background: `${color}22` }}>
+            <span style={{ ...styles.dot, background: dot }} />
+            <span style={{ marginLeft: '6px' }}>{label}</span>
+          </span>
+          {!channel.enabled && (
+            <span style={styles.disabledTag}>disabled</span>
+          )}
+        </div>
       </div>
+
+      {total > 0n && (
+        <div style={styles.balanceRow}>
+          <div style={styles.balanceLabels}>
+            <span>Local Balance</span>
+            <span>Remote Balance</span>
+          </div>
+          <div style={styles.balanceBar}>
+            <div style={{
+              height: '100%',
+              width: `${localPct}%`,
+              background: channel.enabled
+                ? 'var(--signal-active, #4FF0D8)'
+                : 'var(--ink-secondary, #64748b)',
+              borderRight: channel.enabled ? '2px solid #ffffff' : 'none',
+              borderRadius: '2px 0 0 2px',
+              transition: 'width 0.5s ease',
+            }} />
+          </div>
+          <div style={styles.balanceAmounts}>
+            <span style={styles.localAmount}>{shannonsToCkb(channel.local_balance)} CKB</span>
+            <span style={styles.remoteAmount}>{shannonsToCkb(channel.remote_balance)} CKB</span>
+          </div>
+        </div>
+      )}
+
+      {total === 0n && (
+        <div style={{ marginTop: '10px', fontSize: '11px', color: '#475569', fontStyle: 'italic' }}>
+          No balance — channel is closing or closed.
+        </div>
+      )}
+
+      <button
+        style={styles.disclosureBtn}
+        onClick={() => setRawExpanded((v) => !v)}
+      >
+        <span>{rawExpanded ? '▼' : ''}</span> View Raw RPC
+      </button>
+
+      {rawExpanded && (
+        <pre style={styles.jsonBlock}>
+          {JSON.stringify(channel, null, 2)}
+        </pre>
+      )}
     </div>
   );
 }

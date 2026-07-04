@@ -21,7 +21,7 @@ export function RpcLogViewer() {
     <div className="bg-white border border-[#E4E4E7] rounded-lg p-5 mt-5 shadow-[0_1px_3px_rgba(0,0,0,0.02),0_8px_24px_rgba(0,0,0,0.04)]">
       <div className="flex justify-between items-center pb-2.5 mb-3 border-b border-[#F0F0F3]">
         <div className="text-[10px] font-monument tracking-widest text-[#52525B] flex items-center gap-2">
-          ⚙️ RPC Log Inspector
+          ️ RPC Log Inspector
           <span className="text-[10px] bg-[#F4F4F5] text-[#52525B] px-2 py-0.5 rounded font-mono font-bold">
             {rpcLogs.length} logs
           </span>
@@ -55,7 +55,7 @@ export function RpcLogViewer() {
                   onClick={() => setExpandedId(isExpanded ? null : log.id)}
                 >
                   <span className="mr-2 text-[10px] text-[#71717A]">
-                    {isExpanded ? '▼' : '▶'}
+                    {isExpanded ? '▼' : ''}
                   </span>
                   <span className="font-mono font-bold text-[#2E5BFF] flex-1">
                     {log.method}

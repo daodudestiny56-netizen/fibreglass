@@ -17,9 +17,6 @@ import {
 import type { FiberContextValue } from '../lib/rpcClient';
 import { FiberClient } from '../lib/rpcClient';
 
-// ---------------------------------------------------------------------------
-// Helpers
-// ---------------------------------------------------------------------------
 
 function makeWrapper(contextValue: FiberContextValue) {
   return function Wrapper({ children }: { children: React.ReactNode }) {
@@ -48,9 +45,6 @@ const INVOICE_OPTIONS = {
   memo: 'test invoice',
 };
 
-// ---------------------------------------------------------------------------
-// Tests
-// ---------------------------------------------------------------------------
 
 describe('useInvoice', () => {
   beforeEach(() => {

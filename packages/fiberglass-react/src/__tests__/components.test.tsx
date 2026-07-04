@@ -33,9 +33,6 @@ function renderWithProvider(ui: React.ReactElement) {
   );
 }
 
-// ---------------------------------------------------------------------------
-// Tests
-// ---------------------------------------------------------------------------
 
 describe('UI Components Render Tests', () => {
   describe('<ChannelLifecycleCard>', () => {

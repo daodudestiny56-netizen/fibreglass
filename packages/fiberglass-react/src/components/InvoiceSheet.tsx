@@ -17,9 +17,6 @@ import type { InvoiceStatus, Hash256, FiberError } from '../lib/rpcClient';
 import { useInvoice } from '../hooks/useInvoice';
 import { ErrorResolutionBanner } from './ErrorResolutionBanner';
 
-// ---------------------------------------------------------------------------
-// Types
-// ---------------------------------------------------------------------------
 
 export interface InvoiceSheetProps {
   invoiceAddress?: string | null;
@@ -45,24 +42,21 @@ export interface InvoiceSheetProps {
   mode?: 'live' | 'mock';
 }
 
-// ---------------------------------------------------------------------------
-// Helpers
-// ---------------------------------------------------------------------------
 
 function statusStyle(status: InvoiceStatus | null): { color: string; bg: string; border: string; label: string } {
   switch (status) {
     case 'Open':
-      return { color: '#60a5fa', bg: '#0c1a2e', border: '#1d4ed844', label: 'Open — waiting for payment' };
+      return { color: 'var(--signal-active, #4FF0D8)', bg: 'var(--signal-dim, #4FF0D822)', border: 'var(--glass-edge, #151c2d)', label: 'Open — waiting for payment' };
     case 'Paid':
-      return { color: '#4ade80', bg: '#052e16', border: '#16a34a44', label: '✓ Paid' };
+      return { color: 'var(--signal-active, #4FF0D8)', bg: 'var(--signal-dim, #4FF0D822)', border: 'var(--glass-edge, #151c2d)', label: '✓ Paid' };
     case 'Expired':
-      return { color: '#f87171', bg: '#1e0a0a', border: '#dc262644', label: 'Expired' };
+      return { color: 'var(--fail-signal, #f43f5e)', bg: 'transparent', border: 'var(--fail-signal, #f43f5e)', label: 'Expired' };
     case 'Cancelled':
-      return { color: '#f87171', bg: '#1e0a0a', border: '#dc262644', label: 'Cancelled' };
+      return { color: 'var(--fail-signal, #f43f5e)', bg: 'transparent', border: 'var(--fail-signal, #f43f5e)', label: 'Cancelled' };
     case 'Received':
-      return { color: '#a78bfa', bg: '#1e0a2e', border: '#7c3aed44', label: 'Received' };
+      return { color: 'var(--ink-primary, #e2e8f0)', bg: 'var(--glass-surface, #0a0e17)', border: 'var(--glass-edge, #151c2d)', label: 'Received' };
     default:
-      return { color: '#64748b', bg: '#0f172a', border: '#1e293b', label: 'Unknown' };
+      return { color: 'var(--ink-secondary, #64748b)', bg: 'transparent', border: 'var(--glass-edge, #151c2d)', label: 'Unknown' };
   }
 }
 
@@ -88,9 +82,6 @@ function useCountdown(expiresAt: Date | null): string {
   return remaining;
 }
 
-// ---------------------------------------------------------------------------
-// Component
-// ---------------------------------------------------------------------------
 
 export function InvoiceSheet({
   invoiceAddress: propInvoiceAddress,
@@ -140,12 +131,12 @@ export function InvoiceSheet({
   }, [invoiceStatus, paymentHash, onFulfilled]);
 
   const containerStyle: React.CSSProperties = {
-    background: 'linear-gradient(145deg, #1e1e2e, #16213e)',
-    border: '1px solid #2a2a4a',
-    borderRadius: '14px',
+    background: 'var(--glass-surface, #0a0e17)',
+    border: '1px solid var(--glass-edge, #151c2d)',
+    borderRadius: '2px',
     padding: '20px',
-    fontFamily: "'Inter', 'ui-sans-serif', system-ui, sans-serif",
-    color: '#e2e8f0',
+    fontFamily: "'Satoshi', sans-serif",
+    color: 'var(--ink-primary, #e2e8f0)',
     maxWidth: '400px',
   };
 
@@ -159,17 +150,19 @@ export function InvoiceSheet({
   const titleStyle: React.CSSProperties = {
     fontSize: '14px',
     fontWeight: 600,
-    color: '#c7d2fe',
+    color: 'var(--ink-primary, #e2e8f0)',
+    textTransform: 'uppercase',
+    letterSpacing: '0.05em',
   };
 
   const modeBadge: React.CSSProperties = {
     fontSize: '9px',
     fontWeight: 700,
     letterSpacing: '0.08em',
-    color: mode === 'live' ? '#34d399' : '#fbbf24',
-    background: mode === 'live' ? '#06402720' : '#78350f20',
-    border: `1px solid ${mode === 'live' ? '#34d39940' : '#fbbf2440'}`,
-    borderRadius: '4px',
+    color: mode === 'live' ? 'var(--signal-active, #4FF0D8)' : 'var(--ink-secondary, #64748b)',
+    background: mode === 'live' ? 'var(--signal-dim, #4FF0D822)' : 'transparent',
+    border: `1px solid ${mode === 'live' ? 'var(--signal-active, #4FF0D8)' : 'var(--glass-edge, #151c2d)'}`,
+    borderRadius: '2px',
     padding: '2px 6px',
   };
 
@@ -177,7 +170,7 @@ export function InvoiceSheet({
     display: 'inline-flex',
     alignItems: 'center',
     padding: '4px 12px',
-    borderRadius: '20px',
+    borderRadius: '2px',
     fontSize: '12px',
     fontWeight: 600,
     color: st.color,
@@ -193,10 +186,10 @@ export function InvoiceSheet({
     justifyContent: 'center',
     marginBottom: '16px',
     position: 'relative',
-    background: '#0f172a',
+    background: 'var(--glass-base, #05080f)',
     padding: '16px',
-    borderRadius: '8px',
-    border: '1px solid #1e293b',
+    borderRadius: '2px',
+    border: '1px solid var(--glass-edge, #151c2d)',
   };
 
   const paidOverlay: React.CSSProperties = {
@@ -205,19 +198,19 @@ export function InvoiceSheet({
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    background: '#052e16cc',
-    borderRadius: '8px',
+    background: 'var(--signal-dim, #4FF0D840)',
+    borderRadius: '2px',
     fontSize: '32px',
   };
 
   const invoiceBox: React.CSSProperties = {
-    background: '#0f172a',
-    border: '1px solid #1e293b',
-    borderRadius: '8px',
+    background: 'var(--glass-base, #05080f)',
+    border: '1px solid var(--glass-edge, #151c2d)',
+    borderRadius: '2px',
     padding: '8px 10px',
     fontSize: '10px',
-    fontFamily: 'monospace',
-    color: '#64748b',
+    fontFamily: "'Space Mono', monospace",
+    color: 'var(--ink-secondary, #64748b)',
     wordBreak: 'break-all',
     marginBottom: '10px',
     lineHeight: 1.5,
@@ -226,14 +219,16 @@ export function InvoiceSheet({
   const copyBtn: React.CSSProperties = {
     width: '100%',
     padding: '10px',
-    background: copied ? '#052e16' : 'linear-gradient(135deg, #4f46e5, #6d28d9)',
-    border: copied ? '1px solid #16a34a44' : 'none',
-    borderRadius: '8px',
-    color: copied ? '#4ade80' : '#fff',
+    background: copied ? 'var(--signal-dim, #4FF0D822)' : 'transparent',
+    border: `1px solid ${copied ? 'var(--signal-active, #4FF0D8)' : 'var(--glass-edge, #151c2d)'}`,
+    borderRadius: '2px',
+    color: copied ? 'var(--signal-active, #4FF0D8)' : 'var(--ink-primary, #e2e8f0)',
     fontSize: '13px',
     fontWeight: 600,
     cursor: 'pointer',
-    fontFamily: 'inherit',
+    fontFamily: "'Satoshi', sans-serif",
+    textTransform: 'uppercase',
+    letterSpacing: '0.05em',
     transition: 'all 0.2s',
     marginBottom: error ? '12px' : '0',
   };
@@ -242,7 +237,8 @@ export function InvoiceSheet({
     display: 'flex',
     justifyContent: 'space-between',
     fontSize: '11px',
-    color: '#475569',
+    color: 'var(--ink-secondary, #64748b)',
+    fontFamily: "'Space Mono', monospace",
     marginBottom: '12px',
   };
 
@@ -261,7 +257,7 @@ export function InvoiceSheet({
   if (isLoading && !invoiceAddress) {
     return (
       <div style={containerStyle}>
-        <div style={{ textAlign: 'center', padding: '30px', color: '#475569' }}>
+        <div style={{ textAlign: 'center', padding: '30px', color: 'var(--ink-secondary, #64748b)' }}>
           <div style={{ fontSize: '24px', marginBottom: '8px', animation: 'spin 1s linear infinite', display: 'inline-block' }}>⟳</div>
           <div style={{ fontSize: '13px' }}>Creating invoice…</div>
           <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
@@ -273,8 +269,8 @@ export function InvoiceSheet({
   return (
     <div style={containerStyle}>
       <div style={headerStyle}>
-        <span style={titleStyle}>⚡ Receive Payment</span>
-        <span style={modeBadge}>{mode === 'live' ? '● LIVE' : '◌ MOCK'}</span>
+        <span style={titleStyle}>Receive Payment</span>
+        <span style={modeBadge}>{mode === 'live' ? '● LIVE' : '− MOCK'}</span>
       </div>
 
       <div style={statusBadge}>{st.label}</div>
@@ -284,12 +280,12 @@ export function InvoiceSheet({
           <QRCodeSVG
             value={invoiceAddress}
             size={140}
-            bgColor="#0f172a"
-            fgColor="#c7d2fe"
+            bgColor="transparent"
+            fgColor="var(--signal-active, #4FF0D8)"
             level="L"
           />
           {invoiceStatus === 'Paid' && (
-            <div style={paidOverlay}>✅</div>
+            <div style={paidOverlay}></div>
           )}
         </div>
       )}
@@ -307,7 +303,7 @@ export function InvoiceSheet({
             : 'No payment hash'}
         </span>
         {expiresAt && invoiceStatus === 'Open' && (
-          <span style={{ color: countdown === 'Expired' ? '#ef4444' : '#64748b' }}>
+          <span style={{ color: countdown === 'Expired' ? 'var(--fail-signal, #f43f5e)' : 'var(--ink-secondary, #64748b)' }}>
             Expires in {countdown}
           </span>
         )}
