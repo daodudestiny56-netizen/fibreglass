@@ -40,7 +40,7 @@ describe('paymentLink utility', () => {
   });
 
   it('should return null for non-JSON string', () => {
-    const encoded = typeof btoa === 'function' ? btoa('just a regular string') : Buffer.from('just a regular string').toString('base64');
+    const encoded = btoa('just a regular string');
     const decoded = decodePaymentLink(encoded);
     expect(decoded).toBeNull();
   });
@@ -51,13 +51,13 @@ describe('paymentLink utility', () => {
       amount: '100000000'
       // missing paymentHash and asset
     };
-    const encoded = typeof btoa === 'function' ? btoa(JSON.stringify(incompletePayload)) : Buffer.from(JSON.stringify(incompletePayload)).toString('base64');
+    const encoded = btoa(JSON.stringify(incompletePayload));
     const decoded = decodePaymentLink(encoded);
     expect(decoded).toBeNull();
   });
 
   it('should return null if parsed JSON is not an object', () => {
-    const encoded = typeof btoa === 'function' ? btoa(JSON.stringify(['an', 'array'])) : Buffer.from(JSON.stringify(['an', 'array'])).toString('base64');
+    const encoded = btoa(JSON.stringify(['an', 'array']));
     const decoded = decodePaymentLink(encoded);
     expect(decoded).toBeNull();
   });

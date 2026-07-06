@@ -34,11 +34,13 @@ Fiberglass is the UX layer between your app and FNN's raw RPC surface. It provid
 - **`useConfidence`** — dry-run payment validation before committing funds
 - **`useInvoice`** — invoice creation, QR display, expiry countdown, fulfillment polling
 - **`usePayment`** — real-time payment status, route data
+- **`usePaymentLink`** / **`useReadPaymentLink`** — encode and decode shareable payment URLs
 - **`<ChannelLifecycleCard>`** — visual channel state with balance bars
 - **`<ConfidenceCheck>`** — pre-send route validation with clear status states
 - **`<InvoiceSheet>`** — QR + copyable invoice, countdown, live fulfillment
 - **`<ErrorResolutionBanner>`** — human-readable resolution hints from raw FNN errors
 - **`<PaymentRouteVisualizer>`** — animated hop-by-hop route diagram
+- **`<PaymentLinkReceiver>`** — drops in to any route to read and display payment links
 
 ## The "Glass" Promise
 

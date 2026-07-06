@@ -142,6 +142,49 @@ interface UsePaymentResult {
 
 ---
 
+### `usePaymentLink(invoice)`
+
+Generates a shareable URL that encodes a payment request.
+
+#### Options
+
+| Option | Type | Default | Description |
+|---|---|---|---|
+| `invoice` | `PaymentLinkPayload \| null` | *(Required)* | The invoice details to encode in the link. |
+
+#### Return Value
+
+```typescript
+interface UsePaymentLinkResult {
+  url: string;
+  copy: () => void;
+  copied: boolean;
+}
+```
+
+---
+
+### `useReadPaymentLink(encoded)`
+
+Extracts and decodes a payment payload from a URL segment.
+
+#### Options
+
+| Option | Type | Default | Description |
+|---|---|---|---|
+| `encoded` | `string` | *(Required)* | The base64url encoded payload string. |
+
+#### Return Value
+
+```typescript
+interface UseReadPaymentLinkResult {
+  payload: PaymentLinkPayload | null;
+  error: string | null;
+}
+```
+
+---
+
 ## Components
 
 ### `<ChannelLifecycleCard>`
@@ -232,3 +275,16 @@ Displays user-friendly error banners and retry actions.
 | `error` | `FiberError \| null` | *(Required)* | Fiber error details. |
 | `onDismiss` | `() => void` | `undefined` | Close banner callback. |
 | `retry` | `() => void` | `undefined` | Shows a retry action button if provided. |
+
+---
+
+### `<PaymentLinkReceiver>`
+
+Drops in to any route to read, decode, and display an encoded payment link, and polls for fulfillment.
+
+#### Props
+
+| Prop | Type | Default | Description |
+|---|---|---|---|
+| `encodedPayload` | `string` | *(Required)* | The encoded payment payload from the URL. |
+| `onFulfilled` | `(paymentHash: string) => void` | `undefined` | Callback fired when the payment is completed. |

@@ -14,6 +14,7 @@ export { useChannel } from './hooks/useChannel';
 export { useConfidence } from './hooks/useConfidence';
 export { useInvoice } from './hooks/useInvoice';
 export { usePayment } from './hooks/usePayment';
+export { usePaymentLink, useReadPaymentLink } from './hooks/usePaymentLink';
 
 // Components
 export { ChannelLifecycleCard } from './components/ChannelLifecycleCard';
@@ -22,6 +23,7 @@ export { InvoiceSheet } from './components/InvoiceSheet';
 export { ErrorResolutionBanner } from './components/ErrorResolutionBanner';
 export { PaymentRouteVisualizer } from './components/PaymentRouteVisualizer';
 export { RpcLogViewer } from './components/RpcLogViewer';
+export { PaymentLinkReceiver } from './components/PaymentLinkReceiver';
 
 // Types
 export type {

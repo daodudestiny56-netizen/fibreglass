@@ -25,6 +25,7 @@ const mockContextValue = {
   connectionStatus: 'disconnected' as const,
   nodeInfo: null,
   rpcLogs: [],
+  appOrigin: 'http://localhost',
 };
 
 function renderWithProvider(ui: React.ReactElement) {

@@ -15,6 +15,7 @@ import React, { useEffect, useState, useRef } from 'react';
 import { QRCodeSVG } from 'qrcode.react';
 import type { InvoiceStatus, Hash256, FiberError } from '../lib/rpcClient';
 import { useInvoice } from '../hooks/useInvoice';
+import { usePaymentLink } from '../hooks/usePaymentLink';
 import { ErrorResolutionBanner } from './ErrorResolutionBanner';
 
 
@@ -120,6 +121,11 @@ export function InvoiceSheet({
   const [copied, setCopied] = useState(false);
   const countdown = useCountdown(expiresAt);
   const st = statusStyle(invoiceStatus);
+
+  const paymentLinkPayload = (invoiceAddress && paymentHash && amount && currency) 
+    ? { invoiceAddress, paymentHash, amount, asset: currency, ...(memo !== undefined ? { memo } : {}) } 
+    : null;
+  const { copy: copyPaymentLink, copied: paymentLinkCopied } = usePaymentLink(paymentLinkPayload);
 
   // Fire onFulfilled callback on transitions to Paid
   const lastStatusRef = useRef<InvoiceStatus | null>(null);
@@ -310,9 +316,25 @@ export function InvoiceSheet({
       </div>
 
       {invoiceAddress && invoiceStatus !== 'Paid' && invoiceStatus !== 'Expired' && (
-        <button style={copyBtn} onClick={() => void handleCopy()}>
-          {copied ? '✓ Copied!' : 'Copy Invoice'}
-        </button>
+        <div style={{ display: 'flex', gap: '8px', marginBottom: error ? '12px' : '0' }}>
+          <button style={{ ...copyBtn, marginBottom: 0 }} onClick={() => void handleCopy()}>
+            {copied ? '✓ Copied!' : 'Copy Invoice'}
+          </button>
+          {paymentLinkPayload && (
+            <button
+              style={{
+                ...copyBtn,
+                marginBottom: 0,
+                background: paymentLinkCopied ? 'var(--signal-dim, #4FF0D822)' : 'transparent',
+                border: `1px solid ${paymentLinkCopied ? 'var(--signal-active, #4FF0D8)' : 'var(--glass-edge, #151c2d)'}`,
+                color: paymentLinkCopied ? 'var(--signal-active, #4FF0D8)' : 'var(--ink-primary, #e2e8f0)',
+              }}
+              onClick={copyPaymentLink}
+            >
+              {paymentLinkCopied ? '✓ Link Copied!' : 'Copy Payment Link'}
+            </button>
+          )}
+        </div>
       )}
 
       {error && (

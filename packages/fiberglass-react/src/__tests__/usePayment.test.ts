@@ -34,8 +34,9 @@ function makeMockContext(overrides: Partial<FiberContextValue> = {}): FiberConte
     connectionStatus: 'disconnected',
     nodeInfo: null,
     rpcLogs: [],
+    appOrigin: 'http://localhost',
     ...overrides,
-  };
+  } as FiberContextValue;
 }
 
 const MOCK_HASH = '0xa665a45920422f9d417e4867efdc4fb8a04a1f3fff1fa07e998e86f7f7a27ae3' as Hash256;

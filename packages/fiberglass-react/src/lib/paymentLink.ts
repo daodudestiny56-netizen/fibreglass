@@ -9,8 +9,8 @@ export interface PaymentLinkPayload {
 export function encodePaymentLink(invoice: PaymentLinkPayload): string {
   try {
     const jsonStr = JSON.stringify(invoice);
-    // Use btoa if available, else Buffer for Node.js environments
-    const base64 = typeof btoa === 'function' ? btoa(jsonStr) : Buffer.from(jsonStr).toString('base64');
+    // Use btoa
+    const base64 = btoa(jsonStr);
     
     // Convert to base64url format
     return base64.replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
@@ -27,7 +27,7 @@ export function decodePaymentLink(encoded: string): PaymentLinkPayload | null {
       base64 += '=';
     }
     
-    const jsonStr = typeof atob === 'function' ? atob(base64) : Buffer.from(base64, 'base64').toString();
+    const jsonStr = atob(base64);
     const parsed = JSON.parse(jsonStr);
 
     if (

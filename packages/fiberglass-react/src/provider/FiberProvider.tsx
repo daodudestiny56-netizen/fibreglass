@@ -46,12 +46,18 @@ export interface FiberProviderProps {
    * If omitted or unreachable, the SDK silently operates in mock mode.
    */
   nodeUrl?: string;
+  /**
+   * Base URL for payment links.
+   * Defaults to `window.location.origin` if not provided.
+   */
+  appOrigin?: string;
   children: React.ReactNode;
 }
 
 
-export function FiberProvider({ nodeUrl, children }: FiberProviderProps) {
+export function FiberProvider({ nodeUrl, appOrigin, children }: FiberProviderProps) {
   const url = nodeUrl ?? DEFAULT_NODE_URL;
+  const origin = appOrigin ?? (typeof window !== 'undefined' ? window.location.origin : '');
   const clientRef = useRef<FiberClient>(new FiberClient(url));
 
   const [mode, setMode] = useState<FiberMode>('mock');
@@ -102,6 +108,7 @@ export function FiberProvider({ nodeUrl, children }: FiberProviderProps) {
     connectionStatus,
     nodeInfo,
     rpcLogs,
+    appOrigin: origin,
   };
 
   return (

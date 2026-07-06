@@ -54,6 +54,8 @@ export interface FiberContextValue {
   nodeInfo: NodeInfoResponse | null;
   /** Recent RPC request and response logs. */
   rpcLogs: RpcLog[];
+  /** Base URL for payment links, defaults to window.location.origin */
+  appOrigin: string;
 }
 
 /**

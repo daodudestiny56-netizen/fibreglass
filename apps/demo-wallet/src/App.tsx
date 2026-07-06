@@ -29,6 +29,7 @@ import {
   PaymentRouteVisualizer,
   ErrorResolutionBanner,
   RpcLogViewer,
+  PaymentLinkReceiver,
 } from 'fiberglass-react';
 import type {
   ChannelDetail,
@@ -641,9 +642,34 @@ function WalletShell() {
   const { mode, connectionStatus, nodeInfo } = useFiberNode();
   const [activeTab, setActiveTab] = useState<Tab>('channels');
 
+  // Lightweight routing for payment links
+  const [paymentLinkPayload] = useState<string | null>(() => {
+    if (typeof window !== 'undefined') {
+      const path = window.location.pathname;
+      if (path.startsWith('/pay/')) {
+        return path.slice(5);
+      }
+    }
+    return null;
+  });
+
   const modeColor = mode === 'live' ? '#10B981' : '#F59E0B';
   const modeBg = mode === 'live' ? 'bg-[#ECFDF5]/10' : 'bg-[#FFFBEB]/10';
   const modeBorder = mode === 'live' ? 'border-[#10B981]/30' : 'border-[#F59E0B]/30';
+
+  if (paymentLinkPayload) {
+    return (
+      <div className="min-h-screen bg-glass flex flex-col items-center justify-center p-6 text-[surface] font-sans selection:bg-[signal]/10 relative overflow-x-hidden">
+        <div className="grid-background" />
+        <div className="relative z-10 w-full max-w-[400px]">
+          <PaymentLinkReceiver encodedPayload={paymentLinkPayload} />
+          <div className="mt-8 text-center">
+            <a href="/" className="text-[10px] text-[signal] font-sans font-bold uppercase tracking-wider hover:underline">← Back to Wallet</a>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-glass flex flex-col text-[surface] font-sans selection:bg-[signal]/10 relative overflow-x-hidden">
