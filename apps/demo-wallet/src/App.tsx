@@ -334,6 +334,21 @@ function SendTab() {
 // Component: SDK Playground
 // ---------------------------------------------------------------------------
 
+function CodeSnippet({ code }: { code: string }) {
+  const [copied, setCopied] = useState(false);
+  return (
+    <div className="mt-5 bg-[#05080f] border border-[edge] rounded-[2px] p-4 text-[11px] font-mono text-[#a1a1aa] overflow-x-auto relative group whitespace-pre-wrap break-all leading-relaxed">
+      {code}
+      <button 
+        onClick={() => { navigator.clipboard.writeText(code); setCopied(true); setTimeout(() => setCopied(false), 2000); }}
+        className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 bg-[#0a0e17] border border-[edge] px-2.5 py-1 text-[9px] rounded-[2px] font-sans font-bold uppercase tracking-wider text-ink hover:text-[signal] hover:border-[signal]/30 transition-all cursor-pointer"
+      >
+        {copied ? 'Copied!' : 'Copy'}
+      </button>
+    </div>
+  );
+}
+
 function PlaygroundTab() {
   const { mode } = useFiberNode();
 
@@ -430,6 +445,18 @@ function PlaygroundTab() {
 
           <div className="mt-3 pt-3 border-t border-[edge]">
             <ChannelLifecycleCard channel={simulatedChannel} mode={mode} showModeBadge />
+            <CodeSnippet code={`<ChannelLifecycleCard
+  channel={{
+    channel_id: "0x888...",
+    peer_id: "0x028...",
+    local_balance: "${chLocal}",
+    remote_balance: "${chRemote}",
+    enabled: ${chEnabled},
+    state: "${chState}"
+  }}
+  mode="${mode}"
+  showModeBadge
+/>`} />
           </div>
         </div>
 
@@ -470,6 +497,14 @@ function PlaygroundTab() {
               error={null}
               mode={mode}
             />
+            <CodeSnippet code={`<ConfidenceCheck
+  status="${confStatus}"
+  fee="${confFee}"
+  route={MOCK_HOPS}
+  isLoading={${confStatus === 'loading'}}
+  error={null}
+  mode="${mode}"
+/>`} />
           </div>
         </div>
 
@@ -490,7 +525,7 @@ function PlaygroundTab() {
             </select>
           </div>
 
-          <div className="mt-3 pt-3 border-t border-[edge] flex justify-center">
+          <div className="mt-3 pt-3 border-t border-[edge] flex flex-col items-center w-full">
             <InvoiceSheet
               invoiceAddress="fibb1qpp5kh8d0kfwna2t7afjhqjyrq8fq4dg37x4k0hz4w5s9yq9jyeysqqzvq79pq6xm8gqs3y"
               paymentHash={'0x123' as Hash256}
@@ -500,6 +535,17 @@ function PlaygroundTab() {
               error={null}
               mode={mode}
             />
+            <div className="w-full text-left">
+              <CodeSnippet code={`<InvoiceSheet
+  invoiceAddress="fibb1q..."
+  paymentHash="0x123..."
+  invoiceStatus="${invStatus}"
+  expiresAt={new Date(...)}
+  isLoading={false}
+  error={null}
+  mode="${mode}"
+/>`} />
+            </div>
           </div>
         </div>
 
@@ -523,6 +569,14 @@ function PlaygroundTab() {
 
           <div className="mt-3 pt-3 border-t border-[edge]">
             <ErrorResolutionBanner error={simulatedError} retry={() => alert('Callback re-triggered!')} />
+            <CodeSnippet code={`<ErrorResolutionBanner 
+  error={{
+    code: "${errCode}",
+    rawMessage: "FNN FAILED: ${errCode}...",
+    rpcMethod: "send_payment"
+  }} 
+  retry={() => alert('...')}
+/>`} />
           </div>
         </div>
 
@@ -551,6 +605,13 @@ function PlaygroundTab() {
               mode={mode}
               isAnimating={visStatus === 'Inflight'}
             />
+            <CodeSnippet code={`<PaymentRouteVisualizer
+  hops={MOCK_HOPS}
+  paymentStatus="${visStatus}"
+  totalFee="2500"
+  mode="${mode}"
+  isAnimating={${visStatus === 'Inflight'}}
+/>`} />
           </div>
         </div>
 
