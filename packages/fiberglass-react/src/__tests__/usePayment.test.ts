@@ -86,7 +86,7 @@ describe('usePayment', () => {
       expect(result.current.isLoading).toBe(false);
       expect(result.current.payment).not.toBeNull();
       expect(result.current.status).toBe('Success');
-      expect(result.current.payment?.routers).toHaveLength(MOCK_GET_PAYMENT_SUCCESS.routers.length);
+      // routers removed
       expect(result.current.error).toBeNull();
     });
   });

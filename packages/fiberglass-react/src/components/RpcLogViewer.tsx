@@ -2,7 +2,7 @@
  * components/RpcLogViewer.tsx
  *
  * Developer panel showing recent JSON-RPC 2.0 request/response logs.
- * Styled using Tailwind CSS to match the premium minimalist light-mode system.
+ * Styled with Neo-Brutalism tokens.
  */
 
 import { useState } from 'react';
@@ -18,73 +18,74 @@ export function RpcLogViewer() {
   const [expandedId, setExpandedId] = useState<number | null>(null);
 
   return (
-    <div className="bg-white border border-[#E4E4E7] rounded-lg p-5 mt-5 shadow-[0_1px_3px_rgba(0,0,0,0.02),0_8px_24px_rgba(0,0,0,0.04)]">
-      <div className="flex justify-between items-center pb-2.5 mb-3 border-b border-[#F0F0F3]">
-        <div className="text-[10px] font-monument tracking-widest text-[#52525B] flex items-center gap-2">
-          ️ RPC Log Inspector
-          <span className="text-[10px] bg-[#F4F4F5] text-[#52525B] px-2 py-0.5 rounded font-mono font-bold">
-            {rpcLogs.length} logs
+    <div className="brutalist-container p-5 mt-6">
+      <div className="flex justify-between items-center pb-3 mb-4 border-b-4 border-[var(--ink)]">
+        <div className="text-sm font-bold uppercase tracking-widest text-[var(--ink)] flex items-center gap-3" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
+          Node Connection Data
+          <span className="brutalist-badge text-[10px] bg-[var(--accent-primary)] text-[var(--ink)] px-2 py-1 shadow-[2px_2px_0px_var(--ink)]">
+            {rpcLogs.length} LOGS
           </span>
         </div>
       </div>
 
       {rpcLogs.length === 0 ? (
-        <div className="text-center text-[#71717A] py-8 text-xs font-medium">
-          No RPC requests recorded yet. Interact with the wallet to generate logs.
+        <div className="text-center text-[var(--ink)] py-8 text-sm font-bold" style={{ fontFamily: "'Space Grotesk', sans-serif", textTransform: 'uppercase' }}>
+          No data recorded yet.
         </div>
       ) : (
-        <div className="flex flex-col gap-2 max-h-[280px] overflow-y-auto pr-1">
+        <div className="flex flex-col gap-3 max-h-[320px] overflow-y-auto pr-2">
           {rpcLogs.map((log) => {
             const isExpanded = expandedId === log.id;
             const hasError = !!log.error;
 
-            const statusBg = hasError ? 'bg-[#FEF2F2]' : 'bg-[#ECFDF5]';
-            const statusColor = hasError ? 'text-[#EF4444]' : 'text-[#10B981]';
+            const statusBg = hasError ? 'bg-[var(--accent-secondary)]' : 'bg-[var(--success)]';
             const statusLabel = hasError ? 'ERROR' : 'SUCCESS';
 
             return (
               <div
                 key={log.id}
-                className={`border rounded-md overflow-hidden transition-all duration-150 ${
-                  isExpanded ? 'border-[#2E5BFF]' : 'border-[#F0F0F3]'
+                className={`border-4 transition-all duration-100 ${
+                  isExpanded ? 'border-[var(--ink)] shadow-[4px_4px_0px_var(--ink)]' : 'border-[var(--ink)] shadow-[2px_2px_0px_var(--ink)]'
                 }`}
+                style={{ backgroundColor: '#FFFFFF' }}
               >
                 {/* Header row */}
                 <div
-                  className="flex items-center p-3 cursor-pointer bg-[#F9F9FB] hover:bg-[#F4F4F5] select-none text-xs transition-colors"
+                  className="flex items-center p-3 cursor-pointer hover:bg-[var(--accent-primary)] select-none text-xs transition-colors border-b-4 border-transparent hover:border-[var(--ink)]"
                   onClick={() => setExpandedId(isExpanded ? null : log.id)}
+                  style={{ borderBottomColor: isExpanded ? 'var(--ink)' : 'transparent' }}
                 >
-                  <span className="mr-2 text-[10px] text-[#71717A]">
-                    {isExpanded ? '▼' : ''}
+                  <span className="mr-3 font-bold text-[14px] text-[var(--ink)]" style={{ transform: isExpanded ? 'rotate(90deg)' : 'rotate(0)', transition: 'transform 0.1s' }}>
+                    ▶
                   </span>
-                  <span className="font-mono font-bold text-[#2E5BFF] flex-1">
+                  <span className="font-mono font-bold text-[var(--ink)] flex-1 text-[13px]">
                     {log.method}
                   </span>
-                  <span className={`text-[9px] font-bold px-1.5 py-0.5 rounded ml-2 ${statusBg} ${statusColor}`}>
+                  <span className={`brutalist-badge text-[10px] px-2 py-1 ml-2 ${statusBg} text-[var(--ink)] shadow-[2px_2px_0px_var(--ink)]`}>
                     {statusLabel}
                   </span>
-                  <span className="text-[10px] text-[#71717A] font-mono ml-2">
+                  <span className="text-[11px] text-[var(--ink)] font-mono ml-3 font-bold">
                     {formatTime(log.timestamp)}
                   </span>
                 </div>
 
                 {/* Expanded details */}
                 {isExpanded && (
-                  <div className="p-3 bg-[#F9F9FB] border-t border-[#F0F0F3] flex flex-col gap-3">
+                  <div className="p-4 flex flex-col gap-4 bg-[#FFFFFF]">
                     <div>
-                      <div className="text-[9px] font-monument tracking-wider text-[#71717A] mb-1">
-                        Request Parameters (JSON-RPC ID: {log.id})
+                      <div className="text-[11px] font-bold uppercase tracking-wider text-[var(--ink)] mb-2" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
+                        Data Sent
                       </div>
-                      <pre className="bg-[#121214] text-[#E4E4E7] p-3 rounded font-mono text-[10px] overflow-auto max-h-[140px] whitespace-pre-wrap break-all">
+                      <pre className="bg-[var(--ink)] text-[#FFFFFF] p-3 border-4 border-[var(--ink)] font-mono text-[11px] overflow-auto max-h-[140px] whitespace-pre-wrap break-all shadow-[inset_4px_4px_0px_rgba(0,0,0,0.5)]">
                         {JSON.stringify(log.params, null, 2)}
                       </pre>
                     </div>
                     <div>
-                      <div className="text-[9px] font-monument tracking-wider text-[#71717A] mb-1">
-                        {hasError ? 'Error Message' : 'Response Result'}
+                      <div className="text-[11px] font-bold uppercase tracking-wider text-[var(--ink)] mb-2" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
+                        {hasError ? 'Error Received' : 'Data Received'}
                       </div>
-                      <pre className={`p-3 rounded font-mono text-[10px] overflow-auto max-h-[140px] whitespace-pre-wrap break-all ${
-                        hasError ? 'bg-[#450A0A] text-[#FCA5A5]' : 'bg-[#121214] text-[#E4E4E7]'
+                      <pre className={`p-3 border-4 border-[var(--ink)] font-mono text-[11px] overflow-auto max-h-[140px] whitespace-pre-wrap break-all ${
+                        hasError ? 'bg-[var(--accent-secondary)] text-[var(--ink)] font-bold' : 'bg-[var(--ink)] text-[#FFFFFF] shadow-[inset_4px_4px_0px_rgba(0,0,0,0.5)]'
                       }`}>
                         {JSON.stringify(hasError ? log.error : log.response, null, 2)}
                       </pre>

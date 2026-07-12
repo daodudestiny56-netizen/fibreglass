@@ -38,75 +38,84 @@ function codeStyle(code: FiberErrorCode): CodeStyle {
   switch (code) {
     case 'NO_ROUTE':
       return {
-        icon: '',
-        label: 'No Route Found',
-        bg: '#1e1a2e',
-        border: '#7c3aed44',
-        titleColor: '#a78bfa',
-        iconBg: '#4c1d9520',
+        icon: '✕',
+        label: 'No Way to Reach This Recipient',
+        bg: 'var(--accent-secondary)',
+        border: 'var(--ink)',
+        titleColor: 'var(--ink)',
+        iconBg: 'transparent',
       };
     case 'INSUFFICIENT_LIQUIDITY':
       return {
-        icon: '',
-        label: 'Insufficient Liquidity',
-        bg: '#1e1a14',
-        border: '#d9770644',
-        titleColor: '#fb923c',
-        iconBg: '#92400e20',
+        icon: '✕',
+        label: 'Not Enough Funds in the Path',
+        bg: 'var(--accent-secondary)',
+        border: 'var(--ink)',
+        titleColor: 'var(--ink)',
+        iconBg: 'transparent',
       };
     case 'ASSET_MISMATCH':
       return {
-        icon: '️',
-        label: 'Asset Mismatch',
-        bg: '#1e1a14',
-        border: '#ca8a0444',
-        titleColor: '#facc15',
-        iconBg: '#78350f20',
+        icon: '✕',
+        label: 'Wrong Type of Money for This Payment',
+        bg: 'var(--accent-secondary)',
+        border: 'var(--ink)',
+        titleColor: 'var(--ink)',
+        iconBg: 'transparent',
       };
     case 'INVOICE_EXPIRED':
       return {
-        icon: '',
-        label: 'Invoice Expired',
-        bg: '#1a1e14',
-        border: '#4d7c0f44',
-        titleColor: '#86efac',
-        iconBg: '#14532d20',
+        icon: '✕',
+        label: 'Payment Code Expired',
+        bg: 'var(--accent-secondary)',
+        border: 'var(--ink)',
+        titleColor: 'var(--ink)',
+        iconBg: 'transparent',
       };
     case 'INVOICE_CANCELLED':
       return {
-        icon: '',
-        label: 'Invoice Cancelled',
-        bg: '#1e1414',
-        border: '#dc262644',
-        titleColor: '#fca5a5',
-        iconBg: '#7f1d1d20',
+        icon: '✕',
+        label: 'Payment Code Cancelled',
+        bg: 'var(--accent-secondary)',
+        border: 'var(--ink)',
+        titleColor: 'var(--ink)',
+        iconBg: 'transparent',
       };
     case 'PAYMENT_ALREADY_EXISTS':
       return {
-        icon: '',
-        label: 'Payment Already Exists',
-        bg: '#141e1e',
-        border: '#0891b244',
-        titleColor: '#67e8f9',
-        iconBg: '#0c4a6e20',
+        icon: '✕',
+        label: 'Payment Already Sent',
+        bg: 'var(--accent-secondary)',
+        border: 'var(--ink)',
+        titleColor: 'var(--ink)',
+        iconBg: 'transparent',
       };
     case 'NODE_UNREACHABLE':
       return {
-        icon: '',
-        label: 'Node Unreachable',
-        bg: '#1e1414',
-        border: '#dc262644',
-        titleColor: '#f87171',
-        iconBg: '#7f1d1d20',
+        icon: '✕',
+        label: 'Cannot Connect to Network',
+        bg: 'var(--accent-secondary)',
+        border: 'var(--ink)',
+        titleColor: 'var(--ink)',
+        iconBg: 'transparent',
+      };
+    case 'INVALID_INVOICE':
+      return {
+        icon: '✕',
+        label: 'Invalid Payment Code',
+        bg: 'var(--accent-secondary)',
+        border: 'var(--ink)',
+        titleColor: 'var(--ink)',
+        iconBg: 'transparent',
       };
     default:
       return {
-        icon: '',
-        label: 'Unexpected Error',
-        bg: '#1a1a1e',
-        border: '#52525b44',
-        titleColor: '#a1a1aa',
-        iconBg: '#27272a20',
+        icon: '!',
+        label: 'Something Went Wrong',
+        bg: 'var(--accent-secondary)',
+        border: 'var(--ink)',
+        titleColor: 'var(--ink)',
+        iconBg: 'transparent',
       };
   }
 }
@@ -125,53 +134,60 @@ export function ErrorResolutionBanner({
   const hint = getErrorHint(error.code);
 
   const bannerStyle: React.CSSProperties = {
-    background: 'var(--glass-base, #05080f)',
-    border: '1px solid var(--fail-signal, #f43f5e)',
-    borderRadius: '2px',
+    background: style.bg,
+    border: '3px solid var(--ink)',
+    borderRadius: '0',
     padding: '16px 20px',
-    fontFamily: "'Satoshi', sans-serif",
-    color: 'var(--ink-primary, #e2e8f0)',
+    fontFamily: "'Inter', sans-serif",
+    color: 'var(--ink)',
     display: 'flex',
     flexDirection: 'column',
     gap: '12px',
+    boxShadow: '6px 6px 0px var(--ink)',
   };
 
   const headerStyle: React.CSSProperties = {
     display: 'flex',
-    alignItems: 'center',
+    alignItems: 'flex-start',
     gap: '10px',
+    flexWrap: 'wrap' as const,
   };
 
   const iconStyle: React.CSSProperties = {
     fontSize: '18px',
-    color: 'var(--fail-signal, #f43f5e)',
+    color: 'var(--ink)',
+    fontWeight: 700,
   };
 
   const titleStyle: React.CSSProperties = {
-    fontSize: '14px',
-    fontWeight: 600,
-    color: 'var(--fail-signal, #f43f5e)',
+    fontSize: '16px',
+    fontWeight: 700,
+    color: 'var(--ink)',
+    fontFamily: "'Space Grotesk', sans-serif",
     textTransform: 'uppercase',
     letterSpacing: '0.05em',
   };
 
   const codeTagStyle: React.CSSProperties = {
     fontSize: '10px',
-    fontFamily: 'monospace',
-    color: '#64748b',
-    background: '#1e293b',
-    border: '1px solid #334155',
-    borderRadius: '4px',
-    padding: '1px 6px',
-    marginLeft: '6px',
+    fontFamily: "'Space Mono', monospace",
+    color: 'var(--ink)',
+    background: '#FFFFFF',
+    border: '3px solid var(--ink)',
+    borderRadius: '0',
+    padding: '2px 6px',
+    marginLeft: '10px',
     letterSpacing: '0.04em',
+    fontWeight: 700,
+    boxShadow: '2px 2px 0px var(--ink)'
   };
 
   const hintStyle: React.CSSProperties = {
-    fontSize: '12px',
-    color: '#94a3b8',
+    fontSize: '13px',
+    color: 'var(--ink)',
     lineHeight: 1.6,
     marginBottom: '10px',
+    fontWeight: 600,
   };
 
   const footerRowStyle: React.CSSProperties = {
@@ -186,40 +202,45 @@ export function ErrorResolutionBanner({
     display: 'flex',
     alignItems: 'center',
     gap: '4px',
-    fontSize: '11px',
-    color: '#475569',
+    fontSize: '12px',
+    color: 'var(--ink)',
     cursor: 'pointer',
     background: 'none',
     border: 'none',
     padding: 0,
-    fontFamily: 'inherit',
+    fontFamily: "'Space Grotesk', sans-serif",
+    fontWeight: 700,
+    textTransform: 'uppercase',
   };
 
   const retryBtnStyle: React.CSSProperties = {
-    background: 'var(--signal-dim, rgba(79, 240, 216, 0.1))',
-    border: '1px solid var(--signal-active, #4FF0D8)',
-    color: 'var(--signal-active, #4FF0D8)',
+    background: 'var(--accent-primary)',
+    border: '3px solid var(--ink)',
+    color: 'var(--ink)',
     padding: '8px 16px',
-    borderRadius: '2px',
+    borderRadius: '0',
     fontSize: '12px',
-    fontWeight: 600,
+    fontWeight: 700,
     cursor: 'pointer',
-    fontFamily: "'Satoshi', sans-serif",
+    fontFamily: "'Space Grotesk', sans-serif",
     textTransform: 'uppercase',
     letterSpacing: '0.05em',
+    boxShadow: '2px 2px 0px var(--ink)',
+    transition: 'all 0.1s ease-out'
   };
 
   const rawBlockStyle: React.CSSProperties = {
     marginTop: '8px',
-    background: 'var(--glass-surface, #0a0e17)',
-    border: '1px solid var(--glass-edge, #151c2d)',
-    borderRadius: '2px',
-    padding: '10px 12px',
+    background: '#FFFFFF',
+    border: '3px solid var(--ink)',
+    borderRadius: '0',
+    padding: '12px 14px',
     fontFamily: "'Space Mono', monospace",
     fontSize: '11px',
-    color: 'var(--ink-secondary, #64748b)',
+    color: 'var(--ink)',
     wordBreak: 'break-all',
     lineHeight: 1.5,
+    boxShadow: 'inset 4px 4px 0px rgba(17,17,17,0.1)'
   };
 
   const dismissStyle: React.CSSProperties = {
@@ -228,9 +249,10 @@ export function ErrorResolutionBanner({
     right: '12px',
     background: 'none',
     border: 'none',
-    color: '#475569',
+    color: 'var(--ink)',
     cursor: 'pointer',
-    fontSize: '14px',
+    fontSize: '16px',
+    fontWeight: 700,
     lineHeight: 1,
     padding: '0 2px',
     fontFamily: 'inherit',
@@ -254,21 +276,32 @@ export function ErrorResolutionBanner({
 
       {hint && <p style={hintStyle}>{hint}</p>}
 
-      <div style={footerRowStyle}>
+      <div style={footerRowStyle} className="flex-col sm:flex-row">
         <button
           style={rawToggleStyle}
+          className="min-h-[44px]"
           onClick={() => setRawExpanded((v) => !v)}
           aria-expanded={rawExpanded}
         >
-          <span style={{ transform: rawExpanded ? 'rotate(90deg)' : 'rotate(0)', display: 'inline-block', transition: 'transform 0.15s' }}></span>
-          {rawExpanded ? 'Hide' : 'Show'} raw error
-          <span style={{ fontFamily: 'monospace', color: '#334155', marginLeft: '4px' }}>
-            ({error.rpcMethod})
-          </span>
+          <span style={{ transform: rawExpanded ? 'rotate(90deg)' : 'rotate(0)', display: 'inline-block', transition: 'transform 0.15s' }}>▶</span>
+          {rawExpanded ? 'Hide' : 'Show'} Developer Data
         </button>
 
         {retry && (
-          <button style={retryBtnStyle} onClick={retry}>
+          <button
+            style={retryBtnStyle}
+            className="w-full sm:w-auto min-h-[44px]"
+            onClick={(e) => {
+              retry();
+              const el = e.currentTarget;
+              el.style.transform = 'translate(2px, 2px)';
+              el.style.boxShadow = 'none';
+              setTimeout(() => {
+                el.style.transform = '';
+                el.style.boxShadow = '2px 2px 0px var(--ink)';
+              }, 100);
+            }}
+          >
             ↻ Retry
           </button>
         )}

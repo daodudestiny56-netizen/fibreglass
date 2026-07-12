@@ -55,8 +55,8 @@ const PRESET_INVOICES = {
 };
 
 const MOCK_HOPS: RouterHop[] = [
-  { channel_outpoint: '0x0001', next_hop: '0x0002' as import('fiberglass-react').Pubkey, fee: '1000' },
-  { channel_outpoint: '0x0002', next_hop: '0x0003' as import('fiberglass-react').Pubkey, fee: '1500' },
+  { channel_outpoint: '0x0001', target: '0x0002' as import('fiberglass-react').Pubkey, amount_received: '5000', incoming_tlc_expiry: '0x10' },
+  { channel_outpoint: '0x0002', target: '0x0003' as import('fiberglass-react').Pubkey, amount_received: '4000', incoming_tlc_expiry: '0x10' },
 ];
 
 // ---------------------------------------------------------------------------
@@ -67,27 +67,27 @@ function DashboardStats({ channelsCount }: { channelsCount: number }) {
   return (
     <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
       {/* Metric 1 */}
-      <div className="bg-[surface] border border-[edge] p-4 rounded-[2px]  flex flex-col gap-1 text-ink">
-        <span className="font-sans font-bold uppercase tracking-wider text-[9px] tracking-wider text-[inkMuted]">Node Balance</span>
+      <div className="brutalist-container p-4 flex flex-col gap-1 text-ink">
+        <span className="font-['Space_Grotesk'] font-bold uppercase tracking-wider text-[11px] text-ink">Total Node Funds</span>
         <div className="flex items-baseline gap-1 mt-1">
-          <span className="text-xl font-bold font-sans tracking-tight tabular-nums text-ink">10.00000000</span>
-          <span className="text-[10px] font-mono text-[inkMuted]">CKB</span>
+          <span className="text-xl font-mono font-bold tracking-tight tabular-nums text-ink">10.00000000</span>
+          <span className="text-[10px] font-mono font-bold text-ink">CKB</span>
         </div>
       </div>
       {/* Metric 2 */}
-      <div className="bg-[surface] border border-[edge] p-4 rounded-[2px]  flex flex-col gap-1 text-ink">
-        <span className="font-sans font-bold uppercase tracking-wider text-[9px] tracking-wider text-[inkMuted]">Total Channels</span>
+      <div className="brutalist-container p-4 flex flex-col gap-1 text-ink">
+        <span className="font-['Space_Grotesk'] font-bold uppercase tracking-wider text-[11px] text-ink">Total Connections</span>
         <div className="flex items-baseline gap-1 mt-1">
-          <span className="text-xl font-bold font-sans tracking-tight tabular-nums text-ink">{channelsCount}</span>
-          <span className="text-[10px] font-mono text-[inkMuted]">Active</span>
+          <span className="text-xl font-mono font-bold tracking-tight tabular-nums text-ink">{channelsCount}</span>
+          <span className="text-[10px] font-mono font-bold text-ink">Active</span>
         </div>
       </div>
       {/* Metric 3 */}
-      <div className="bg-[surface] border border-[edge] p-4 rounded-[2px]  flex flex-col gap-1 text-ink">
-        <span className="font-sans font-bold uppercase tracking-wider text-[9px] tracking-wider text-[inkMuted]">Network Fee</span>
+      <div className="brutalist-container p-4 flex flex-col gap-1 text-ink">
+        <span className="font-['Space_Grotesk'] font-bold uppercase tracking-wider text-[11px] text-ink">Network Fee</span>
         <div className="flex items-baseline gap-1 mt-1">
-          <span className="text-xl font-bold font-sans tracking-tight tabular-nums text-ink">4,200</span>
-          <span className="text-[10px] font-mono text-[inkMuted]">shannons</span>
+          <span className="text-xl font-mono font-bold tracking-tight tabular-nums text-ink">4,200</span>
+          <span className="text-[10px] font-mono font-bold text-ink">shannons</span>
         </div>
       </div>
     </div>
@@ -102,16 +102,16 @@ function ChannelsTab() {
   const { mode } = useFiberNode();
   const { channels, isLoading, error, refetch } = useChannel({ refreshIntervalMs: 0 });
 
-  if (isLoading) return <LoadingSpinner label="Retrieving channel states" />;
+  if (isLoading) return <LoadingSpinner label="Fetching Connections" />;
 
   return (
     <div className="flex flex-col gap-4 font-sans text-xs">
       <DashboardStats channelsCount={channels.length} />
 
       <div className="flex justify-between items-center mb-1">
-        <span className="font-sans font-bold uppercase tracking-wider text-[10px] tracking-widest text-[inkMuted]">Channel Overview</span>
+        <span className="font-['Space_Grotesk'] font-bold uppercase tracking-widest text-[12px] text-ink">Connection Overview</span>
         <button
-          className="bg-[surface] border border-[edge] hover:bg-[#1C1C20] text-[9px] font-sans font-bold uppercase tracking-wider tracking-widest px-4 py-2 rounded-[2px] text-ink transition-all duration-200 active:scale-[0.98] "
+          className="brutalist-button px-4 py-2 text-[11px]"
           onClick={refetch}
         >
           ↻ Refresh
@@ -121,8 +121,8 @@ function ChannelsTab() {
       {error && <ErrorResolutionBanner error={error} />}
       
       {channels.length === 0 && !error && (
-        <div className="text-center py-12 text-xs text-[inkMuted] bg-[surface] border border-[edge] rounded-[2px]  font-semibold">
-          No channels configured on this node.
+        <div className="text-center py-12 text-sm text-ink brutalist-container font-semibold">
+          No connections configured on this node.
         </div>
       )}
 
@@ -159,24 +159,24 @@ function ReceiveTab() {
   return (
     <div className="flex flex-col gap-4 items-center font-sans">
       <div className="w-full max-w-[420px] flex flex-col gap-4">
-        <span className="font-sans font-bold uppercase tracking-wider text-[10px] tracking-widest text-[inkMuted] mb-1">Receive Funds</span>
+        <span className="font-sans font-bold uppercase tracking-wider text-[10px] tracking-widest text-ink mb-1">Receive Funds</span>
         
         {/* Dynamic Controls */}
-        <div className="bg-[surface] border border-[edge] rounded-[2px] p-5  flex flex-col gap-4 text-ink">
+        <div className="brutalist-container p-5  flex flex-col gap-4 text-ink">
           <div className="flex flex-col gap-1.5">
-            <label className="text-[9px] font-sans font-bold uppercase tracking-wider tracking-wider text-[inkMuted]">Amount (shannons)</label>
+            <label className="text-[9px] font-sans font-bold uppercase tracking-wider tracking-wider text-ink">Amount (shannons)</label>
             <input
               type="text"
-              className="bg-glass border border-[edge] focus:border-[signal] focus:ring-1 focus:ring-[signal]/30 rounded-[2px] py-2 px-3 text-xs text-ink font-mono outline-none transition-all duration-200"
+              className="bg-[#FFFFFF] border-[3px] border-ink focus:bg-[var(--accent-primary)] focus:shadow-[4px_4px_0px_var(--ink)] py-2 px-3 text-xs text-ink font-mono outline-none transition-all duration-200"
               value={invoiceAmount}
               onChange={(e) => setInvoiceAmount(e.target.value)}
             />
           </div>
           <div className="flex flex-col gap-1.5">
-            <label className="text-[9px] font-sans font-bold uppercase tracking-wider tracking-wider text-[inkMuted]">Description / Memo</label>
+            <label className="text-[9px] font-sans font-bold uppercase tracking-wider tracking-wider text-ink">Description / Memo</label>
             <input
               type="text"
-              className="bg-glass border border-[edge] focus:border-[signal] focus:ring-1 focus:ring-[signal]/30 rounded-[2px] py-2 px-3 text-xs text-ink outline-none transition-all duration-200"
+              className="bg-[#FFFFFF] border-[3px] border-ink focus:bg-[var(--accent-primary)] focus:shadow-[4px_4px_0px_var(--ink)] py-2 px-3 text-xs text-ink outline-none transition-all duration-200"
               value={invoiceMemo}
               onChange={(e) => setInvoiceMemo(e.target.value)}
             />
@@ -223,23 +223,23 @@ function SendTab() {
   return (
     <div className="flex flex-col gap-6 font-sans">
       <div className="flex flex-col gap-2">
-        <span className="font-sans font-bold uppercase tracking-wider text-[10px] tracking-widest text-[inkMuted]">Send Payment</span>
+        <span className="font-sans font-bold uppercase tracking-wider text-[10px] tracking-widest text-ink">Send Payment</span>
       </div>
 
-      <div className="bg-[surface] border border-[edge] rounded-[2px] p-6  flex flex-col gap-4 text-[ink]">
+      <div className="brutalist-container p-6  flex flex-col gap-4 text-[ink]">
         {/* Preset Selectors */}
         <div className="flex flex-col gap-1.5">
-          <label className="text-[9px] font-sans font-bold uppercase tracking-wider tracking-wider text-[inkMuted]">Preset Mock Scenarios</label>
+          <label className="text-[9px] font-sans font-bold uppercase tracking-wider tracking-wider text-ink">Preset Mock Scenarios</label>
           <div className="grid grid-cols-3 gap-2">
             <button
               onClick={() => {
                 setInvoiceInput(PRESET_INVOICES.standard);
                 setActiveInvoice(PRESET_INVOICES.standard);
               }}
-              className={`py-1.5 px-3 rounded-[2px] text-[10px] border font-sans font-bold uppercase tracking-wider tracking-wider transition-all ${
+              className={`py-2.5 px-3 text-[10px] border-[3px] border-ink font-sans font-bold uppercase tracking-wider tracking-wider transition-all min-h-[44px] ${
                 invoiceInput === PRESET_INVOICES.standard
-                  ? 'bg-[signal] border-[signal] text-ink'
-                  : 'bg-glass border-[edge] text-[inkMuted] hover:text-ink'
+                  ? 'bg-[var(--accent-primary)] text-ink shadow-[2px_2px_0px_var(--ink)] translate-x-[2px] translate-y-[2px]'
+                  : 'bg-[#FFFFFF] border-ink text-ink hover:text-ink'
               }`}
             >
               Standard
@@ -249,10 +249,10 @@ function SendTab() {
                 setInvoiceInput(PRESET_INVOICES.no_route);
                 setActiveInvoice(PRESET_INVOICES.no_route);
               }}
-              className={`py-1.5 px-3 rounded-[2px] text-[10px] border font-sans font-bold uppercase tracking-wider tracking-wider transition-all ${
+              className={`py-2.5 px-3 text-[10px] border-[3px] border-ink font-sans font-bold uppercase tracking-wider tracking-wider transition-all min-h-[44px] ${
                 invoiceInput === PRESET_INVOICES.no_route
-                  ? 'bg-[signal] border-[signal] text-ink'
-                  : 'bg-glass border-[edge] text-[inkMuted] hover:text-ink'
+                  ? 'bg-[var(--accent-primary)] text-ink shadow-[2px_2px_0px_var(--ink)] translate-x-[2px] translate-y-[2px]'
+                  : 'bg-[#FFFFFF] border-ink text-ink hover:text-ink'
               }`}
             >
               No Route
@@ -262,10 +262,10 @@ function SendTab() {
                 setInvoiceInput(PRESET_INVOICES.expired);
                 setActiveInvoice(PRESET_INVOICES.expired);
               }}
-              className={`py-1.5 px-3 rounded-[2px] text-[10px] border font-sans font-bold uppercase tracking-wider tracking-wider transition-all ${
+              className={`py-2.5 px-3 text-[10px] border-[3px] border-ink font-sans font-bold uppercase tracking-wider tracking-wider transition-all min-h-[44px] ${
                 invoiceInput === PRESET_INVOICES.expired
-                  ? 'bg-[signal] border-[signal] text-ink'
-                  : 'bg-glass border-[edge] text-[inkMuted] hover:text-ink'
+                  ? 'bg-[var(--accent-primary)] text-ink shadow-[2px_2px_0px_var(--ink)] translate-x-[2px] translate-y-[2px]'
+                  : 'bg-[#FFFFFF] border-ink text-ink hover:text-ink'
               }`}
             >
               Expired
@@ -274,18 +274,18 @@ function SendTab() {
         </div>
 
         <div className="flex flex-col gap-2 mt-2">
-          <label className="text-[10px] font-sans font-bold uppercase tracking-wider tracking-widest text-[inkMuted]">Invoice Address</label>
-          <div className="flex gap-2">
+          <label className="text-[10px] font-sans font-bold uppercase tracking-wider tracking-widest text-ink">Invoice Address</label>
+          <div className="flex flex-col sm:flex-row gap-2">
             <input
               id="send-invoice-input"
-              className="flex-1 bg-glass border border-[edge] focus:border-[signal] focus:ring-1 focus:ring-[signal]/30 rounded-[2px] py-2.5 px-3.5 text-xs text-ink font-mono outline-none transition-all duration-200"
+              className="flex-1 bg-[#FFFFFF] border-[3px] border-ink focus:bg-[var(--accent-primary)] focus:shadow-[4px_4px_0px_var(--ink)] py-2.5 px-3.5 text-xs text-ink font-mono outline-none transition-all duration-200 min-h-[44px] break-all"
               value={invoiceInput}
               onChange={(e) => setInvoiceInput(e.target.value)}
               placeholder="fibb1q…"
               spellCheck={false}
             />
             <button
-              className="bg-[signal] hover:bg-[#1E4BEF] text-ink text-[9px] font-sans font-bold uppercase tracking-wider tracking-widest px-4 py-2.5 rounded-[2px]  transition-all duration-200 active:scale-[0.98]"
+              className="brutalist-button px-4 py-2.5 text-[9px] min-h-[44px] w-full sm:w-auto"
               onClick={() => setActiveInvoice(invoiceInput || null)}
             >
               Verify Route
@@ -307,16 +307,16 @@ function SendTab() {
 
       {canSend && (
         <button
-          className="w-full py-3.5 bg-[signal] hover:bg-[#1E4BEF] text-ink text-[10px] font-sans font-bold uppercase tracking-wider tracking-widest rounded-[2px]  transition-all duration-200 ease-out active:scale-[0.99] uppercase"
+          className="w-full py-3.5 brutalist-button text-[10px] uppercase"
           onClick={handleSend}
         >
           Confirm & Send Payment
         </button>
       )}
 
-      {paymentResult.payment && (
+      {paymentResult.payment && confidence.route && (
         <PaymentRouteVisualizer
-          hops={paymentResult.payment.routers}
+          hops={confidence.route}
           paymentStatus={paymentResult.status}
           totalFee={paymentResult.payment.fee}
           mode={mode}
@@ -338,11 +338,11 @@ function SendTab() {
 function CodeSnippet({ code }: { code: string }) {
   const [copied, setCopied] = useState(false);
   return (
-    <div className="mt-5 bg-[#05080f] border border-[edge] rounded-[2px] p-4 text-[11px] font-mono text-[#a1a1aa] overflow-x-auto relative group whitespace-pre-wrap break-all leading-relaxed">
+    <div className="mt-5 brutalist-container p-4 text-[11px] font-mono text-ink overflow-x-auto relative group whitespace-pre-wrap break-all leading-relaxed">
       {code}
       <button 
         onClick={() => { navigator.clipboard.writeText(code); setCopied(true); setTimeout(() => setCopied(false), 2000); }}
-        className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 bg-[#0a0e17] border border-[edge] px-2.5 py-1 text-[9px] rounded-[2px] font-sans font-bold uppercase tracking-wider text-ink hover:text-[signal] hover:border-[signal]/30 transition-all cursor-pointer"
+        className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 bg-[#FFFFFF] border-[3px] border-ink px-2.5 py-1 text-[9px]  font-sans font-bold uppercase tracking-wider text-ink hover:bg-[var(--accent-primary)] hover:shadow-[4px_4px_0px_var(--ink)] transition-all cursor-pointer"
       >
         {copied ? 'Copied!' : 'Copy'}
       </button>
@@ -390,20 +390,20 @@ function PlaygroundTab() {
   return (
     <div className="flex flex-col gap-6 font-sans">
       <div className="flex flex-col gap-1.5">
-        <span className="font-sans font-bold uppercase tracking-wider text-[10px] tracking-widest text-[inkMuted]">SDK Component Playground</span>
-        <span className="text-[11px] text-[inkMuted] font-medium">Dynamically adjust parameters to inspect SDK component layouts.</span>
+        <span className="font-sans font-bold uppercase tracking-wider text-[10px] tracking-widest text-ink">SDK Component Playground</span>
+        <span className="text-[11px] text-ink font-medium">Dynamically adjust parameters to inspect SDK component layouts.</span>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         
         {/* Card 1: ChannelLifecycleCard */}
-        <div className="bg-[surface] border border-[edge] rounded-[2px] p-5  flex flex-col gap-3.5 text-[ink]">
-          <div className="text-[10px] font-sans font-bold uppercase tracking-wider font-bold text-[signal] pb-2 border-b border-[edge] tracking-wider">&lt;ChannelLifecycleCard&gt;</div>
+        <div className="brutalist-container p-5  flex flex-col gap-3.5 text-[ink]">
+          <div className="text-[10px] font-sans font-bold uppercase tracking-wider font-bold text-[signal] pb-2 border-b border-ink tracking-wider">&lt;ChannelLifecycleCard&gt;</div>
           
           <div className="flex justify-between items-center text-xs">
-            <span className="text-[inkMuted] font-semibold">State:</span>
+            <span className="text-ink font-semibold">State:</span>
             <select
-              className="bg-glass border border-[edge] text-ink rounded-[2px] py-1 px-2 text-xs outline-none"
+              className="bg-[#FFFFFF] border-[3px] border-ink text-ink font-bold py-1 px-2 text-xs outline-none"
               value={chState}
               onChange={(e) => setChState(e.target.value as ChannelState)}
             >
@@ -415,9 +415,9 @@ function PlaygroundTab() {
           </div>
 
           <div className="flex justify-between items-center text-xs">
-            <span className="text-[inkMuted] font-semibold">Local (CKB):</span>
+            <span className="text-ink font-semibold">Local (CKB):</span>
             <input
-              className="w-24 bg-glass border border-[edge] rounded-[2px] py-1 px-2 text-xs outline-none text-right text-ink font-mono tabular-nums"
+              className="w-24 bg-[#FFFFFF] border-[3px] border-ink py-1 px-2 text-xs outline-none text-right text-ink font-mono tabular-nums"
               type="number"
               value={Number(chLocal) / 1e8}
               onChange={(e) => setChLocal(String(Number(e.target.value) * 1e8))}
@@ -425,9 +425,9 @@ function PlaygroundTab() {
           </div>
 
           <div className="flex justify-between items-center text-xs">
-            <span className="text-[inkMuted] font-semibold">Remote (CKB):</span>
+            <span className="text-ink font-semibold">Remote (CKB):</span>
             <input
-              className="w-24 bg-glass border border-[edge] rounded-[2px] py-1 px-2 text-xs outline-none text-right text-ink font-mono tabular-nums"
+              className="w-24 bg-[#FFFFFF] border-[3px] border-ink py-1 px-2 text-xs outline-none text-right text-ink font-mono tabular-nums"
               type="number"
               value={Number(chRemote) / 1e8}
               onChange={(e) => setChRemote(String(Number(e.target.value) * 1e8))}
@@ -435,7 +435,7 @@ function PlaygroundTab() {
           </div>
 
           <div className="flex justify-between items-center text-xs">
-            <span className="text-[inkMuted] font-semibold">Enabled:</span>
+            <span className="text-ink font-semibold">Enabled:</span>
             <input
               type="checkbox"
               className="accent-[signal] h-4 w-4"
@@ -444,7 +444,7 @@ function PlaygroundTab() {
             />
           </div>
 
-          <div className="mt-3 pt-3 border-t border-[edge]">
+          <div className="mt-3 pt-3 border-t border-ink">
             <ChannelLifecycleCard channel={simulatedChannel} mode={mode} showModeBadge />
             <CodeSnippet code={`<ChannelLifecycleCard
   channel={{
@@ -462,13 +462,13 @@ function PlaygroundTab() {
         </div>
 
         {/* Card 2: ConfidenceCheck */}
-        <div className="bg-[surface] border border-[edge] rounded-[2px] p-5  flex flex-col gap-3.5 text-[ink]">
-          <div className="text-[10px] font-sans font-bold uppercase tracking-wider font-bold text-[signal] pb-2 border-b border-[edge] tracking-wider">&lt;ConfidenceCheck&gt;</div>
+        <div className="brutalist-container p-5  flex flex-col gap-3.5 text-[ink]">
+          <div className="text-[10px] font-sans font-bold uppercase tracking-wider font-bold text-[signal] pb-2 border-b border-ink tracking-wider">&lt;ConfidenceCheck&gt;</div>
 
           <div className="flex justify-between items-center text-xs">
-            <span className="text-[inkMuted] font-semibold">Route Confidence:</span>
+            <span className="text-ink font-semibold">Route Confidence:</span>
             <select
-              className="bg-glass border border-[edge] text-ink rounded-[2px] py-1 px-2 text-xs outline-none"
+              className="bg-[#FFFFFF] border-[3px] border-ink text-ink font-bold py-1 px-2 text-xs outline-none"
               value={confStatus}
               onChange={(e) => setConfStatus(e.target.value as ConfidenceStatus)}
             >
@@ -481,15 +481,15 @@ function PlaygroundTab() {
           </div>
 
           <div className="flex justify-between items-center text-xs">
-            <span className="text-[inkMuted] font-semibold">Fee (shannons):</span>
+            <span className="text-ink font-semibold">Fee (shannons):</span>
             <input
-              className="w-24 bg-glass border border-[edge] rounded-[2px] py-1 px-2 text-xs outline-none text-right text-ink font-mono tabular-nums"
+              className="w-24 bg-[#FFFFFF] border-[3px] border-ink py-1 px-2 text-xs outline-none text-right text-ink font-mono tabular-nums"
               value={confFee}
               onChange={(e) => setConfFee(e.target.value)}
             />
           </div>
 
-          <div className="mt-3 pt-3 border-t border-[edge]">
+          <div className="mt-3 pt-3 border-t border-ink">
             <ConfidenceCheck
               status={confStatus}
               fee={confFee}
@@ -510,13 +510,13 @@ function PlaygroundTab() {
         </div>
 
         {/* Card 3: InvoiceSheet */}
-        <div className="bg-[surface] border border-[edge] rounded-[2px] p-5  flex flex-col gap-3.5 text-[ink]">
-          <div className="text-[10px] font-sans font-bold uppercase tracking-wider font-bold text-[signal] pb-2 border-b border-[edge] tracking-wider">&lt;InvoiceSheet&gt;</div>
+        <div className="brutalist-container p-5  flex flex-col gap-3.5 text-[ink]">
+          <div className="text-[10px] font-sans font-bold uppercase tracking-wider font-bold text-[signal] pb-2 border-b border-ink tracking-wider">&lt;InvoiceSheet&gt;</div>
 
           <div className="flex justify-between items-center text-xs">
-            <span className="text-[inkMuted] font-semibold">Invoice Status:</span>
+            <span className="text-ink font-semibold">Invoice Status:</span>
             <select
-              className="bg-glass border border-[edge] text-ink rounded-[2px] py-1 px-2 text-xs outline-none"
+              className="bg-[#FFFFFF] border-[3px] border-ink text-ink font-bold py-1 px-2 text-xs outline-none"
               value={invStatus}
               onChange={(e) => setInvStatus(e.target.value as InvoiceStatus)}
             >
@@ -526,7 +526,7 @@ function PlaygroundTab() {
             </select>
           </div>
 
-          <div className="mt-3 pt-3 border-t border-[edge] flex flex-col items-center w-full">
+          <div className="mt-3 pt-3 border-t border-ink flex flex-col items-center w-full">
             <InvoiceSheet
               invoiceAddress="fibb1qpp5kh8d0kfwna2t7afjhqjyrq8fq4dg37x4k0hz4w5s9yq9jyeysqqzvq79pq6xm8gqs3y"
               paymentHash={'0x123' as Hash256}
@@ -551,13 +551,13 @@ function PlaygroundTab() {
         </div>
 
         {/* Card 4: ErrorResolutionBanner */}
-        <div className="bg-[surface] border border-[edge] rounded-[2px] p-5  flex flex-col gap-3.5 text-[ink]">
-          <div className="text-[10px] font-sans font-bold uppercase tracking-wider font-bold text-[signal] pb-2 border-b border-[edge] tracking-wider">&lt;ErrorResolutionBanner&gt;</div>
+        <div className="brutalist-container p-5  flex flex-col gap-3.5 text-[ink]">
+          <div className="text-[10px] font-sans font-bold uppercase tracking-wider font-bold text-[signal] pb-2 border-b border-ink tracking-wider">&lt;ErrorResolutionBanner&gt;</div>
 
           <div className="flex justify-between items-center text-xs">
-            <span className="text-[inkMuted] font-semibold">FNN Error Code:</span>
+            <span className="text-ink font-semibold">FNN Error Code:</span>
             <select
-              className="bg-glass border border-[edge] text-ink rounded-[2px] py-1 px-2 text-xs outline-none"
+              className="bg-[#FFFFFF] border-[3px] border-ink text-ink font-bold py-1 px-2 text-xs outline-none"
               value={errCode}
               onChange={(e) => setErrCode(e.target.value as import('fiberglass-react').FiberErrorCode)}
             >
@@ -568,7 +568,7 @@ function PlaygroundTab() {
             </select>
           </div>
 
-          <div className="mt-3 pt-3 border-t border-[edge]">
+          <div className="mt-3 pt-3 border-t border-ink">
             <ErrorResolutionBanner error={simulatedError} retry={() => alert('Callback re-triggered!')} />
             <CodeSnippet code={`<ErrorResolutionBanner 
   error={{
@@ -582,13 +582,13 @@ function PlaygroundTab() {
         </div>
 
         {/* Card 5: PaymentRouteVisualizer (Full Span) */}
-        <div className="bg-[surface] border border-[edge] rounded-[2px] p-5  flex flex-col gap-3.5 text-[ink] md:col-span-2">
-          <div className="text-[10px] font-sans font-bold uppercase tracking-wider font-bold text-[signal] pb-2 border-b border-[edge] tracking-wider">&lt;PaymentRouteVisualizer&gt;</div>
+        <div className="brutalist-container p-5  flex flex-col gap-3.5 text-[ink] md:col-span-2">
+          <div className="text-[10px] font-sans font-bold uppercase tracking-wider font-bold text-[signal] pb-2 border-b border-ink tracking-wider">&lt;PaymentRouteVisualizer&gt;</div>
 
           <div className="flex justify-between items-center text-xs mb-1">
-            <span className="text-[inkMuted] font-semibold">Payment Status:</span>
+            <span className="text-ink font-semibold">Payment Status:</span>
             <select
-              className="bg-glass border border-[edge] text-ink rounded-[2px] py-1 px-2 text-xs outline-none"
+              className="bg-[#FFFFFF] border-[3px] border-ink text-ink font-bold py-1 px-2 text-xs outline-none"
               value={visStatus}
               onChange={(e) => setVisStatus(e.target.value as PaymentStatus)}
             >
@@ -627,7 +627,7 @@ function PlaygroundTab() {
 
 function LoadingSpinner({ label }: { label: string }) {
   return (
-    <div className="text-center py-16 text-[inkMuted]">
+    <div className="text-center py-16 text-ink">
       <div className="text-3xl animate-spin inline-block text-[signal]">⟳</div>
       <div className="mt-3 text-[9px] font-sans font-bold uppercase tracking-wider tracking-widest uppercase">{label}</div>
     </div>
@@ -641,6 +641,7 @@ function LoadingSpinner({ label }: { label: string }) {
 function WalletShell() {
   const { mode, connectionStatus, nodeInfo } = useFiberNode();
   const [activeTab, setActiveTab] = useState<Tab>('channels');
+  const [isHeaderExpanded, setIsHeaderExpanded] = useState(false);
 
   // Lightweight routing for payment links
   const [paymentLinkPayload] = useState<string | null>(() => {
@@ -653,18 +654,13 @@ function WalletShell() {
     return null;
   });
 
-  const modeColor = mode === 'live' ? '#10B981' : '#F59E0B';
-  const modeBg = mode === 'live' ? 'bg-[#ECFDF5]/10' : 'bg-[#FFFBEB]/10';
-  const modeBorder = mode === 'live' ? 'border-[#10B981]/30' : 'border-[#F59E0B]/30';
-
   if (paymentLinkPayload) {
     return (
-      <div className="min-h-screen bg-glass flex flex-col items-center justify-center p-6 text-[surface] font-sans selection:bg-[signal]/10 relative overflow-x-hidden">
-        <div className="grid-background" />
+      <div className="min-h-screen flex flex-col items-center justify-center p-4 sm:p-6 text-ink font-sans relative overflow-x-hidden">
         <div className="relative z-10 w-full max-w-[400px]">
           <PaymentLinkReceiver encodedPayload={paymentLinkPayload} />
           <div className="mt-8 text-center">
-            <a href="/" className="text-[10px] text-[signal] font-sans font-bold uppercase tracking-wider hover:underline">← Back to Wallet</a>
+            <a href="/" className="text-[12px] text-ink font-['Space_Grotesk'] font-bold uppercase hover:underline">← Back to Wallet</a>
           </div>
         </div>
       </div>
@@ -672,54 +668,86 @@ function WalletShell() {
   }
 
   return (
-    <div className="min-h-screen bg-glass flex flex-col text-[surface] font-sans selection:bg-[signal]/10 relative overflow-x-hidden">
-      {/* Radial-masked grid background */}
-      <div className="grid-background" />
+    <div className="min-h-screen flex flex-col text-ink font-sans relative overflow-x-hidden">
       
       {/* Header */}
-      <header className="relative z-10 flex justify-between items-center py-5 px-6 border-b border-[edge] bg-[surface] text-ink ">
-        <div>
-          <div className="text-xs font-sans font-bold uppercase tracking-wider tracking-widest text-ink flex items-center gap-2">
-            fiberglass <span className="text-[9px] bg-signal/20 text-signal border border-signal/30 px-1.5 py-0.5 rounded-[2px] tracking-normal font-mono font-bold lowercase">SDK</span>
+      <header 
+        className="relative z-10 border-b-[3px] border-ink bg-[#FFFFFF] text-ink sm:cursor-auto"
+      >
+        {/* Mobile Compact View */}
+        <div 
+          className="sm:hidden flex justify-between items-center py-3 px-4 cursor-pointer"
+          onClick={() => setIsHeaderExpanded(!isHeaderExpanded)}
+        >
+          <div className="text-[12px] font-['Space_Grotesk'] font-bold uppercase tracking-wider flex items-center gap-2">
+            fiberglass <span className="text-[9px] bg-[var(--accent-primary)] text-ink border-[2px] border-ink px-1 py-0.5 font-mono font-bold shadow-[1px_1px_0px_var(--ink)]">SDK</span>
           </div>
-          <div className="text-[9px] text-[inkMuted] tracking-widest uppercase mt-1 font-sans font-bold uppercase tracking-wider">FNN Client Interface</div>
+          <div className="flex items-center gap-2">
+            <div className={`w-2 h-2 rounded-full border-[1.5px] border-ink ${mode === 'live' ? 'bg-[#00FF00]' : 'bg-[var(--mock-tag)]'}`} />
+            <span className="text-[10px] font-['Space_Grotesk'] font-bold uppercase">{mode}</span>
+            <span className="text-[10px] font-bold">▼</span>
+          </div>
         </div>
 
-        <div className="flex items-center gap-3">
-          <div className={`text-[9px] font-sans font-bold uppercase tracking-wider tracking-widest px-3.5 py-1.5 border rounded-[2px] ${modeBg} ${modeBorder} text-ink`} style={{ color: modeColor }}>
-            {mode === 'live' ? '● LIVE' : '◌ MOCK'} · {connectionStatus.toUpperCase()}
-          </div>
-          {nodeInfo && (
-            <div className="text-[10px] font-mono text-[inkMuted] bg-glass border border-[edge] px-2.5 py-1 rounded">
-              {nodeInfo.node_name} v{nodeInfo.version}
+        {/* Expanded View (Always visible on sm) */}
+        <div className={`${isHeaderExpanded ? 'flex' : 'hidden'} sm:flex flex-col sm:flex-row justify-between items-start sm:items-center py-4 sm:py-5 px-4 sm:px-6 gap-4 sm:gap-0 border-t-[3px] sm:border-t-0 border-ink`}>
+          <div>
+            <div className="hidden sm:flex text-[14px] font-['Space_Grotesk'] font-bold uppercase tracking-wider text-ink items-center gap-2">
+              fiberglass <span className="text-[11px] bg-[var(--accent-primary)] text-ink border-[2px] border-ink px-1.5 py-0.5 tracking-normal font-mono font-bold lowercase shadow-[2px_2px_0px_var(--ink)]">SDK</span>
             </div>
-          )}
+            <div className="text-[10px] text-ink font-['Space_Grotesk'] font-bold uppercase sm:mt-1">Node Client Interface</div>
+          </div>
+
+          <div className="flex flex-wrap items-center gap-3">
+            <div className="text-[11px] font-['Space_Grotesk'] font-bold uppercase tracking-wider px-3.5 py-1.5 border-[3px] border-ink bg-white text-ink shadow-[2px_2px_0px_var(--ink)]" title={mode === 'live' ? 'Live = connected to a real Fiber node right now.' : 'Mock = practice data, not a real payment'}>
+              {mode === 'live' ? 'LIVE' : 'MOCK'} · {connectionStatus.toUpperCase()}
+            </div>
+            {nodeInfo && (
+              <div className="text-[12px] font-mono text-ink border-[3px] border-ink bg-white px-2.5 py-1 font-bold shadow-[2px_2px_0px_var(--ink)]">
+                {nodeInfo.node_name} v{nodeInfo.version}
+              </div>
+            )}
+          </div>
         </div>
       </header>
 
       {/* Tab Navigation */}
-      <nav className="relative z-10 flex gap-1 border-b border-[edge] bg-[surface] px-6">
+      <nav className="fixed bottom-0 left-0 w-full z-50 sm:relative sm:z-10 flex sm:gap-1 justify-around sm:justify-start border-t-[3px] sm:border-t-0 sm:border-b-[3px] border-ink bg-[#FFFFFF] px-0 sm:px-6 pt-0 sm:pt-2 pb-4 sm:pb-0">
         {(['channels', 'receive', 'send', 'playground'] as Tab[]).map((tab) => {
           const isActive = activeTab === tab;
+          
+          let icon = '';
+          let shortLabel = '';
+          let desktopLabel = '';
+          
+          switch(tab) {
+            case 'channels': icon = '⧉'; shortLabel = 'Connect'; desktopLabel = 'Connections'; break;
+            case 'receive': icon = '↓'; shortLabel = 'Receive'; desktopLabel = 'Get Paid'; break;
+            case 'send': icon = '↑'; shortLabel = 'Send'; desktopLabel = 'Send Funds'; break;
+            case 'playground': icon = '⚙'; shortLabel = 'Dev'; desktopLabel = 'Playground'; break;
+          }
+
           return (
             <button
               key={tab}
               id={`tab-${tab}`}
-              className={`border-b-2 py-4 px-4 text-[9px] font-sans font-bold uppercase tracking-wider tracking-widest transition-all duration-200 ease-out outline-none ${
+              className={`flex-1 sm:flex-none flex flex-col sm:block items-center justify-center py-3 sm:py-4 px-2 sm:px-6 text-[10px] sm:text-[12px] font-['Space_Grotesk'] font-bold uppercase tracking-wider outline-none sm:border-[3px] sm:border-ink sm:border-b-0 sm:translate-y-[3px] min-h-[44px] min-w-[44px] ${
                 isActive
-                  ? 'border-[signal] text-ink font-bold'
-                  : 'border-transparent text-[inkMuted] hover:text-[ink]'
+                  ? 'bg-[var(--accent-primary)] sm:bg-white text-ink z-10 border-t-[3px] sm:border-t-[3px] border-ink sm:border-t-ink'
+                  : 'bg-white sm:bg-[var(--bg)] text-ink sm:opacity-60 hover:opacity-100 z-0 border-t-[3px] border-transparent sm:border-t-transparent sm:border-ink'
               }`}
               onClick={() => setActiveTab(tab)}
             >
-              {tab}
+              <span className="sm:hidden text-lg leading-none mb-1">{icon}</span>
+              <span className="sm:hidden">{shortLabel}</span>
+              <span className="hidden sm:inline">{desktopLabel}</span>
             </button>
           );
         })}
       </nav>
 
       {/* Main Content Area */}
-      <main className="relative z-10 flex-1 max-w-[850px] w-full mx-auto p-6 md:py-8 flex flex-col gap-6">
+      <main className="relative z-10 flex-1 max-w-[850px] w-full mx-auto p-4 sm:p-6 md:py-8 flex flex-col gap-6 mb-24 sm:mb-0">
         <div className="flex-1">
           {activeTab === 'channels' && <ChannelsTab />}
           {activeTab === 'receive' && <ReceiveTab />}

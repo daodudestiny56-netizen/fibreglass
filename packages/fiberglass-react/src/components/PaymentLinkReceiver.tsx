@@ -76,20 +76,22 @@ export function PaymentLinkReceiver({ encodedPayload, onFulfilled }: PaymentLink
   };
 
   const containerStyle: React.CSSProperties = {
-    background: 'var(--glass-surface, #0a0e17)',
-    border: '1px solid var(--glass-edge, #151c2d)',
-    borderRadius: '2px',
+    background: '#FFFFFF',
+    border: '3px solid var(--ink)',
+    borderRadius: '0',
     padding: '20px',
-    fontFamily: "'Satoshi', sans-serif",
-    color: 'var(--ink-primary, #e2e8f0)',
+    fontFamily: "'Inter', sans-serif",
+    color: 'var(--ink)',
     maxWidth: '400px',
-    margin: '0 auto'
+    width: '100%',
+    margin: '0 auto',
+    boxShadow: '6px 6px 0px var(--ink)',
   };
 
   if (decodeError || !payload) {
     return (
       <div style={containerStyle}>
-        <div style={{ padding: '20px', textAlign: 'center', color: 'var(--fail-signal, #f43f5e)' }}>
+        <div style={{ padding: '20px', textAlign: 'center', color: 'var(--accent-secondary)', fontWeight: 600 }}>
           {decodeError || 'This payment link looks broken or incomplete.'}
         </div>
       </div>
@@ -97,30 +99,30 @@ export function PaymentLinkReceiver({ encodedPayload, onFulfilled }: PaymentLink
   }
 
   const headerStyle: React.CSSProperties = { display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' };
-  const titleStyle: React.CSSProperties = { fontSize: '14px', fontWeight: 600, color: 'var(--ink-primary, #e2e8f0)', textTransform: 'uppercase', letterSpacing: '0.05em' };
-  const modeBadge: React.CSSProperties = { fontSize: '9px', fontWeight: 700, letterSpacing: '0.08em', color: mode === 'live' ? 'var(--signal-active, #4FF0D8)' : 'var(--ink-secondary, #64748b)', background: mode === 'live' ? 'var(--signal-dim, #4FF0D822)' : 'transparent', border: `1px solid ${mode === 'live' ? 'var(--signal-active, #4FF0D8)' : 'var(--glass-edge, #151c2d)'}`, borderRadius: '2px', padding: '2px 6px' };
+  const titleStyle: React.CSSProperties = { fontSize: '18px', fontWeight: 700, color: 'var(--ink)', textTransform: 'uppercase', letterSpacing: '0.05em', fontFamily: "'Space Grotesk', sans-serif" };
+  const modeBadge: React.CSSProperties = { fontSize: '10px', fontWeight: 700, letterSpacing: '0.08em', color: 'var(--ink)', background: mode === 'live' ? 'var(--accent-primary)' : 'var(--mock-tag)', border: '3px solid var(--ink)', borderRadius: '0', padding: '4px 8px', fontFamily: "'Space Grotesk', sans-serif", boxShadow: '2px 2px 0px var(--ink)' };
   
-  let st = { color: 'var(--signal-active, #4FF0D8)', bg: 'var(--signal-dim, #4FF0D822)', border: 'var(--glass-edge, #151c2d)', label: 'Open — waiting for payment' };
-  if (invoiceStatus === 'Paid') st = { color: 'var(--signal-active, #4FF0D8)', bg: 'var(--signal-dim, #4FF0D822)', border: 'var(--glass-edge, #151c2d)', label: '✓ Paid' };
-  if (invoiceStatus === 'Expired') st = { color: 'var(--fail-signal, #f43f5e)', bg: 'transparent', border: 'var(--fail-signal, #f43f5e)', label: 'Expired' };
-  if (invoiceStatus === 'Cancelled') st = { color: 'var(--fail-signal, #f43f5e)', bg: 'transparent', border: 'var(--fail-signal, #f43f5e)', label: 'Cancelled' };
+  let st = { color: 'var(--ink)', bg: 'var(--accent-primary)', border: 'var(--ink)', label: 'Waiting for Payment' };
+  if (invoiceStatus === 'Paid') st = { color: 'var(--ink)', bg: 'var(--success)', border: 'var(--ink)', label: '✓ Paid' };
+  if (invoiceStatus === 'Expired') st = { color: 'var(--ink)', bg: 'var(--accent-secondary)', border: 'var(--ink)', label: 'Code Expired' };
+  if (invoiceStatus === 'Cancelled') st = { color: 'var(--ink)', bg: 'var(--accent-secondary)', border: 'var(--ink)', label: 'Code Cancelled' };
 
-  const statusBadge: React.CSSProperties = { display: 'inline-flex', alignItems: 'center', padding: '4px 12px', borderRadius: '2px', fontSize: '12px', fontWeight: 600, color: st.color, background: st.bg, border: `1px solid ${st.border}`, marginBottom: '14px', width: '100%', justifyContent: 'center' };
-  const qrWrap: React.CSSProperties = { display: 'flex', justifyContent: 'center', marginBottom: '16px', position: 'relative', background: 'var(--glass-base, #05080f)', padding: '16px', borderRadius: '2px', border: '1px solid var(--glass-edge, #151c2d)' };
-  const paidOverlay: React.CSSProperties = { position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'var(--signal-dim, #4FF0D840)', borderRadius: '2px', fontSize: '32px' };
-  const invoiceBox: React.CSSProperties = { background: 'var(--glass-base, #05080f)', border: '1px solid var(--glass-edge, #151c2d)', borderRadius: '2px', padding: '8px 10px', fontSize: '10px', fontFamily: "'Space Mono', monospace", color: 'var(--ink-secondary, #64748b)', wordBreak: 'break-all', marginBottom: '10px', lineHeight: 1.5 };
-  const copyBtn: React.CSSProperties = { width: '100%', padding: '10px', background: copied ? 'var(--signal-dim, #4FF0D822)' : 'transparent', border: `1px solid ${copied ? 'var(--signal-active, #4FF0D8)' : 'var(--glass-edge, #151c2d)'}`, borderRadius: '2px', color: copied ? 'var(--signal-active, #4FF0D8)' : 'var(--ink-primary, #e2e8f0)', fontSize: '13px', fontWeight: 600, cursor: 'pointer', fontFamily: "'Satoshi', sans-serif", textTransform: 'uppercase', letterSpacing: '0.05em', transition: 'all 0.2s', marginBottom: '0' };
-  const metaRow: React.CSSProperties = { display: 'flex', justifyContent: 'space-between', fontSize: '11px', color: 'var(--ink-secondary, #64748b)', fontFamily: "'Space Mono', monospace", marginBottom: '12px' };
+  const statusBadge: React.CSSProperties = { display: 'inline-flex', alignItems: 'center', padding: '6px 12px', borderRadius: '0', fontSize: '14px', fontWeight: 700, color: st.color, background: st.bg, border: `3px solid ${st.border}`, marginBottom: '16px', width: '100%', justifyContent: 'center', fontFamily: "'Space Grotesk', sans-serif", textTransform: 'uppercase', boxShadow: '2px 2px 0px var(--ink)' };
+  const qrWrap: React.CSSProperties = { display: 'flex', justifyContent: 'center', marginBottom: '16px', position: 'relative', background: '#FFFFFF', padding: '16px', borderRadius: '0', border: '3px solid var(--ink)', boxShadow: 'inset 4px 4px 0px rgba(17,17,17,0.1)' };
+  const paidOverlay: React.CSSProperties = { position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'rgba(0, 200, 83, 0.4)', borderRadius: '0', fontSize: '48px' };
+  const invoiceBox: React.CSSProperties = { background: '#FFFFFF', border: '3px solid var(--ink)', borderRadius: '0', padding: '12px 14px', fontSize: '11px', fontFamily: "'Space Mono', monospace", color: 'var(--ink)', wordBreak: 'break-all', marginBottom: '12px', lineHeight: 1.5, boxShadow: 'inset 4px 4px 0px rgba(17,17,17,0.1)' };
+  const copyBtn: React.CSSProperties = { width: '100%', padding: '12px', background: copied ? 'var(--success)' : 'var(--accent-primary)', border: '3px solid var(--ink)', borderRadius: '0', color: 'var(--ink)', fontSize: '13px', fontWeight: 700, cursor: 'pointer', fontFamily: "'Space Grotesk', sans-serif", textTransform: 'uppercase', letterSpacing: '0.05em', transition: 'all 0.1s ease-out', marginBottom: '0', boxShadow: '2px 2px 0px var(--ink)' };
+  const metaRow: React.CSSProperties = { display: 'flex', justifyContent: 'space-between', fontSize: '12px', color: 'var(--ink)', fontFamily: "'Space Mono', monospace", marginBottom: '16px', fontWeight: 700, flexWrap: 'wrap' as const, gap: '4px' };
 
   return (
     <div style={containerStyle}>
       <div style={headerStyle}>
         <span style={titleStyle}>Payment Link</span>
-        <span style={modeBadge}>{mode === 'live' ? '● LIVE' : '− MOCK'}</span>
+        <span style={modeBadge} title={mode === 'live' ? 'Live = connected to a real Fiber node right now.' : 'Mock = practice data, not a real payment'}>{mode === 'live' ? 'LIVE' : 'MOCK'}</span>
       </div>
       <div style={statusBadge}>{st.label}</div>
       <div style={qrWrap}>
-        <QRCodeSVG value={payload.invoiceAddress} size={140} bgColor="transparent" fgColor="var(--signal-active, #4FF0D8)" level="L" />
+        <QRCodeSVG value={payload.invoiceAddress} size={160} bgColor="transparent" fgColor="var(--ink)" level="L" className="w-[140px] h-[140px] sm:w-[160px] sm:h-[160px] min-w-[140px] min-h-[140px]" />
         {invoiceStatus === 'Paid' && <div style={paidOverlay}></div>}
       </div>
       <div style={invoiceBox} title={payload.invoiceAddress}>{payload.invoiceAddress.slice(0, 60)}…</div>
@@ -129,8 +131,20 @@ export function PaymentLinkReceiver({ encodedPayload, onFulfilled }: PaymentLink
         {payload.memo && <span>{payload.memo}</span>}
       </div>
       {invoiceStatus !== 'Paid' && invoiceStatus !== 'Expired' && (
-        <button style={copyBtn} onClick={() => void handleCopy()}>
-          {copied ? '✓ Copied!' : 'Copy Invoice'}
+        <button
+          style={{ ...copyBtn, minHeight: '44px' }}
+          onClick={(e) => {
+            void handleCopy();
+            const el = e.currentTarget;
+            el.style.transform = 'translate(2px, 2px)';
+            el.style.boxShadow = '2px 2px 0px var(--ink)';
+            setTimeout(() => {
+              el.style.transform = '';
+              el.style.boxShadow = '2px 2px 0px var(--ink)';
+            }, 100);
+          }}
+        >
+          {copied ? '✓ Copied!' : 'Copy Payment Code'}
         </button>
       )}
     </div>

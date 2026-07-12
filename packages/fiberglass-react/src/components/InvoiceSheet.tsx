@@ -47,17 +47,17 @@ export interface InvoiceSheetProps {
 function statusStyle(status: InvoiceStatus | null): { color: string; bg: string; border: string; label: string } {
   switch (status) {
     case 'Open':
-      return { color: 'var(--signal-active, #4FF0D8)', bg: 'var(--signal-dim, #4FF0D822)', border: 'var(--glass-edge, #151c2d)', label: 'Open — waiting for payment' };
+      return { color: 'var(--ink)', bg: 'var(--accent-primary)', border: 'var(--ink)', label: 'Waiting for Payment' };
     case 'Paid':
-      return { color: 'var(--signal-active, #4FF0D8)', bg: 'var(--signal-dim, #4FF0D822)', border: 'var(--glass-edge, #151c2d)', label: '✓ Paid' };
+      return { color: 'var(--ink)', bg: 'var(--success)', border: 'var(--ink)', label: '✓ Paid' };
     case 'Expired':
-      return { color: 'var(--fail-signal, #f43f5e)', bg: 'transparent', border: 'var(--fail-signal, #f43f5e)', label: 'Expired' };
+      return { color: 'var(--ink)', bg: 'var(--accent-secondary)', border: 'var(--ink)', label: 'Code Expired' };
     case 'Cancelled':
-      return { color: 'var(--fail-signal, #f43f5e)', bg: 'transparent', border: 'var(--fail-signal, #f43f5e)', label: 'Cancelled' };
+      return { color: 'var(--ink)', bg: 'var(--accent-secondary)', border: 'var(--ink)', label: 'Code Cancelled' };
     case 'Received':
-      return { color: 'var(--ink-primary, #e2e8f0)', bg: 'var(--glass-surface, #0a0e17)', border: 'var(--glass-edge, #151c2d)', label: 'Received' };
+      return { color: 'var(--ink)', bg: 'var(--success)', border: 'var(--ink)', label: 'Funds Received' };
     default:
-      return { color: 'var(--ink-secondary, #64748b)', bg: 'transparent', border: 'var(--glass-edge, #151c2d)', label: 'Unknown' };
+      return { color: 'var(--ink)', bg: '#FFFFFF', border: 'var(--ink)', label: 'Unknown' };
   }
 }
 
@@ -137,13 +137,15 @@ export function InvoiceSheet({
   }, [invoiceStatus, paymentHash, onFulfilled]);
 
   const containerStyle: React.CSSProperties = {
-    background: 'var(--glass-surface, #0a0e17)',
-    border: '1px solid var(--glass-edge, #151c2d)',
-    borderRadius: '2px',
+    background: '#FFFFFF',
+    border: '3px solid var(--ink)',
+    borderRadius: '0',
     padding: '20px',
-    fontFamily: "'Satoshi', sans-serif",
-    color: 'var(--ink-primary, #e2e8f0)',
+    fontFamily: "'Inter', sans-serif",
+    color: 'var(--ink)',
     maxWidth: '400px',
+    width: '100%',
+    boxShadow: '6px 6px 0px var(--ink)'
   };
 
   const headerStyle: React.CSSProperties = {
@@ -154,37 +156,43 @@ export function InvoiceSheet({
   };
 
   const titleStyle: React.CSSProperties = {
-    fontSize: '14px',
-    fontWeight: 600,
-    color: 'var(--ink-primary, #e2e8f0)',
+    fontSize: '18px',
+    fontWeight: 700,
+    color: 'var(--ink)',
+    fontFamily: "'Space Grotesk', sans-serif",
     textTransform: 'uppercase',
     letterSpacing: '0.05em',
   };
 
   const modeBadge: React.CSSProperties = {
-    fontSize: '9px',
+    fontSize: '10px',
+    fontFamily: "'Space Grotesk', sans-serif",
     fontWeight: 700,
     letterSpacing: '0.08em',
-    color: mode === 'live' ? 'var(--signal-active, #4FF0D8)' : 'var(--ink-secondary, #64748b)',
-    background: mode === 'live' ? 'var(--signal-dim, #4FF0D822)' : 'transparent',
-    border: `1px solid ${mode === 'live' ? 'var(--signal-active, #4FF0D8)' : 'var(--glass-edge, #151c2d)'}`,
-    borderRadius: '2px',
-    padding: '2px 6px',
+    color: 'var(--ink)',
+    background: mode === 'live' ? 'var(--accent-primary)' : 'var(--mock-tag)',
+    border: '3px solid var(--ink)',
+    borderRadius: '0',
+    padding: '4px 8px',
+    boxShadow: '2px 2px 0px var(--ink)',
   };
 
   const statusBadge: React.CSSProperties = {
     display: 'inline-flex',
     alignItems: 'center',
-    padding: '4px 12px',
-    borderRadius: '2px',
-    fontSize: '12px',
-    fontWeight: 600,
+    padding: '6px 12px',
+    borderRadius: '0',
+    fontSize: '14px',
+    fontFamily: "'Space Grotesk', sans-serif",
+    fontWeight: 700,
+    textTransform: 'uppercase',
     color: st.color,
     background: st.bg,
-    border: `1px solid ${st.border}`,
-    marginBottom: '14px',
+    border: `3px solid ${st.border}`,
+    marginBottom: '16px',
     width: '100%',
     justifyContent: 'center',
+    boxShadow: '2px 2px 0px var(--ink)',
   };
 
   const qrWrap: React.CSSProperties = {
@@ -192,10 +200,11 @@ export function InvoiceSheet({
     justifyContent: 'center',
     marginBottom: '16px',
     position: 'relative',
-    background: 'var(--glass-base, #05080f)',
+    background: '#FFFFFF',
     padding: '16px',
-    borderRadius: '2px',
-    border: '1px solid var(--glass-edge, #151c2d)',
+    borderRadius: '0',
+    border: '3px solid var(--ink)',
+    boxShadow: 'inset 4px 4px 0px rgba(17,17,17,0.1)',
   };
 
   const paidOverlay: React.CSSProperties = {
@@ -204,48 +213,56 @@ export function InvoiceSheet({
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    background: 'var(--signal-dim, #4FF0D840)',
-    borderRadius: '2px',
-    fontSize: '32px',
+    background: 'rgba(0, 200, 83, 0.4)',
+    borderRadius: '0',
+    fontSize: '48px',
   };
 
   const invoiceBox: React.CSSProperties = {
-    background: 'var(--glass-base, #05080f)',
-    border: '1px solid var(--glass-edge, #151c2d)',
-    borderRadius: '2px',
-    padding: '8px 10px',
-    fontSize: '10px',
+    background: '#FFFFFF',
+    border: '3px solid var(--ink)',
+    borderRadius: '0',
+    padding: '12px 14px',
+    fontSize: '11px',
     fontFamily: "'Space Mono', monospace",
-    color: 'var(--ink-secondary, #64748b)',
+    color: 'var(--ink)',
     wordBreak: 'break-all',
-    marginBottom: '10px',
+    marginBottom: '12px',
     lineHeight: 1.5,
+    boxShadow: 'inset 4px 4px 0px rgba(17,17,17,0.1)',
   };
 
   const copyBtn: React.CSSProperties = {
     width: '100%',
-    padding: '10px',
-    background: copied ? 'var(--signal-dim, #4FF0D822)' : 'transparent',
-    border: `1px solid ${copied ? 'var(--signal-active, #4FF0D8)' : 'var(--glass-edge, #151c2d)'}`,
-    borderRadius: '2px',
-    color: copied ? 'var(--signal-active, #4FF0D8)' : 'var(--ink-primary, #e2e8f0)',
+    padding: '12px',
+    background: copied ? 'var(--success)' : 'var(--accent-primary)',
+    border: '3px solid var(--ink)',
+    borderRadius: '0',
+    color: 'var(--ink)',
     fontSize: '13px',
-    fontWeight: 600,
+    fontWeight: 700,
     cursor: 'pointer',
-    fontFamily: "'Satoshi', sans-serif",
+    fontFamily: "'Space Grotesk', sans-serif",
     textTransform: 'uppercase',
     letterSpacing: '0.05em',
-    transition: 'all 0.2s',
+    transition: 'all 0.1s ease-out',
     marginBottom: error ? '12px' : '0',
+    boxShadow: '2px 2px 0px var(--ink)',
+  };
+
+  const copyBtnLink: React.CSSProperties = {
+    ...copyBtn,
+    background: paymentLinkCopied ? 'var(--success)' : '#FFFFFF',
   };
 
   const metaRow: React.CSSProperties = {
     display: 'flex',
     justifyContent: 'space-between',
-    fontSize: '11px',
-    color: 'var(--ink-secondary, #64748b)',
+    fontSize: '12px',
+    color: 'var(--ink)',
     fontFamily: "'Space Mono', monospace",
-    marginBottom: '12px',
+    marginBottom: '16px',
+    fontWeight: 700,
   };
 
   const handleCopy = async () => {
@@ -263,9 +280,9 @@ export function InvoiceSheet({
   if (isLoading && !invoiceAddress) {
     return (
       <div style={containerStyle}>
-        <div style={{ textAlign: 'center', padding: '30px', color: 'var(--ink-secondary, #64748b)' }}>
-          <div style={{ fontSize: '24px', marginBottom: '8px', animation: 'spin 1s linear infinite', display: 'inline-block' }}>⟳</div>
-          <div style={{ fontSize: '13px' }}>Creating invoice…</div>
+        <div style={{ textAlign: 'center', padding: '30px', color: 'var(--ink)' }}>
+          <div style={{ fontSize: '24px', marginBottom: '8px', animation: 'spin 1s linear infinite', display: 'inline-block', fontFamily: "'Space Grotesk', sans-serif" }}>⟳</div>
+          <div style={{ fontSize: '13px', fontFamily: "'Space Grotesk', sans-serif", fontWeight: 700, textTransform: 'uppercase' }}>Creating payment code…</div>
           <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
         </div>
       </div>
@@ -276,7 +293,7 @@ export function InvoiceSheet({
     <div style={containerStyle}>
       <div style={headerStyle}>
         <span style={titleStyle}>Receive Payment</span>
-        <span style={modeBadge}>{mode === 'live' ? '● LIVE' : '− MOCK'}</span>
+        <span style={modeBadge} title={mode === 'live' ? 'Live = connected to a real Fiber node right now.' : 'Mock = practice data, not a real payment'}>{mode === 'live' ? 'LIVE' : 'MOCK'}</span>
       </div>
 
       <div style={statusBadge}>{st.label}</div>
@@ -285,10 +302,11 @@ export function InvoiceSheet({
         <div style={qrWrap}>
           <QRCodeSVG
             value={invoiceAddress}
-            size={140}
+            size={160}
             bgColor="transparent"
-            fgColor="var(--signal-active, #4FF0D8)"
+            fgColor="var(--ink)"
             level="L"
+            className="w-[140px] h-[140px] sm:w-[160px] sm:h-[160px] min-w-[140px] min-h-[140px]"
           />
           {invoiceStatus === 'Paid' && (
             <div style={paidOverlay}></div>
@@ -302,36 +320,55 @@ export function InvoiceSheet({
         </div>
       )}
 
-      <div style={metaRow}>
-        <span>
+      <div style={metaRow} className="flex-col gap-2 sm:flex-row sm:gap-0">
+        <span style={{ wordBreak: 'break-all' as const }}>
           {paymentHash
             ? `Hash: ${paymentHash.slice(0, 12)}…${paymentHash.slice(-6)}`
             : 'No payment hash'}
         </span>
         {expiresAt && invoiceStatus === 'Open' && (
-          <span style={{ color: countdown === 'Expired' ? 'var(--fail-signal, #f43f5e)' : 'var(--ink-secondary, #64748b)' }}>
+          <span style={{ color: countdown === 'Expired' ? 'var(--accent-secondary)' : 'var(--ink)', flexShrink: 0 }}>
             Expires in {countdown}
           </span>
         )}
       </div>
 
       {invoiceAddress && invoiceStatus !== 'Paid' && invoiceStatus !== 'Expired' && (
-        <div style={{ display: 'flex', gap: '8px', marginBottom: error ? '12px' : '0' }}>
-          <button style={{ ...copyBtn, marginBottom: 0 }} onClick={() => void handleCopy()}>
-            {copied ? '✓ Copied!' : 'Copy Invoice'}
+        <div className="flex flex-col sm:flex-row gap-3" style={{ marginBottom: error ? '12px' : '0' }}>
+          <button
+            style={{ ...copyBtn, marginBottom: 0, minHeight: '44px' }}
+            onClick={(e) => {
+              void handleCopy();
+              const el = e.currentTarget;
+              el.style.transform = 'translate(2px, 2px)';
+              el.style.boxShadow = '2px 2px 0px var(--ink)';
+              setTimeout(() => {
+                el.style.transform = '';
+                el.style.boxShadow = '2px 2px 0px var(--ink)';
+              }, 100);
+            }}
+          >
+            {copied ? '✓ Copied!' : 'Copy Payment Code'}
           </button>
           {paymentLinkPayload && (
             <button
               style={{
-                ...copyBtn,
+                ...copyBtnLink,
                 marginBottom: 0,
-                background: paymentLinkCopied ? 'var(--signal-dim, #4FF0D822)' : 'transparent',
-                border: `1px solid ${paymentLinkCopied ? 'var(--signal-active, #4FF0D8)' : 'var(--glass-edge, #151c2d)'}`,
-                color: paymentLinkCopied ? 'var(--signal-active, #4FF0D8)' : 'var(--ink-primary, #e2e8f0)',
+                minHeight: '44px',
               }}
-              onClick={copyPaymentLink}
+              onClick={(e) => {
+                copyPaymentLink();
+                const el = e.currentTarget;
+                el.style.transform = 'translate(2px, 2px)';
+                el.style.boxShadow = '2px 2px 0px var(--ink)';
+                setTimeout(() => {
+                  el.style.transform = '';
+                  el.style.boxShadow = '2px 2px 0px var(--ink)';
+                }, 100);
+              }}
             >
-              {paymentLinkCopied ? '✓ Link Copied!' : 'Copy Payment Link'}
+              {paymentLinkCopied ? '✓ Copied!' : 'Copy Link'}
             </button>
           )}
         </div>

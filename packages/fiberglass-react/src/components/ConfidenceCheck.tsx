@@ -55,50 +55,50 @@ function statusInfo(status: ConfidenceStatus): StatusInfo {
     case 'ready':
       return {
         icon: '✓',
-        label: 'Route found — ready to send',
-        color: 'var(--signal-active, #4FF0D8)',
-        bg: 'var(--signal-dim, #4FF0D822)',
-        border: 'var(--glass-edge, #151c2d)',
+        label: 'Path Found — Ready to Send',
+        color: 'var(--ink)',
+        bg: 'var(--success)',
+        border: 'var(--ink)',
       };
     case 'loading':
       return {
         icon: '⟳',
-        label: 'Checking route…',
-        color: 'var(--ink-secondary, #64748b)',
-        bg: 'transparent',
-        border: 'var(--glass-edge, #151c2d)',
+        label: 'Checking the Path…',
+        color: 'var(--ink)',
+        bg: 'var(--accent-primary)',
+        border: 'var(--ink)',
       };
     case 'no_route':
       return {
         icon: '✕',
-        label: 'No route available',
-        color: 'var(--fail-signal, #f43f5e)',
-        bg: 'transparent',
-        border: 'var(--glass-edge, #151c2d)',
+        label: 'No Way to Reach This Recipient Right Now',
+        color: 'var(--ink)',
+        bg: 'var(--accent-secondary)',
+        border: 'var(--ink)',
       };
     case 'insufficient_liquidity':
       return {
-        icon: '',
-        label: 'Insufficient channel liquidity',
-        color: '#fb923c',
-        bg: '#1e1204',
-        border: '#d9770644',
+        icon: '✕',
+        label: 'Not Enough Funds in the Path',
+        color: 'var(--ink)',
+        bg: 'var(--accent-secondary)',
+        border: 'var(--ink)',
       };
     case 'asset_mismatch':
       return {
-        icon: '',
-        label: 'Asset type mismatch',
-        color: '#facc15',
-        bg: 'transparent',
-        border: 'var(--glass-edge, #151c2d)',
+        icon: '✕',
+        label: 'Wrong Type of Money for This Payment',
+        color: 'var(--ink)',
+        bg: 'var(--accent-secondary)',
+        border: 'var(--ink)',
       };
     case 'error':
       return {
         icon: '!',
-        label: 'Routing check failed',
-        color: 'var(--fail-signal, #f43f5e)',
-        bg: 'transparent',
-        border: 'var(--glass-edge, #151c2d)',
+        label: 'Check Failed',
+        color: 'var(--ink)',
+        bg: 'var(--accent-secondary)',
+        border: 'var(--ink)',
       };
   }
 }
@@ -134,12 +134,12 @@ export function ConfidenceCheck({
   const info = statusInfo(status);
 
   const containerStyle: React.CSSProperties = {
-    background: 'var(--glass-surface, #0a0e17)',
-    border: '1px solid var(--glass-edge, #151c2d)',
-    borderRadius: '2px',
+    background: '#FFFFFF',
+    border: '3px solid var(--ink)',
+    boxShadow: '6px 6px 0px var(--ink)',
     padding: '16px 20px',
-    fontFamily: "'Satoshi', sans-serif",
-    color: 'var(--ink-primary, #e2e8f0)',
+    fontFamily: "'Inter', sans-serif",
+    color: 'var(--ink)',
   };
 
   const statusBarStyle: React.CSSProperties = {
@@ -148,80 +148,86 @@ export function ConfidenceCheck({
     gap: '10px',
     padding: '10px 14px',
     background: info.bg,
-    border: `1px solid ${info.border}`,
-    borderRadius: '2px',
+    border: '3px solid var(--ink)',
     marginBottom: '14px',
+    boxShadow: '2px 2px 0px var(--ink)',
   };
 
   const iconStyle: React.CSSProperties = {
-    width: '24px',
-    height: '24px',
-    borderRadius: '50%',
-    background: `${info.color}22`,
-    border: `1px solid ${info.color}55`,
+    width: '28px',
+    height: '28px',
+    background: '#FFFFFF',
+    border: '2px solid var(--ink)',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    fontSize: '12px',
+    fontSize: '14px',
     fontWeight: 700,
     color: info.color,
+    fontFamily: "'Space Grotesk', sans-serif",
     flexShrink: 0,
     animation: status === 'loading' || isLoading ? 'spin 1s linear infinite' : 'none',
   };
 
   const labelStyle: React.CSSProperties = {
-    fontSize: '13px',
-    fontWeight: 500,
+    fontSize: '14px',
+    fontWeight: 700,
     color: info.color,
+    fontFamily: "'Space Grotesk', sans-serif",
   };
 
   const statsRowStyle: React.CSSProperties = {
     display: 'flex',
-    gap: '12px',
+    gap: '16px',
     flexWrap: 'wrap' as const,
   };
 
   const statBoxStyle: React.CSSProperties = {
     flex: '1 1 120px',
-    background: 'var(--glass-base, #05080f)',
-    border: '1px solid var(--glass-edge, #151c2d)',
-    borderRadius: '2px',
+    background: '#FFFFFF',
+    border: '3px solid var(--ink)',
     padding: '10px 14px',
+    boxShadow: 'inset 4px 4px 0px rgba(17,17,17,0.1)'
   };
 
   const statLabelStyle: React.CSSProperties = {
-    fontSize: '10px',
-    color: 'var(--ink-secondary, #64748b)',
+    fontSize: '12px',
+    color: 'var(--ink)',
+    fontFamily: "'Space Grotesk', sans-serif",
+    fontWeight: 700,
     textTransform: 'uppercase' as const,
-    letterSpacing: '0.08em',
+    letterSpacing: '0.05em',
     marginBottom: '4px',
   };
 
   const statValueStyle: React.CSSProperties = {
     fontSize: '15px',
     fontWeight: 700,
-    color: 'var(--ink-primary, #e2e8f0)',
+    color: 'var(--ink)',
     fontFamily: "'Space Mono', monospace",
   };
 
   const modeBadgeStyle: React.CSSProperties = {
     display: 'inline-block',
-    fontSize: '9px',
+    fontSize: '10px',
+    fontFamily: "'Space Grotesk', sans-serif",
     fontWeight: 700,
     letterSpacing: '0.08em',
-    color: mode === 'live' ? 'var(--signal-active, #4FF0D8)' : 'var(--ink-secondary, #64748b)',
-    background: mode === 'live' ? 'var(--signal-dim, #4FF0D822)' : 'transparent',
-    border: `1px solid ${mode === 'live' ? 'var(--signal-active, #4FF0D8)' : 'var(--glass-edge, #151c2d)'}`,
-    borderRadius: '2px',
-    padding: '1px 5px',
-    marginBottom: '10px',
+    color: 'var(--ink)',
+    background: mode === 'live' ? 'var(--accent-primary)' : 'var(--mock-tag)',
+    border: '3px solid var(--ink)',
+    padding: '4px 8px',
+    boxShadow: '2px 2px 0px var(--ink)',
+    marginBottom: '14px',
   };
 
   return (
-    <div style={containerStyle}>
+    <div style={containerStyle} className="!p-4 sm:!p-5">
       <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
 
-      <div style={modeBadgeStyle}>{mode === 'live' ? '● LIVE' : '− MOCK'}</div>
+      <div style={modeBadgeStyle} title={mode === 'live' ? 'Live = connected to a real Fiber node right now.' : 'Mock = practice data, not a real payment'}>
+        {mode === 'live' ? 'LIVE' : 'MOCK'}
+      </div>
 
       <div style={statusBarStyle}>
         <div style={iconStyle}>{info.icon}</div>
@@ -229,15 +235,15 @@ export function ConfidenceCheck({
           {renderStatus ? renderStatus(status) : info.label}
         </span>
         {isLoading && (
-          <span style={{ fontSize: '11px', color: '#475569', marginLeft: 'auto' }}>
-            validating…
+          <span style={{ fontSize: '11px', color: 'var(--ink)', marginLeft: 'auto', fontFamily: "'Space Grotesk', sans-serif", fontWeight: 700, textTransform: 'uppercase' }}>
+            Checking…
           </span>
         )}
       </div>
 
       {asset && (
-        <div style={{ fontSize: '12px', color: '#94a3b8', marginBottom: '12px' }}>
-          Asset: <span style={{ color: '#c7d2fe', fontWeight: 500 }}>{asset}</span>
+        <div style={{ fontSize: '12px', color: 'var(--ink)', marginBottom: '12px', fontFamily: "'Space Grotesk', sans-serif", fontWeight: 700 }}>
+          Asset: <span style={{ color: 'var(--ink)', fontFamily: "'Space Mono', monospace" }}>{asset}</span>
         </div>
       )}
 
@@ -253,13 +259,14 @@ export function ConfidenceCheck({
             <div style={statBoxStyle}>
               <div style={statLabelStyle}>Hops</div>
               <div style={statValueStyle}>{route.length}</div>
+              <div style={{ fontSize: '10px', marginTop: '4px', opacity: 0.8 }}>Each hop is a stop in the path.</div>
             </div>
           )}
         </div>
       )}
 
       {error && status !== 'ready' && (
-        <div style={{ marginTop: '12px' }}>
+        <div style={{ marginTop: '16px' }}>
           <ErrorResolutionBanner error={error} />
         </div>
       )}

@@ -41,60 +41,25 @@ interface ErrorMatcher {
 // ---------------------------------------------------------------------------
 
 const MATCHERS: ErrorMatcher[] = [
-  // --- No route -----------------------------------------------------------
-  {
-    // PROVISIONAL — update from real FNN "failed_error" string
-    pattern: /no path found|no route|route not found/i,
-    code: 'NO_ROUTE',
-    hint: 'No payment path exists to the destination. The payee may be offline or disconnected from the network.',
-  },
-
   // --- Insufficient liquidity ---------------------------------------------
   {
-    // PROVISIONAL — update from real FNN "failed_error" string
-    pattern: /insufficient.*liquidity|insufficient.*balance|liquidity/i,
+    pattern: /Insufficient balance: max outbound liquidity/i,
     code: 'INSUFFICIENT_LIQUIDITY',
     hint: "A channel on the route doesn't have enough balance to forward this payment. Try a smaller amount or wait for liquidity to rebalance.",
   },
 
-  // --- Asset / currency mismatch ------------------------------------------
+  // --- No route / Self-payment disabled -----------------------------------
   {
-    // PROVISIONAL — update from real FNN "failed_error" string
-    pattern: /asset.*mismatch|currency.*mismatch|wrong.*currency|wrong.*asset/i,
-    code: 'ASSET_MISMATCH',
-    hint: "The asset type in the invoice doesn't match the asset supported on this route.",
+    pattern: /allow_self_payment is not enabled/i,
+    code: 'NO_ROUTE',
+    hint: 'Self-payments are disabled on this node, or no valid route exists.',
   },
 
-  // --- Invoice already paid / payment duplicate ---------------------------
+  // --- Invalid Invoice ----------------------------------------------------
   {
-    // PROVISIONAL
-    pattern: /already.*paid|duplicate.*payment|payment.*exists/i,
-    code: 'PAYMENT_ALREADY_EXISTS',
-    hint: 'This payment hash was already used. The invoice may have been paid previously.',
-  },
-
-  // --- Invoice expired ----------------------------------------------------
-  {
-    // PROVISIONAL
-    pattern: /invoice.*expired|expired.*invoice/i,
-    code: 'INVOICE_EXPIRED',
-    hint: 'The invoice has expired. Ask the payee to generate a fresh invoice.',
-  },
-
-  // --- Invoice cancelled --------------------------------------------------
-  {
-    // PROVISIONAL
-    pattern: /invoice.*cancelled|cancelled.*invoice/i,
-    code: 'INVOICE_CANCELLED',
-    hint: 'The invoice was cancelled by the payee.',
-  },
-
-  // --- Node / peer unreachable --------------------------------------------
-  {
-    // PROVISIONAL
-    pattern: /peer.*connection.*failed|unable to reach|node.*unreachable|peer.*offline/i,
-    code: 'NODE_UNREACHABLE',
-    hint: 'The destination node or an intermediate hop is unreachable. The peer may be offline.',
+    pattern: /invoice is invalid/i,
+    code: 'INVALID_INVOICE',
+    hint: 'The payment request is invalid. It may be malformed or corrupted.',
   },
 ];
 

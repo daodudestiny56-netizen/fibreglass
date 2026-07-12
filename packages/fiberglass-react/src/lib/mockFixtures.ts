@@ -144,19 +144,22 @@ export const MOCK_SEND_PAYMENT_DRY_RUN: SendPaymentResponse = {
   router: [
     {
       channel_outpoint: `${MOCK_CHANNEL_A}:0`,
-      next_hop: MOCK_PEER_A,
-      fee: '400',
+      target: MOCK_PEER_A,
+      amount_received: '400',
+      incoming_tlc_expiry: '0x10',
     },
     {
       channel_outpoint: `${MOCK_CHANNEL_B}:0`,
-      next_hop: MOCK_PEER_B,
-      fee: '400',
+      target: MOCK_PEER_B,
+      amount_received: '400',
+      incoming_tlc_expiry: '0x10',
     },
     {
       channel_outpoint:
         '0xdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeef:0',
-      next_hop: MOCK_PEER_C,
-      fee: '400',
+      target: MOCK_PEER_C,
+      amount_received: '400',
+      incoming_tlc_expiry: '0x10',
     },
   ],
 };
@@ -166,26 +169,10 @@ export const MOCK_GET_PAYMENT_SUCCESS: GetPaymentResponse = {
   payment_hash: MOCK_PAYMENT_HASH,
   status: 'Success',
   fee: '1200',
-  amount: '100000000',
   failed_error: null,
-  routers: [
-    {
-      channel_outpoint: `${MOCK_CHANNEL_A}:0`,
-      next_hop: MOCK_PEER_A,
-      fee: '400',
-    },
-    {
-      channel_outpoint: `${MOCK_CHANNEL_B}:0`,
-      next_hop: MOCK_PEER_B,
-      fee: '400',
-    },
-    {
-      channel_outpoint:
-        '0xdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeef:0',
-      next_hop: MOCK_PEER_C,
-      fee: '400',
-    },
-  ],
+  created_at: '0x19f55c86409',
+  last_updated_at: '0x19f55c86409',
+  custom_records: null,
 };
 
 // ---------------------------------------------------------------------------
@@ -203,10 +190,10 @@ export const MOCK_GET_PAYMENT_NO_ROUTE: GetPaymentResponse = {
   payment_hash: MOCK_PAYMENT_HASH,
   status: 'Failed',
   fee: null,
-  amount: '100000000',
-  // PROVISIONAL — replace with real FNN error string
-  failed_error: 'Failed to find a route: no path found to destination node',
-  routers: [],
+  failed_error: 'Send payment error: Failed to build route, no path found',
+  created_at: '0x19f55c86409',
+  last_updated_at: '0x19f55c86409',
+  custom_records: null,
 };
 
 /** Failure: channel has insufficient liquidity. PROVISIONAL error string. */
@@ -214,12 +201,11 @@ export const MOCK_GET_PAYMENT_INSUFFICIENT: GetPaymentResponse = {
   payment_hash: MOCK_PAYMENT_HASH,
   status: 'Failed',
   fee: null,
-  amount: '500000000000', // 5 000 CKB — more than any channel holds
-  // PROVISIONAL — replace with real FNN error string
   failed_error:
-    'Failed to send payment: insufficient outbound liquidity on channel ' +
-    MOCK_CHANNEL_A,
-  routers: MOCK_GET_PAYMENT_SUCCESS.routers.slice(0, 2), // failed mid-route
+    'Send payment error: Failed to build route, Insufficient balance: max outbound liquidity 30100000000 is insufficient, required amount: 1000000000000',
+  created_at: '0x19f55c86409',
+  last_updated_at: '0x19f55c86409',
+  custom_records: null,
 };
 
 /** Failure: remote node not reachable / peer offline. PROVISIONAL error string. */
@@ -227,10 +213,10 @@ export const MOCK_GET_PAYMENT_NODE_UNREACHABLE: GetPaymentResponse = {
   payment_hash: MOCK_PAYMENT_HASH,
   status: 'Failed',
   fee: null,
-  amount: '100000000',
-  // PROVISIONAL — replace with real FNN error string
   failed_error: 'Peer connection failed: unable to reach remote node ' + MOCK_PEER_C,
-  routers: MOCK_GET_PAYMENT_SUCCESS.routers.slice(0, 1),
+  created_at: '0x19f55c86409',
+  last_updated_at: '0x19f55c86409',
+  custom_records: null,
 };
 
 

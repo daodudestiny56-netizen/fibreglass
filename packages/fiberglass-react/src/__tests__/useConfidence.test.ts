@@ -97,10 +97,10 @@ describe('useConfidence', () => {
   });
 
   describe('live mode — routing failures', () => {
-    it('maps "no path found" error to no_route status', async () => {
+    it('maps "allow_self_payment is not enabled" error to no_route status', async () => {
       const mockClient = new FiberClient('http://mock-node');
       vi.spyOn(mockClient, 'sendPaymentDryRun').mockRejectedValue(
-        new Error('no path found to destination'),
+        new Error('allow_self_payment is not enabled'),
       );
 
       const ctx = makeMockContext({ mode: 'live', client: mockClient });
@@ -118,10 +118,10 @@ describe('useConfidence', () => {
       expect(result.current.error?.code).toBe('NO_ROUTE');
     });
 
-    it('maps "insufficient liquidity" to insufficient_liquidity status', async () => {
+    it('maps "Insufficient balance: max outbound liquidity" to insufficient_liquidity status', async () => {
       const mockClient = new FiberClient('http://mock-node');
       vi.spyOn(mockClient, 'sendPaymentDryRun').mockRejectedValue(
-        new Error('insufficient outbound liquidity on channel'),
+        new Error('Insufficient balance: max outbound liquidity 30100000000 is insufficient'),
       );
 
       const ctx = makeMockContext({ mode: 'live', client: mockClient });
@@ -134,24 +134,6 @@ describe('useConfidence', () => {
 
       await waitFor(() => expect(result.current.isLoading).toBe(false));
       expect(result.current.status).toBe('insufficient_liquidity');
-    });
-
-    it('maps "asset mismatch" to asset_mismatch status', async () => {
-      const mockClient = new FiberClient('http://mock-node');
-      vi.spyOn(mockClient, 'sendPaymentDryRun').mockRejectedValue(
-        new Error('asset mismatch: wrong currency'),
-      );
-
-      const ctx = makeMockContext({ mode: 'live', client: mockClient });
-      const wrapper = makeWrapper(ctx);
-
-      const { result } = renderHook(
-        () => useConfidence({ invoiceAddress: 'fibb1qtest...' }),
-        { wrapper },
-      );
-
-      await waitFor(() => expect(result.current.isLoading).toBe(false));
-      expect(result.current.status).toBe('asset_mismatch');
     });
 
     it('maps unknown error to error status', async () => {

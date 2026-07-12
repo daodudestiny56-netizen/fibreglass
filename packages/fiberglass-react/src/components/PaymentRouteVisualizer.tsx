@@ -48,16 +48,14 @@ function shannonsToCkb(shannons: string): string {
 function NodeBubble({
   label,
   sublabel,
-  color,
-  glow,
+  bg,
   visible,
   isSource,
   isDest,
 }: {
   label: string;
   sublabel?: string;
-  color: string;
-  glow: string;
+  bg: string;
   visible: boolean;
   isSource?: boolean;
   isDest?: boolean;
@@ -69,36 +67,38 @@ function NodeBubble({
       display: 'flex',
       flexDirection: 'column',
       alignItems: 'center',
-      gap: '6px',
+      gap: '8px',
       opacity: visible ? 1 : 0,
       transform: visible ? 'translateY(0) scale(1)' : 'translateY(10px) scale(0.9)',
-      transition: 'opacity 0.35s ease, transform 0.35s ease',
+      transition: 'opacity 0.2s ease-out, transform 0.2s ease-out',
       flexShrink: 0,
     }}>
       <div style={{
-        width: special ? '52px' : '44px',
-        height: special ? '52px' : '44px',
-        borderRadius: '50%',
-        background: `radial-gradient(circle at 35% 35%, ${color}cc, ${color}66)`,
-        border: `2px solid ${color}`,
-        boxShadow: visible ? `0 0 16px ${glow}, 0 0 4px ${color}40` : 'none',
+        width: special ? '56px' : '48px',
+        height: special ? '56px' : '48px',
+        borderRadius: '0',
+        background: bg,
+        border: '3px solid var(--ink)',
+        boxShadow: visible ? '4px 4px 0px var(--ink)' : 'none',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
         fontSize: special ? '18px' : '14px',
-        transition: 'box-shadow 0.5s ease',
+        fontFamily: "'Space Grotesk', sans-serif",
+        fontWeight: 700,
+        color: 'var(--ink)',
       }}>
-        {isSource ? '' : isDest ? '' : '⬡'}
+        {isSource ? 'YOU' : isDest ? 'DEST' : 'HOP'}
       </div>
       <div style={{
         textAlign: 'center',
-        maxWidth: '72px',
+        maxWidth: '80px',
       }}>
-        <div style={{ fontSize: '10px', color: 'var(--ink-secondary, #64748b)', fontFamily: "'Space Mono', monospace", lineHeight: 1.2 }}>
+        <div style={{ fontSize: '11px', color: 'var(--ink)', fontFamily: "'Space Mono', monospace", lineHeight: 1.2, fontWeight: 700 }}>
           {label}
         </div>
         {sublabel && (
-          <div style={{ fontSize: '9px', color: 'var(--ink-secondary, #64748b)', marginTop: '2px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+          <div style={{ fontSize: '10px', color: 'var(--ink)', marginTop: '2px', textTransform: 'uppercase', letterSpacing: '0.05em', fontFamily: "'Space Grotesk', sans-serif", fontWeight: 700 }}>
             {sublabel}
           </div>
         )}
@@ -109,13 +109,13 @@ function NodeBubble({
 
 function EdgeArrow({
   fee,
-  color,
+  bg,
   visible,
   animating,
   delay,
 }: {
   fee?: string;
-  color: string;
+  bg: string;
   visible: boolean;
   animating: boolean;
   delay: number;
@@ -127,18 +127,20 @@ function EdgeArrow({
       alignItems: 'center',
       justifyContent: 'center',
       flex: 1,
-      minWidth: '48px',
+      minWidth: '60px',
       opacity: visible ? 1 : 0,
-      transition: `opacity 0.3s ease ${delay}ms`,
+      transition: `opacity 0.1s ease-out ${delay}ms`,
       position: 'relative',
     }}>
       <div style={{
-        height: '2px',
+        height: '4px',
         width: '100%',
-        background: `linear-gradient(90deg, ${color}44, ${color}, ${color}44)`,
+        background: bg,
         position: 'relative',
         overflow: 'hidden',
-        borderRadius: '1px',
+        borderRadius: '0',
+        borderTop: '2px solid var(--ink)',
+        borderBottom: '2px solid var(--ink)',
       }}>
         {animating && (
           <div style={{
@@ -147,7 +149,7 @@ function EdgeArrow({
             left: '-30%',
             width: '30%',
             height: '100%',
-            background: `linear-gradient(90deg, transparent, ${color}, transparent)`,
+            background: 'var(--ink)',
             animation: `pulse-edge 1.2s ease-in-out ${delay}ms infinite`,
           }} />
         )}
@@ -157,24 +159,26 @@ function EdgeArrow({
         right: 0,
         width: 0,
         height: 0,
-        borderTop: '5px solid transparent',
-        borderBottom: '5px solid transparent',
-        borderLeft: `8px solid ${color}`,
+        borderTop: '8px solid transparent',
+        borderBottom: '8px solid transparent',
+        borderLeft: `10px solid var(--ink)`,
       }} />
       {fee !== undefined && (
         <div style={{
           position: 'absolute',
-          top: '-18px',
-          fontSize: '9px',
-          color: 'var(--ink-secondary, #64748b)',
-          background: 'var(--glass-surface, #0a0e17)',
-          padding: '1px 4px',
-          borderRadius: '2px',
-          border: '1px solid var(--glass-edge, #151c2d)',
+          top: '-24px',
+          fontSize: '10px',
+          color: 'var(--ink)',
+          background: '#FFFFFF',
+          padding: '2px 6px',
+          borderRadius: '0',
+          border: '2px solid var(--ink)',
           whiteSpace: 'nowrap',
-          fontFamily: "'Satoshi', sans-serif",
+          fontFamily: "'Space Grotesk', sans-serif",
+          fontWeight: 700,
           textTransform: 'uppercase',
           letterSpacing: '0.05em',
+          boxShadow: '2px 2px 0px var(--ink)',
         }}>
           {shannonsToCkb(fee)} fee
         </div>
@@ -199,10 +203,20 @@ export function PaymentRouteVisualizer({
     paymentHash: paymentHash as Hash256 | null,
   });
 
-  const hops = isInternal ? (internalData.payment?.routers ?? []) : (propHops ?? []);
+  // FNN get_payment does not return routers.
+  // We rely entirely on propHops, which would typically be fetched
+  // during the routing phase (send_payment dry_run) rather than get_payment.
+  const hops = propHops ?? [];
   const paymentStatus = isInternal ? internalData.status : propPaymentStatus;
   const totalFee = isInternal ? internalData.payment?.fee : propTotalFee;
 
+  // We can calculate the total amount sent if it's available, otherwise fallback.
+  // We need to pass down the "previous hop's amount received" to calculate fee.
+  // However, without the initial sending amount exactly, we can't calculate fee for hop 0 reliably unless we know `totalSentAmount`.
+  // Wait, fee for hop i is `amount_received[i-1] - amount_received[i]`.
+  // If `i == 0`, fee is `totalSentAmount - amount_received[0]`.
+  // Since we might not have `totalSentAmount`, we can compute it if `totalFee` and `amount_received[last]` are known, or we just omit fee for the first hop if we don't have it.
+  
   const [visibleCount, setVisibleCount] = useState(0);
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -227,26 +241,25 @@ export function PaymentRouteVisualizer({
   }, [hops]);
 
   const containerStyle: React.CSSProperties = {
-    background: 'var(--glass-surface, #0a0e17)',
-    border: '1px solid var(--glass-edge, #151c2d)',
-    borderRadius: '2px',
+    background: '#FFFFFF',
+    border: '3px solid var(--ink)',
+    borderRadius: '0',
     padding: '20px',
-    fontFamily: "'Satoshi', sans-serif",
-    color: 'var(--ink-primary, #e2e8f0)',
+    fontFamily: "'Inter', sans-serif",
+    color: 'var(--ink)',
     overflow: 'auto',
+    boxShadow: '6px 6px 0px var(--ink)',
   };
 
   const headerStyle: React.CSSProperties = {
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: '20px',
+    marginBottom: '24px',
   };
 
   const titleStyle: React.CSSProperties = {
-    fontSize: '14px',
-    fontWeight: 600,
-    color: 'var(--ink-primary, #e2e8f0)',
+    fontSize: '18px',
+    fontWeight: 700,
+    color: 'var(--ink)',
+    fontFamily: "'Space Grotesk', sans-serif",
     letterSpacing: '0.05em',
     textTransform: 'uppercase' as const,
   };
@@ -256,58 +269,70 @@ export function PaymentRouteVisualizer({
     alignItems: 'center',
     gap: '0',
     minWidth: 'max-content',
-    padding: '10px 0',
+    padding: '16px 0 24px 0',
   };
 
   const modeBadge: React.CSSProperties = {
-    fontSize: '9px',
+    fontSize: '10px',
+    fontFamily: "'Space Grotesk', sans-serif",
     fontWeight: 700,
     letterSpacing: '0.08em',
-    color: mode === 'live' ? 'var(--signal-active, #4FF0D8)' : 'var(--ink-secondary, #64748b)',
-    background: mode === 'live' ? 'var(--signal-dim, #4FF0D822)' : 'transparent',
-    border: `1px solid ${mode === 'live' ? 'var(--signal-active, #4FF0D8)' : 'var(--glass-edge, #151c2d)'}`,
-    borderRadius: '2px',
-    padding: '2px 6px',
+    color: 'var(--ink)',
+    background: mode === 'live' ? 'var(--accent-primary)' : 'var(--mock-tag)',
+    border: '3px solid var(--ink)',
+    borderRadius: '0',
+    padding: '4px 8px',
+    boxShadow: '2px 2px 0px var(--ink)',
   };
 
   const statsRow: React.CSSProperties = {
     display: 'flex',
-    gap: '16px',
+    gap: '24px',
     marginTop: '16px',
-    borderTop: '1px solid var(--glass-edge, #151c2d)',
-    paddingTop: '14px',
+    borderTop: '3px solid var(--ink)',
+    paddingTop: '16px',
     flexWrap: 'wrap' as const,
   };
 
   const statItem: React.CSSProperties = {
     display: 'flex',
     flexDirection: 'column',
-    gap: '2px',
+    gap: '4px',
   };
 
   const statLabel: React.CSSProperties = {
-    fontSize: '10px',
-    color: 'var(--ink-secondary, #64748b)',
+    fontSize: '12px',
+    color: 'var(--ink)',
+    fontFamily: "'Space Grotesk', sans-serif",
+    fontWeight: 700,
     textTransform: 'uppercase' as const,
-    letterSpacing: '0.08em',
+    letterSpacing: '0.05em',
   };
 
   const statValue: React.CSSProperties = {
-    fontSize: '14px',
+    fontSize: '16px',
     fontWeight: 700,
-    color: 'var(--ink-primary, #e2e8f0)',
+    color: 'var(--ink)',
     fontFamily: "'Space Mono', monospace",
   };
 
   if (hops.length === 0) {
     return (
       <div style={containerStyle}>
-        <div style={{ textAlign: 'center', padding: '30px 0', color: 'var(--ink-secondary, #64748b)', fontSize: '13px' }}>
+        <div style={{ textAlign: 'center', padding: '30px 0', color: 'var(--ink)', fontSize: '15px', fontFamily: "'Space Grotesk', sans-serif", fontWeight: 700 }}>
           <div style={{ fontSize: '28px', marginBottom: '8px' }}></div>
-          No route data available.
+          No path data yet.
         </div>
       </div>
     );
+  }
+
+  // Calculate total sent amount to derive the fee for the first hop
+  let totalSentBigInt = 0n;
+  if (hops.length > 0) {
+    const finalAmount = BigInt(hops[hops.length - 1]!.amount_received);
+    const totalFeeBigInt = totalFee ? BigInt(totalFee) : 0n;
+    totalSentBigInt = finalAmount + totalFeeBigInt;
   }
 
   // Visual status indicators
@@ -316,29 +341,29 @@ export function PaymentRouteVisualizer({
   const isInflight = paymentStatus === 'Inflight';
 
   // Base colors
-  const activeNodeColor = isSuccess ? 'var(--signal-active, #4FF0D8)' : isFailed ? 'var(--fail-signal, #f43f5e)' : isInflight ? 'var(--signal-active, #4FF0D8)' : 'var(--ink-secondary, #64748b)';
-  const activeEdgeColor = isSuccess ? 'var(--signal-active, #4FF0D8)' : isInflight ? 'var(--signal-active, #4FF0D8)' : 'var(--ink-secondary, #64748b)';
-  const activeGlow = isSuccess ? 'var(--signal-dim, rgba(79, 240, 216, 0.25))' : isInflight ? 'var(--signal-dim, rgba(79, 240, 216, 0.4))' : 'var(--glass-edge, rgba(21, 28, 45, 0.4))';
+  const activeNodeColor = isSuccess ? 'var(--success)' : isFailed ? 'var(--accent-secondary)' : isInflight ? 'var(--accent-primary)' : '#FFFFFF';
+  const activeEdgeColor = isSuccess ? 'var(--success)' : isInflight ? 'var(--accent-primary)' : '#FFFFFF';
 
   // Failed node/edge colors
-  const failColor = 'var(--fail-signal, #f43f5e)';
-  const failGlow = 'rgba(244, 63, 94, 0.4)';
+  const failColor = 'var(--accent-secondary)';
 
-  const destId = hops[hops.length - 1]?.next_hop ?? 'Destination';
+  // The final destination is the target of the LAST hop in the route
+  const destId = hops.length > 0 ? hops[hops.length - 1]!.target : 'Destination';
 
   const replayBtnStyle: React.CSSProperties = {
-    background: 'var(--signal-dim, rgba(79, 240, 216, 0.1))',
-    border: '1px solid var(--signal-active, #4FF0D8)',
-    borderRadius: '2px',
-    color: 'var(--signal-active, #4FF0D8)',
-    padding: '3px 8px',
-    fontSize: '11px',
+    background: '#FFFFFF',
+    border: '3px solid var(--ink)',
+    borderRadius: '0',
+    color: 'var(--ink)',
+    padding: '4px 10px',
+    fontSize: '12px',
     cursor: 'pointer',
-    fontFamily: "'Satoshi', sans-serif",
+    fontFamily: "'Space Grotesk', sans-serif",
     textTransform: 'uppercase',
     letterSpacing: '0.05em',
-    fontWeight: 600,
-    transition: 'background-color 0.15s',
+    fontWeight: 700,
+    boxShadow: '2px 2px 0px var(--ink)',
+    transition: 'all 0.1s ease-out',
   };
 
   const handleReplay = () => {
@@ -367,10 +392,23 @@ export function PaymentRouteVisualizer({
         }
       `}</style>
 
-      <div style={headerStyle}>
-        <span style={titleStyle}>Payment Route</span>
-        <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
-          <button style={replayBtnStyle} onClick={handleReplay}>
+      <div style={headerStyle} className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3 sm:gap-0">
+        <span style={titleStyle}>Payment Path</span>
+        <div className="flex flex-wrap gap-2 sm:gap-3 items-center">
+          <button
+            style={replayBtnStyle}
+            className="min-h-[44px]"
+            onClick={(e) => {
+              handleReplay();
+              const el = e.currentTarget;
+              el.style.transform = 'translate(2px, 2px)';
+              el.style.boxShadow = 'none';
+              setTimeout(() => {
+                el.style.transform = '';
+                el.style.boxShadow = '2px 2px 0px var(--ink)';
+              }, 100);
+            }}
+          >
             Replay
           </button>
           {paymentStatus && (
@@ -378,83 +416,98 @@ export function PaymentRouteVisualizer({
               display: 'inline-flex',
               alignItems: 'center',
               gap: '6px',
-              fontSize: '11px',
-              fontWeight: 600,
-              color: isSuccess ? 'var(--signal-active, #4FF0D8)' : isFailed ? 'var(--fail-signal, #f43f5e)' : 'var(--signal-active, #4FF0D8)',
-              background: isSuccess ? 'var(--signal-dim, #4FF0D822)' : isFailed ? 'transparent' : 'var(--signal-dim, #4FF0D822)',
-              border: `1px solid ${isSuccess ? 'var(--signal-active, #4FF0D8)' : isFailed ? 'var(--fail-signal, #f43f5e)' : 'var(--signal-active, #4FF0D8)'}`,
-              borderRadius: '2px',
-              padding: '3px 10px',
+              fontSize: '12px',
+              fontWeight: 700,
+              fontFamily: "'Space Grotesk', sans-serif",
+              color: 'var(--ink)',
+              background: isSuccess ? 'var(--success)' : isFailed ? 'var(--accent-secondary)' : 'var(--accent-primary)',
+              border: '3px solid var(--ink)',
+              borderRadius: '0',
+              padding: '4px 10px',
               textTransform: 'uppercase',
               letterSpacing: '0.05em',
+              boxShadow: '2px 2px 0px var(--ink)',
             }}>
-              {isSuccess ? '●' : isFailed ? '✕' : '⟳'}
+              {isSuccess ? '✓' : isFailed ? '✕' : '⟳'}
               {' '}{paymentStatus}
             </span>
           )}
-          <span style={modeBadge}>{mode === 'live' ? '● LIVE' : '− MOCK'}</span>
+          <span style={modeBadge} title={mode === 'live' ? 'Live = connected to a real Fiber node right now.' : 'Mock = practice data, not a real payment'}>{mode === 'live' ? 'LIVE' : 'MOCK'}</span>
         </div>
       </div>
 
-      <div style={{ overflowX: 'auto' }}>
+      <div style={{ overflowX: 'auto', WebkitOverflowScrolling: 'touch' }}>
         <div style={routeRowStyle}>
           {/* Source node */}
           <NodeBubble
             label="You"
             sublabel="Source"
-            color={activeNodeColor}
-            glow={activeGlow}
+            bg={activeNodeColor}
             visible={visibleCount >= 1}
             isSource
           />
 
-          {/* Each hop */}
+          {/* Each hop (representing an intermediary or the final step) */}
           {hops.map((hop, idx) => {
             const isLastHop = idx === hops.length - 1;
-            // If the whole route fails, the failure occurs at the link after the last successfully traversed hop
             const edgeColor = isFailed && isLastHop ? failColor : activeEdgeColor;
             const nodeColor = isFailed && isLastHop ? failColor : activeNodeColor;
-            const nodeGlow = isFailed && isLastHop ? failGlow : activeGlow;
+
+            let hopFeeBigInt = 0n;
+            if (idx === 0) {
+              hopFeeBigInt = totalSentBigInt - BigInt((hop?.amount_received || '0'));
+            } else {
+              hopFeeBigInt = BigInt((hops[idx - 1]?.amount_received || '0')) - BigInt((hop?.amount_received || '0'));
+            }
+            const feeString = hopFeeBigInt > 0n ? `0x${hopFeeBigInt.toString(16)}` : undefined;
 
             return (
               <React.Fragment key={idx}>
                 <EdgeArrow
-                  fee={hop.fee}
-                  color={edgeColor}
+                  {...(feeString ? { fee: feeString } : {})}
+                  bg={edgeColor}
                   visible={visibleCount >= idx + 2}
                   animating={isAnimating || isInflight}
                   delay={idx * 200}
                 />
-                <NodeBubble
-                  label={shortKey(hop.channel_outpoint, 4)}
-                  sublabel={`Hop ${idx + 1}`}
-                  color={nodeColor}
-                  glow={nodeGlow}
-                  visible={visibleCount >= idx + 2}
-                />
+                {!isLastHop && (
+                  <NodeBubble
+                    label={shortKey(hop.target, 4)}
+                    sublabel={`Hop ${idx + 1}`}
+                    bg={nodeColor}
+                    visible={visibleCount >= idx + 2}
+                  />
+                )}
               </React.Fragment>
             );
           })}
-
-          {/* Final edge to destination */}
-          <EdgeArrow
-            color={isFailed ? failColor : activeEdgeColor}
-            visible={visibleCount >= hops.length + 2}
-            animating={isAnimating || isInflight}
-            delay={hops.length * 200}
-          />
 
           {/* Destination */}
           <NodeBubble
             label={typeof destId === 'string' ? shortKey(destId, 4) : '?'}
             sublabel="Destination"
-            color={isFailed ? failColor : activeNodeColor}
-            glow={isFailed ? failGlow : activeGlow}
-            visible={visibleCount >= hops.length + 2}
+            bg={isFailed ? failColor : activeNodeColor}
+            visible={visibleCount >= hops.length + 1}
             isDest
           />
         </div>
       </div>
+      {hops.length > 1 && (
+        <div className="sm:hidden" style={{
+          fontSize: '10px',
+          color: 'var(--ink)',
+          fontFamily: "'Space Grotesk', sans-serif",
+          fontWeight: 700,
+          textTransform: 'uppercase' as const,
+          letterSpacing: '0.05em',
+          textAlign: 'center',
+          marginTop: '-16px',
+          marginBottom: '8px',
+          opacity: 0.7,
+        }}>
+          Swipe to see the full route →
+        </div>
+      )}
 
       <div style={statsRow}>
         <div style={statItem}>
@@ -470,13 +523,13 @@ export function PaymentRouteVisualizer({
         {isSuccess && (
           <div style={statItem}>
             <span style={statLabel}>Status</span>
-            <span style={{ ...statValue, color: 'var(--signal-active, #4FF0D8)' }}>✓ Delivered</span>
+            <span style={{ ...statValue, color: 'var(--success)', fontFamily: "'Space Grotesk', sans-serif" }}>✓ Delivered</span>
           </div>
         )}
         {isFailed && (
           <div style={statItem}>
             <span style={statLabel}>Status</span>
-            <span style={{ ...statValue, color: 'var(--fail-signal, #f43f5e)' }}>✕ Failed at link</span>
+            <span style={{ ...statValue, color: 'var(--accent-secondary)', fontFamily: "'Space Grotesk', sans-serif" }}>✕ Failed here</span>
           </div>
         )}
       </div>

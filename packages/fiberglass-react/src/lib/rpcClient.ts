@@ -71,7 +71,6 @@ export interface FiberError {
   rpcMethod: FnnMethod;
 }
 
-/** Inferred error codes — derived from real FNN error strings (see errorMap.ts). */
 export type FiberErrorCode =
   | 'INSUFFICIENT_LIQUIDITY'
   | 'NO_ROUTE'
@@ -80,6 +79,7 @@ export type FiberErrorCode =
   | 'INVOICE_CANCELLED'
   | 'PAYMENT_ALREADY_EXISTS'
   | 'NODE_UNREACHABLE'
+  | 'INVALID_INVOICE'
   | 'UNKNOWN';
 
 export type InvoiceStatus = 'Open' | 'Cancelled' | 'Expired' | 'Received' | 'Paid';
@@ -255,44 +255,35 @@ export interface GetPaymentParams {
   payment_hash: Hash256;
 }
 
-/**
- * One hop in a payment route.
- * PROVISIONAL: real field names will be confirmed from captured payload.
- */
 export interface RouterHop {
-  /** The forwarding node's pubkey. */
+  /** The target node's pubkey. */
+  target: Pubkey;
+  /** The channel outpoint used for this hop. */
   channel_outpoint: string;
-  /** Next-hop channel ID or target node. PROVISIONAL. */
-  next_hop: Pubkey | null;
-  /** Fee charged by this hop (shannons). PROVISIONAL. */
-  fee: AmountString;
-  /** [PROVISIONAL] Additional fields from real payload will extend this. */
+  /** The amount received at this hop (shannons). */
+  amount_received: AmountString;
+  /** Expiry for the incoming TLC. */
+  incoming_tlc_expiry: string;
   [key: string]: unknown;
 }
 
 /**
- * PROVISIONAL: get_payment response.
- * Key fields: status, failed_error (free text), routers (real hop path).
+ * Real get_payment response from FNN.
+ * Note: FNN's get_payment does NOT return the route hops array.
  */
 export interface GetPaymentResponse {
   payment_hash: Hash256;
   status: PaymentStatus;
   /** Fee paid (shannons). Populated after Success. */
   fee: AmountString | null;
-  /** Amount sent (shannons). */
-  amount: AmountString;
   /**
-   * Free-text error string from FNN — never a fixed enum.
-   * Present only when status === 'Failed'.
-   * Fiberglass maps this to FiberErrorCode via errorMap.ts.
+   * Free-text error string from FNN.
+   * This comes from the raw FNN RPC on failure (e.g., synchronous routing failure).
    */
   failed_error: string | null;
-  /**
-   * Ordered list of hops actually traversed.
-   * This is the raw data that powers PaymentRouteVisualizer.
-   */
-  routers: RouterHop[];
-  /** [PROVISIONAL] Additional fields from real payload will extend this. */
+  created_at: string;
+  last_updated_at: string;
+  custom_records: unknown | null;
   [key: string]: unknown;
 }
 

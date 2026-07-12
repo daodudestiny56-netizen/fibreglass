@@ -40,8 +40,8 @@ describe('UI Components Render Tests', () => {
     it('renders channel details correctly', () => {
       const channel = MOCK_LIST_CHANNELS.channels[0]!;
       renderWithProvider(<ChannelLifecycleCard channel={channel} />);
-      expect(screen.getByText(/Channel/i)).toBeDefined();
-      expect(screen.getByText(/Local Balance/i)).toBeDefined();
+      expect(screen.getAllByText(/You Can Send/i).length).toBeGreaterThan(0);
+      expect(screen.getAllByText(/You Can Receive/i).length).toBeGreaterThan(0);
     });
 
     it('renders empty message if channel not found', () => {
@@ -61,7 +61,7 @@ describe('UI Components Render Tests', () => {
           error={null}
         />
       );
-      expect(screen.getByText(/Route found/i)).toBeDefined();
+      expect(screen.getByText(/Path Found/i)).toBeDefined();
       expect(screen.getByText(/Estimated Fee/i)).toBeDefined();
     });
 
@@ -93,7 +93,7 @@ describe('UI Components Render Tests', () => {
         />
       );
       expect(screen.getByText(/Receive Payment/i)).toBeDefined();
-      expect(screen.getByRole('button', { name: /Copy Invoice/i })).toBeDefined();
+      expect(screen.getByRole('button', { name: /Copy Payment Code/i })).toBeDefined();
     });
   });
 
@@ -111,7 +111,7 @@ describe('UI Components Render Tests', () => {
           retry={handleRetry}
         />
       );
-      expect(screen.getByText(/Insufficient Liquidity/i)).toBeDefined();
+      expect(screen.getByText(/Not Enough Funds in the Path/i)).toBeDefined();
       expect(screen.getByRole('button', { name: /Retry/i })).toBeDefined();
     });
   });
@@ -125,7 +125,7 @@ describe('UI Components Render Tests', () => {
           totalFee="1200"
         />
       );
-      expect(screen.getByText(/Payment Route/i)).toBeDefined();
+      expect(screen.getByText(/Payment Path/i)).toBeDefined();
       expect(screen.getByText(/Total Fee/i)).toBeDefined();
     });
   });

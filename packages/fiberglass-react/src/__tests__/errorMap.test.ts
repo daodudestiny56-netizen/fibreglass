@@ -12,53 +12,31 @@ import { describe, it, expect } from 'vitest';
 import { classifyError, getErrorHint, buildFiberError, allErrorCodes } from '../lib/errorMap';
 
 describe('classifyError', () => {
-  it('returns NO_ROUTE for "no path found" [PROVISIONAL]', () => {
-    expect(classifyError('Failed to find a route: no path found to destination node')).toBe(
+  it('returns NO_ROUTE for "allow_self_payment is not enabled"', () => {
+    expect(classifyError('Feature not enabled: allow_self_payment is not enabled, can not pay to self')).toBe(
       'NO_ROUTE',
     );
   });
 
-  it('returns NO_ROUTE for "no route" variant [PROVISIONAL]', () => {
-    expect(classifyError('no route available')).toBe('NO_ROUTE');
-  });
-
-  it('returns INSUFFICIENT_LIQUIDITY for liquidity error [PROVISIONAL]', () => {
+  it('returns INSUFFICIENT_LIQUIDITY for liquidity error', () => {
     expect(
-      classifyError('Failed to send payment: insufficient outbound liquidity on channel 0x123'),
+      classifyError('Failed to build route, Insufficient balance: max outbound liquidity 30100000000 is insufficient'),
     ).toBe('INSUFFICIENT_LIQUIDITY');
   });
 
-  it('returns ASSET_MISMATCH for currency mismatch [PROVISIONAL]', () => {
-    expect(classifyError('asset mismatch: expected CKB got USDT')).toBe('ASSET_MISMATCH');
-  });
-
-  it('returns PAYMENT_ALREADY_EXISTS for duplicate payment [PROVISIONAL]', () => {
-    expect(classifyError('duplicate payment: payment already exists')).toBe(
-      'PAYMENT_ALREADY_EXISTS',
+  it('returns INVALID_INVOICE with a hint for invalid invoice', () => {
+    expect(classifyError('Failed to validate payment request: "invoice is invalid"')).toBe(
+      'INVALID_INVOICE'
     );
   });
 
-  it('returns INVOICE_EXPIRED for expired invoice [PROVISIONAL]', () => {
-    expect(classifyError('invoice expired')).toBe('INVOICE_EXPIRED');
-  });
-
-  it('returns INVOICE_CANCELLED for cancelled invoice [PROVISIONAL]', () => {
-    expect(classifyError('invoice cancelled by payee')).toBe('INVOICE_CANCELLED');
-  });
-
-  it('returns NODE_UNREACHABLE for peer connection failure [PROVISIONAL]', () => {
-    expect(classifyError('peer connection failed: unable to reach remote node')).toBe(
-      'NODE_UNREACHABLE',
-    );
-  });
-
-  it('returns UNKNOWN for unrecognised error strings', () => {
+  it('returns UNKNOWN for completely unrecognised error strings', () => {
     expect(classifyError('something completely unexpected happened')).toBe('UNKNOWN');
   });
 
   it('is case-insensitive', () => {
-    expect(classifyError('NO PATH FOUND')).toBe('NO_ROUTE');
-    expect(classifyError('INSUFFICIENT LIQUIDITY')).toBe('INSUFFICIENT_LIQUIDITY');
+    expect(classifyError('ALLOW_SELF_PAYMENT IS NOT ENABLED')).toBe('NO_ROUTE');
+    expect(classifyError('INSUFFICIENT BALANCE: MAX OUTBOUND LIQUIDITY')).toBe('INSUFFICIENT_LIQUIDITY');
   });
 });
 
@@ -69,16 +47,19 @@ describe('getErrorHint', () => {
     expect(typeof hint).toBe('string');
   });
 
-  it('returns null for UNKNOWN', () => {
-    expect(getErrorHint('UNKNOWN')).toBeNull();
+  it('returns a specific hint for INVALID_INVOICE if matched', () => {
+    // Our invalid invoice matcher returns INVALID_INVOICE but provides a hint
+    expect(getErrorHint('INVALID_INVOICE')).toBe(
+      'The payment request is invalid. It may be malformed or corrupted.'
+    );
   });
 });
 
 describe('buildFiberError', () => {
   it('builds a FiberError with correct shape', () => {
-    const err = buildFiberError('no path found', 'send_payment');
+    const err = buildFiberError('allow_self_payment is not enabled', 'send_payment');
     expect(err.code).toBe('NO_ROUTE');
-    expect(err.rawMessage).toBe('no path found');
+    expect(err.rawMessage).toBe('allow_self_payment is not enabled');
     expect(err.rpcMethod).toBe('send_payment');
   });
 

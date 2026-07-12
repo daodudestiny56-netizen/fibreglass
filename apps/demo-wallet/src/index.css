@@ -1,14 +1,56 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;700&family=Space+Mono:wght@400;700&family=Inter:wght@400;600&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 :root {
-  color-scheme: dark;
+  --bg: #F5F3EE;
+  --ink: #111111;
+  --accent-primary: #FFD60A;
+  --accent-secondary: #FF4D4D;
+  --success: #00C853;
+  --mock-tag: #FF8C00;
+  
+  color-scheme: light;
 }
 
 body {
   @apply min-h-screen antialiased;
-  background-color: #05080f;
-  color: #e2e8f0;
-  font-family: 'Satoshi', sans-serif;
+  background-color: var(--bg);
+  color: var(--ink);
+  font-family: 'Inter', sans-serif;
+}
+
+/* Brutalist utility classes */
+.brutalist-container {
+  border: 3px solid var(--ink);
+  background-color: #FFFFFF;
+  box-shadow: 6px 6px 0px var(--ink);
+  border-radius: 0;
+}
+
+.brutalist-button {
+  border: 3px solid var(--ink);
+  background-color: var(--accent-primary);
+  color: var(--ink);
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 700;
+  box-shadow: 4px 4px 0px var(--ink);
+  text-transform: uppercase;
+  transition: all 0.1s ease-out;
+  border-radius: 0;
+}
+
+.brutalist-button:active {
+  box-shadow: 2px 2px 0px var(--ink);
+  transform: translate(2px, 2px);
+}
+
+.brutalist-badge {
+  border: 3px solid var(--ink);
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 700;
+  text-transform: uppercase;
+  border-radius: 0;
 }
