@@ -22,7 +22,6 @@ export { ConfidenceCheck } from './components/ConfidenceCheck';
 export { InvoiceSheet } from './components/InvoiceSheet';
 export { ErrorResolutionBanner } from './components/ErrorResolutionBanner';
 export { PaymentRouteVisualizer } from './components/PaymentRouteVisualizer';
-export { RpcLogViewer } from './components/RpcLogViewer';
 export { PaymentLinkReceiver } from './components/PaymentLinkReceiver';
 
 // Types

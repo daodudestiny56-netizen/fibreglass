@@ -3,10 +3,12 @@
  *
  * Developer panel showing recent JSON-RPC 2.0 request/response logs.
  * Styled with Neo-Brutalism tokens.
+ *
+ * Stays in apps/demo-wallet as an internal dev-tool.
  */
 
 import { useState } from 'react';
-import { useFiberNode } from '../hooks/useFiberNode';
+import { useFiberNode } from 'fiberglass-react';
 
 function formatTime(timestamp: number): string {
   const d = new Date(timestamp);

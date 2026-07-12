@@ -9,3 +9,5 @@ dist/
 coverage/
 .vite/
 storybook-static/
+*.tgz
+temp-fiberglass-test/

@@ -6,7 +6,7 @@
  * In live mode calls the real node and refreshes on demand.
  */
 
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useFiberNode } from './useFiberNode';
 import { MOCK_LIST_CHANNELS } from '../lib/mockFixtures';
 import { buildFiberError } from '../lib/errorMap';
@@ -30,8 +30,10 @@ export function useChannel(options: UseChannelOptions = {}): UseChannelResult {
   const [channels, setChannels] = useState<ChannelDetail[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<FiberError | null>(null);
+  const lastRequestIdRef = useRef(0);
 
   const fetch = useCallback(async () => {
+    const requestId = ++lastRequestIdRef.current;
     setIsLoading(true);
     setError(null);
 
@@ -44,19 +46,27 @@ export function useChannel(options: UseChannelOptions = {}): UseChannelResult {
         const filtered = peerId
           ? data.channels.filter((ch) => ch.peer_id === peerId)
           : data.channels;
-        setChannels(filtered);
+        if (requestId === lastRequestIdRef.current) {
+          setChannels(filtered);
+        }
       } else {
         const data = await client.listChannels(
           peerId ? { peer_id: peerId as import('../lib/rpcClient').Pubkey } : {},
         );
-        setChannels(data.channels);
+        if (requestId === lastRequestIdRef.current) {
+          setChannels(data.channels);
+        }
       }
     } catch (err) {
-      const msg = err instanceof Error ? err.message : String(err);
-      setError(buildFiberError(msg, 'list_channels'));
-      setChannels([]);
+      if (requestId === lastRequestIdRef.current) {
+        const msg = err instanceof Error ? err.message : String(err);
+        setError(buildFiberError(msg, 'list_channels'));
+        setChannels([]);
+      }
     } finally {
-      setIsLoading(false);
+      if (requestId === lastRequestIdRef.current) {
+        setIsLoading(false);
+      }
     }
   }, [client, mode, peerId]);
 

@@ -61,6 +61,9 @@ export function useInvoice(options: UseInvoiceOptions): UseInvoiceResult {
   // Mock auto-pay timeout
   const mockPayRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
+  const lastRequestIdRef = useRef(0);
+  const paymentHashRef = useRef<Hash256 | null>(null);
+
   const stopPolling = useCallback(() => {
     if (pollIntervalRef.current !== null) {
       clearInterval(pollIntervalRef.current);
@@ -75,9 +78,11 @@ export function useInvoice(options: UseInvoiceOptions): UseInvoiceResult {
         return;
       }
       const data = await client.getInvoice({ payment_hash: hash });
-      setInvoiceStatus(data.status);
-      if (TERMINAL_STATUSES.includes(data.status)) {
-        stopPolling();
+      if (hash === paymentHashRef.current) {
+        setInvoiceStatus(data.status);
+        if (TERMINAL_STATUSES.includes(data.status)) {
+          stopPolling();
+        }
       }
     } catch (err) {
       // Non-fatal polling error — log and continue
@@ -95,6 +100,7 @@ export function useInvoice(options: UseInvoiceOptions): UseInvoiceResult {
     if (createdRef.current) return;
     createdRef.current = true;
 
+    const requestId = ++lastRequestIdRef.current;
     setIsLoading(true);
     setError(null);
 
@@ -103,16 +109,21 @@ export function useInvoice(options: UseInvoiceOptions): UseInvoiceResult {
         await delay(200);
         const data = MOCK_NEW_INVOICE;
         client.logMockCall('new_invoice', { amount, currency, description: memo, ...(expirySeconds ? { expiry: expirySeconds } : {}) }, data);
-        setInvoiceAddress(data.invoice_address);
-        setPaymentHash(data.invoice.payment_hash);
-        setInvoiceStatus(MOCK_GET_INVOICE_OPEN.status);
-        setExpiresAt(new Date(data.invoice.expiry * 1000));
+        if (requestId === lastRequestIdRef.current) {
+          setInvoiceAddress(data.invoice_address);
+          setPaymentHash(data.invoice.payment_hash);
+          paymentHashRef.current = data.invoice.payment_hash;
+          setInvoiceStatus(MOCK_GET_INVOICE_OPEN.status);
+          setExpiresAt(new Date(data.invoice.expiry * 1000));
+        }
 
         // Simulate payment arriving after ~6 s in mock mode
         mockPayRef.current = setTimeout(() => {
-          client.logMockCall('get_invoice', { payment_hash: data.invoice.payment_hash }, { invoice_address: data.invoice_address, invoice: data.invoice, status: 'Paid' });
-          setInvoiceStatus(MOCK_GET_INVOICE_PAID.status);
-          stopPolling();
+          if (requestId === lastRequestIdRef.current) {
+            client.logMockCall('get_invoice', { payment_hash: data.invoice.payment_hash }, { invoice_address: data.invoice_address, invoice: data.invoice, status: 'Paid' });
+            setInvoiceStatus(MOCK_GET_INVOICE_PAID.status);
+            stopPolling();
+          }
         }, 6_000);
       } else {
         const data = await client.newInvoice({
@@ -121,17 +132,24 @@ export function useInvoice(options: UseInvoiceOptions): UseInvoiceResult {
           ...(memo !== undefined ? { description: memo } : {}),
           ...(expirySeconds !== undefined ? { expiry: expirySeconds } : {}),
         });
-        setInvoiceAddress(data.invoice_address);
-        setPaymentHash(data.invoice.payment_hash);
-        setInvoiceStatus('Open');
-        setExpiresAt(new Date(data.invoice.expiry * 1000));
+        if (requestId === lastRequestIdRef.current) {
+          setInvoiceAddress(data.invoice_address);
+          setPaymentHash(data.invoice.payment_hash);
+          paymentHashRef.current = data.invoice.payment_hash;
+          setInvoiceStatus('Open');
+          setExpiresAt(new Date(data.invoice.expiry * 1000));
+        }
       }
     } catch (err) {
-      const msg = err instanceof Error ? err.message : String(err);
-      setError(buildFiberError(msg, 'new_invoice'));
+      if (requestId === lastRequestIdRef.current) {
+        const msg = err instanceof Error ? err.message : String(err);
+        setError(buildFiberError(msg, 'new_invoice'));
+      }
       createdRef.current = false; // Allow retry
     } finally {
-      setIsLoading(false);
+      if (requestId === lastRequestIdRef.current) {
+        setIsLoading(false);
+      }
     }
   }, [amount, currency, memo, expirySeconds, mode, client, stopPolling]);
 

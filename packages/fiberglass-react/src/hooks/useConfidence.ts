@@ -41,6 +41,7 @@ export function useConfidence({
 
   // Track the last invoice address we ran a dry-run for to avoid duplicate calls
   const lastInvoice = useRef<string | null>(null);
+  const lastRequestIdRef = useRef(0);
 
   const run = useCallback(async () => {
     if (!invoiceAddress) {
@@ -50,6 +51,7 @@ export function useConfidence({
     if (lastInvoice.current === invoiceAddress + (amount ?? '')) return;
     lastInvoice.current = invoiceAddress + (amount ?? '');
 
+    const requestId = ++lastRequestIdRef.current;
     setIsLoading(true);
     setError(null);
     setStatus('loading');
@@ -59,31 +61,39 @@ export function useConfidence({
         await delay(180);
         const data = MOCK_SEND_PAYMENT_DRY_RUN;
         client.logMockCall('send_payment', { invoice: invoiceAddress, dry_run: true, ...(amount ? { amount } : {}) }, data);
-        setFee(data.fee);
-        setRoute(data.router);
-        setStatus('ready');
+        if (requestId === lastRequestIdRef.current) {
+          setFee(data.fee);
+          setRoute(data.router);
+          setStatus('ready');
+        }
       } else {
         const params = { invoice: invoiceAddress, ...(amount ? { amount } : {}) };
         const data = await client.sendPaymentDryRun(params);
-        setFee(data.fee);
-        setRoute(data.router);
-        setStatus('ready');
+        if (requestId === lastRequestIdRef.current) {
+          setFee(data.fee);
+          setRoute(data.router);
+          setStatus('ready');
+        }
       }
     } catch (err) {
-      const msg = err instanceof Error ? err.message : String(err);
-      const code = classifyError(msg);
-      const fiberErr = buildFiberError(msg, 'send_payment');
-      setError(fiberErr);
-      setFee(null);
-      setRoute(null);
+      if (requestId === lastRequestIdRef.current) {
+        const msg = err instanceof Error ? err.message : String(err);
+        const code = classifyError(msg);
+        const fiberErr = buildFiberError(msg, 'send_payment');
+        setError(fiberErr);
+        setFee(null);
+        setRoute(null);
 
-      // Map error code to ConfidenceStatus
-      if (code === 'NO_ROUTE') setStatus('no_route');
-      else if (code === 'INSUFFICIENT_LIQUIDITY') setStatus('insufficient_liquidity');
-      else if (code === 'ASSET_MISMATCH') setStatus('asset_mismatch');
-      else setStatus('error');
+        // Map error code to ConfidenceStatus
+        if (code === 'NO_ROUTE') setStatus('no_route');
+        else if (code === 'INSUFFICIENT_LIQUIDITY') setStatus('insufficient_liquidity');
+        else if (code === 'ASSET_MISMATCH') setStatus('asset_mismatch');
+        else setStatus('error');
+      }
     } finally {
-      setIsLoading(false);
+      if (requestId === lastRequestIdRef.current) {
+        setIsLoading(false);
+      }
     }
   }, [client, mode, invoiceAddress, amount]);
 

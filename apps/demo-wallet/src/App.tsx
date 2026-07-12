@@ -28,9 +28,9 @@ import {
   ConfidenceCheck,
   PaymentRouteVisualizer,
   ErrorResolutionBanner,
-  RpcLogViewer,
   PaymentLinkReceiver,
 } from 'fiberglass-react';
+import { RpcLogViewer } from './components/RpcLogViewer';
 import type {
   ChannelDetail,
   ChannelState,

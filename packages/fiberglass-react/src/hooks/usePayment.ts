@@ -40,6 +40,7 @@ export function usePayment({
   const [error, setError] = useState<FiberError | null>(null);
 
   const pollRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const lastRequestIdRef = useRef(0);
 
   const stopPolling = useCallback(() => {
     if (pollRef.current !== null) {
@@ -51,6 +52,7 @@ export function usePayment({
   const fetchPayment = useCallback(async () => {
     if (!paymentHash) return;
 
+    const requestId = ++lastRequestIdRef.current;
     setIsLoading(true);
     setError(null);
 
@@ -59,20 +61,28 @@ export function usePayment({
         await delay(150);
         const data = MOCK_GET_PAYMENT_SUCCESS;
         client.logMockCall('get_payment', { payment_hash: paymentHash }, data);
-        setPayment(data);
-        setStatus(data.status);
-        if (TERMINAL_STATUSES.includes(data.status)) stopPolling();
+        if (requestId === lastRequestIdRef.current) {
+          setPayment(data);
+          setStatus(data.status);
+          if (TERMINAL_STATUSES.includes(data.status)) stopPolling();
+        }
       } else {
         const data = await client.getPayment({ payment_hash: paymentHash });
-        setPayment(data);
-        setStatus(data.status);
-        if (TERMINAL_STATUSES.includes(data.status)) stopPolling();
+        if (requestId === lastRequestIdRef.current) {
+          setPayment(data);
+          setStatus(data.status);
+          if (TERMINAL_STATUSES.includes(data.status)) stopPolling();
+        }
       }
     } catch (err) {
-      const msg = err instanceof Error ? err.message : String(err);
-      setError(buildFiberError(msg, 'get_payment'));
+      if (requestId === lastRequestIdRef.current) {
+        const msg = err instanceof Error ? err.message : String(err);
+        setError(buildFiberError(msg, 'get_payment'));
+      }
     } finally {
-      setIsLoading(false);
+      if (requestId === lastRequestIdRef.current) {
+        setIsLoading(false);
+      }
     }
   }, [client, mode, paymentHash, stopPolling]);
 
