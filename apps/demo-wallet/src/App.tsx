@@ -639,7 +639,7 @@ function LoadingSpinner({ label }: { label: string }) {
 // ---------------------------------------------------------------------------
 
 function WalletShell() {
-  const { mode, connectionStatus, nodeInfo } = useFiberNode();
+  const { mode, connectionStatus, nodeInfo, setMode } = useFiberNode();
   const [activeTab, setActiveTab] = useState<Tab>('channels');
   const [isHeaderExpanded, setIsHeaderExpanded] = useState(false);
 
@@ -682,10 +682,24 @@ function WalletShell() {
           <div className="text-[12px] font-['Space_Grotesk'] font-bold uppercase tracking-wider flex items-center gap-2">
             fiberglass <span className="text-[9px] bg-[var(--accent-primary)] text-ink border-[2px] border-ink px-1 py-0.5 font-mono font-bold shadow-[1px_1px_0px_var(--ink)]">SDK</span>
           </div>
-          <div className="flex items-center gap-2">
+          <div className="relative flex items-center gap-2" onClick={(e) => e.stopPropagation()}>
             <div className={`w-2 h-2 rounded-full border-[1.5px] border-ink ${mode === 'live' ? 'bg-[#00FF00]' : 'bg-[var(--mock-tag)]'}`} />
-            <span className="text-[10px] font-['Space_Grotesk'] font-bold uppercase">{mode}</span>
-            <span className="text-[10px] font-bold">▼</span>
+            <select
+              value={mode}
+              onChange={(e) => {
+                if (setMode) setMode(e.target.value as any);
+              }}
+              className="text-[10px] font-['Space_Grotesk'] font-bold uppercase bg-transparent border-none outline-none cursor-pointer appearance-none pr-4"
+              style={{
+                backgroundImage: `url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e")`,
+                backgroundRepeat: 'no-repeat',
+                backgroundPosition: 'right center',
+                backgroundSize: '8px'
+              }}
+            >
+              <option value="live">LIVE</option>
+              <option value="mock">MOCK</option>
+            </select>
           </div>
         </div>
 
@@ -699,8 +713,23 @@ function WalletShell() {
           </div>
 
           <div className="flex flex-wrap items-center gap-3">
-            <div className="text-[11px] font-['Space_Grotesk'] font-bold uppercase tracking-wider px-3.5 py-1.5 border-[3px] border-ink bg-white text-ink shadow-[2px_2px_0px_var(--ink)]" title={mode === 'live' ? 'Live = connected to a real Fiber node right now.' : 'Mock = practice data, not a real payment'}>
-              {mode === 'live' ? 'LIVE' : 'MOCK'} · {connectionStatus.toUpperCase()}
+            <div className="relative inline-block">
+              <select
+                value={mode}
+                onChange={(e) => {
+                  if (setMode) setMode(e.target.value as any);
+                }}
+                className="text-[11px] font-['Space_Grotesk'] font-bold uppercase tracking-wider pl-3.5 pr-8 py-1.5 border-[3px] border-ink bg-white text-ink shadow-[2px_2px_0px_var(--ink)] outline-none cursor-pointer appearance-none"
+                style={{
+                  backgroundImage: `url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e")`,
+                  backgroundRepeat: 'no-repeat',
+                  backgroundPosition: 'right 10px center',
+                  backgroundSize: '10px'
+                }}
+              >
+                <option value="live">LIVE · {connectionStatus.toUpperCase()}</option>
+                <option value="mock">MOCK · DISCONNECTED</option>
+              </select>
             </div>
             {nodeInfo && (
               <div className="text-[12px] font-mono text-ink border-[3px] border-ink bg-white px-2.5 py-1 font-bold shadow-[2px_2px_0px_var(--ink)]">

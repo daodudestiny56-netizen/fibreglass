@@ -109,6 +109,7 @@ export function FiberProvider({ nodeUrl, appOrigin, children }: FiberProviderPro
     nodeInfo,
     rpcLogs,
     appOrigin: origin,
+    setMode,
   };
 
   return (

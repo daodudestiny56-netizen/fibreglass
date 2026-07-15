@@ -56,6 +56,8 @@ export interface FiberContextValue {
   rpcLogs: RpcLog[];
   /** Base URL for payment links, defaults to window.location.origin */
   appOrigin: string;
+  /** Allows manually overriding the mode between live and mock. */
+  setMode?: (mode: FiberMode) => void;
 }
 
 /**
