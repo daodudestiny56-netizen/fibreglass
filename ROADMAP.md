@@ -1,35 +1,47 @@
-# Roadmap
+# Fiberglass Project Roadmap
 
-> Everything listed here is **explicitly deferred** — it's not in the hackathon build, but represents the full vision for Fiberglass as a real ecosystem library.
+This document outlines the development path for the Fiberglass SDK. It helps developers and users understand what features are fully built and ready to use, versus what is planned for future releases.
 
-## What's Built (Days 1–7)
+---
 
-- SDK core: FiberProvider, 4 hooks, 5 components
-- Dual live/mock mode with always-visible mode badge
-- PaymentRouteVisualizer (hero feature)
-- Demo wallet app (Send + Receive + Channel overview)
-- Full documentation set
-- Vitest test suite
+## 🟢 Phase 1: Hackathon Ready (Fully Built & Available)
+These features are completed, tested, and ready for you to use in your applications today:
 
-## Phase 2 — Developer Tooling (Days 8–14 stretch, time-permitting)
+*   **SDK Core Package (`fiberglass-react`):**
+    *   `<FiberProvider>` configuration context wrapper.
+    *   Hooks for managing channels, invoicing, path-finding, and sending payments (`useChannel`, `useInvoice`, `useConfidence`, `usePayment`, `usePaymentLink`).
+    *   Pre-styled UI components including `<InvoiceSheet>`, `<ChannelLifecycleCard>`, `<ConfidenceCheck>`, `<ErrorResolutionBanner>`, and `<PaymentRouteVisualizer>`.
+*   **Dual Mode Detection:**
+    *   SDK automatically detects if your local node is running.
+    *   Seamlessly runs in **Mock Mode** (using simulated fixtures) or **Live Mode** (connected to real nodes) with a persistent status badge.
+*   **Demo Wallet Application:**
+    *   A sample application showcasing the components in a Neobrutalist design.
+    *   Live demo link: [fibreglass-demo-wallet.vercel.app](https://fibreglass-demo-wallet.vercel.app)
+*   **Documentation & Test Suite:**
+    *   Complete step-by-step setup guides, testing checklists, and Vitest suite (all 57 unit tests passing).
 
-- **Minimal RPC Log Viewer** — internal panel showing recent request/response pairs
-- **Storybook** — interactive stories for the 5 existing components
-- **Route Replay** — animated replay of a completed payment's route
-- **Developer Playground** — internal page with toggleable component props
+---
 
-## Phase 3 — Ecosystem Maturity (Post-Hackathon)
+## 🟡 Phase 2: Developer Tooling (Planned Future Releases)
+These improvements are focused on making the developer integration experience even better:
 
-These are future work, not planned for the hackathon under any circumstances:
+*   **Storybook Component Catalog:**
+    *   An interactive visual dictionary where developers can preview and play with each UI component under different configurations.
+*   **Minimal RPC Log Inspector:**
+    *   An optional debug panel inside the UI allowing developers to see raw requests and responses being exchanged with their node.
+*   **Failure and Error Simulator:**
+    *   A tool allowing developers to simulate node offline conditions, expired invoices, and routing errors to test how their applications behave.
 
-- **Real npm publish** — `npm publish` for the `fiberglass-react` package
-- **Theme Engine** — CSS custom property system, light mode, custom color schemes
-- **Plugin System** — extensibility hooks for custom renderers and data sources
-- **Documentation Website** — dedicated docs site (Docusaurus or similar)
-- **DevTools Browser Extension** — Chrome/Firefox extension for FNN channel inspection
-- **Multi-Framework Support** — Vue, Svelte, and vanilla JS adapters
-- **RPC Inspector** — full request/response log viewer with filtering and replay
-- **Payment / Failure Simulator** — configurable failure injection for development
-- **Route Replay (full)** — step-by-step animated replay with timing data
-- **Channel Management UI** — open/close/rebalance channel flows (currently out of scope by design)
-- **Key Management / Signing** — out of scope; Fiberglass is a UI layer, not a wallet
+---
+
+## 🔵 Phase 3: Ecosystem Maturity (Post-Hackathon Roadmap)
+Long-term development goals for production-grade use:
+
+*   **Custom Theme Engine:**
+    *   A simple way to change the design style of components (e.g. from the default Neobrutalist style to Tailwind, modern glassmorphism, or dark modes) using custom CSS variables.
+*   **Multi-Framework Adapters:**
+    *   Wrappers enabling other popular frontend frameworks (like Vue, Svelte, and Angular) or Vanilla JS/HTML to use Fiberglass.
+*   **Chrome/Firefox DevTools Extension:**
+    *   A browser extension for developers to inspect, debug, and trace payments directly inside their browser's dev console.
+*   **Interactive Payment Replay:**
+    *   An advanced route visualization tool showing historical payment animations with exact hop timings and fee breakdowns.
